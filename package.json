@@ -1,0 +1,18 @@
+{
+  "name": "nemonemo",
+  "version": "1.0.0",
+  "description": "nemonemo logic adding server",
+  "private": "true",
+  "repository": "https://github.com/kkirico/nemonemo.git",
+  "author": "Dante <48055710+kkirico@users.noreply.github.com>",
+  "license": "MIT",
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
+  },
+  "scripts": {
+    "client_test": "yarn workspace client test",
+    "client_dev": "yarn workspace client start"
+  }
+}
