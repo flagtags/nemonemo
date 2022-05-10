@@ -13,6 +13,8 @@
   },
   "scripts": {
     "client_test": "yarn workspace client test",
-    "client_dev": "yarn workspace client start"
+    "client_dev": "yarn workspace client start",
+    "server_test": "yarn workspace server test:watch",
+    "server_dev": "yarn workspace server start:dev"
   }
 }
