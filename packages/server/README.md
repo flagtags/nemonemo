@@ -70,3 +70,4 @@
 - 사용자가 로그인 한다.
 
 ## 컴포넌트
+<img width="566" alt="image" src="https://user-images.githubusercontent.com/46087226/172619566-39712e0b-6e83-4945-95f5-050d73440b72.png">
