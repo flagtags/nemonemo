@@ -1,19 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
-import { User.EntityService } from './user.entity/user.entity.service';
-import { UserModule } from './controllers/user/user.module';
-import { UserModule } from './user-stories/user/user.module';
-import { UserEntityModule } from './entities/user-entity/user-entity.module';
-import { UserEntityModule } from './entities/user-entity/user-entity/user-entity.module';
-import { UserEntityModule } from './user-entity/user-entity.module';
-import { UserEntityService } from 'src/user/user-entity.service';
-import { User.EntityService } from './user.entity/user.entity.service';
+import { UserController } from '@controllers/user/user.controller';
+import { UserModule } from '@modules/user/user.module';
 
 @Module({
-  imports: [UserModule, UserEntityModule],
-  controllers: [AppController],
-  providers: [AppService, User.EntityService, UserEntityService],
+  imports: [UserModule],
+  controllers: [AppController, UserController],
+  providers: [AppService],
 })
 export class AppModule {}
