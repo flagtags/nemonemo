@@ -3,6 +3,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './user/user.module';
 import { User.EntityService } from './user.entity/user.entity.service';
+import { UserModule } from './controllers/user/user.module';
+import { UserModule } from './user-stories/user/user.module';
 import { UserEntityModule } from './entities/user-entity/user-entity.module';
 import { UserEntityModule } from './entities/user-entity/user-entity/user-entity.module';
 import { UserEntityModule } from './user-entity/user-entity.module';
