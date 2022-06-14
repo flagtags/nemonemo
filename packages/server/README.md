@@ -69,5 +69,9 @@
 ## 유저스토리
 - 사용자가 로그인 한다.
 
+
+## 클린 아키텍처
+![imga](https://techblog.woowahan.com/wp-content/uploads/img/2019-10-02/the-clean-architecture.png)
+
 ## 컴포넌트
 <img width="566" alt="image" src="https://user-images.githubusercontent.com/46087226/172619566-39712e0b-6e83-4945-95f5-050d73440b72.png">
