@@ -2,10 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UserEntityService } from './user-entity.service';
 
 describe('UserEntityService', () => {
-  let service: UserEntityService;
+  let userEntityService: UserEntityService;
+  let userModelService: UserModelService;
 
   class UserModelService {
-    createUser (userId){
+    createUser(userId) {
       return userId;
     }
   }
@@ -15,20 +16,21 @@ describe('UserEntityService', () => {
       providers: [UserEntityService, UserModelService],
     }).compile();
 
-    service = module.get<UserEntityService>(UserEntityService);
-
+    userEntityService = module.get<UserEntityService>(UserEntityService);
+    userModelService = module.get<UserModelService>(UserModelService);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(userEntityService).toBeDefined();
   });
 
   it('create user', () => {
-    const testUserId = 'asdb'
+    const testUserId = 'asdb';
 
-    const spyfn = jest.spyOn(UserModelService, 'createUser').getMockImplementation()
+    const spyfn = jest.spyOn(userModelService, 'createUser');
 
-    expect(service.createUser(testUserId))
-  })
+    userEntityService.createUser(testUserId);
+
+    expect(spyfn).toHaveBeenCalledWith(testUserId);
+  });
 });
-
