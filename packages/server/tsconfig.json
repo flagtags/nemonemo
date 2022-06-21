@@ -14,7 +14,9 @@
       "@controllers/*": ["./src/controllers/*"],
       "@use-cases/*": ["./src/use-cases/*"],
       "@entities/*": ["./src/entities/*"],
-      "@modules/*": ["./src/modules/*"]
+      "@modules/*": ["./src/modules/*"],
+      "@models/*": ["./src/models/*"],
+      "@config": ["./src/config/index"]
     },
     "incremental": true,
     "skipLibCheck": true,
