@@ -55,6 +55,14 @@
     "typescript": "^4.3.5"
   },
   "jest": {
+    "moduleNameMapper": {
+      "^@controllers/(.*)$": "<rootDir>/controllers/$1",
+      "^@use-cases/(.*)$": "<rootDir>/use-cases/$1",
+      "^@entities/(.*)$": "<rootDir>/entities/$1",
+      "^@modules/(.*)$": "<rootDir>/modules/$1",
+      "^@models/(.*)": "<rootDir>/models/$1",
+      "^@config/(.*)": "<rootDir>/config/$1"
+    },
     "moduleFileExtensions": [
       "js",
       "json",
