@@ -1,23 +1,30 @@
+import { UserModel } from '@models/user/user.model';
+import { User, UserSchema } from '@models/user/user.schema';
+import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
+import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { UserEntityService } from './user-entity.service';
+
+class UserModelMock {
+  constructor() {}
+
+  createUser(createUserDto: CreateUserDto) {}
+}
 
 describe('UserEntityService', () => {
   let userEntityService: UserEntityService;
-  let userModelService: UserModelService;
-
-  class UserModelService {
-    createUser(userId) {
-      return userId;
-    }
-  }
+  let userModel: UserModelMock;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [UserEntityService, UserModelService],
+      providers: [
+        UserEntityService,
+        { provide: UserModel, useClass: UserModelMock },
+      ],
     }).compile();
 
     userEntityService = module.get<UserEntityService>(UserEntityService);
-    userModelService = module.get<UserModelService>(UserModelService);
+    userModel = module.get<UserModelMock>(UserModel);
   });
 
   it('should be defined', () => {
@@ -25,12 +32,16 @@ describe('UserEntityService', () => {
   });
 
   it('create user', () => {
-    const testUserId = 'asdb';
+    const createUserDto = {
+      name: 'name',
+      userName: 'userName',
+      password: 'password',
+    };
 
-    const spyfn = jest.spyOn(userModelService, 'createUser');
+    const spyfn = jest.spyOn(userModel, 'createUser');
 
-    userEntityService.createUser(testUserId);
+    userEntityService.createUser(createUserDto);
 
-    expect(spyfn).toHaveBeenCalledWith(testUserId);
+    expect(spyfn).toHaveBeenCalledWith(createUserDto);
   });
 });

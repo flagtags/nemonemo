@@ -1,7 +1,12 @@
+import { UserModel } from '@models/user/user.model';
 import { Injectable } from '@nestjs/common';
-import { AppService } from 'src/app.service';
+import { CreateUserDto } from 'src/dto/user/create-user.dto';
 
 @Injectable()
 export class UserEntityService {
-    createUser(userId){}
+  constructor(private readonly userModel: UserModel) {}
+
+  createUser(createUserDto: CreateUserDto) {
+    return this.userModel.createUser(createUserDto);
+  }
 }
