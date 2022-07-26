@@ -3,6 +3,7 @@ import { UserDocument } from '@models/user/user.schema';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { FindUserDto } from 'src/dto/user/find-user.dto';
+import { HasUserDto } from 'src/dto/user/has-user.dto';
 
 @Injectable()
 export class UserEntityService {
@@ -14,6 +15,10 @@ export class UserEntityService {
 
   findUser(findUserDto: FindUserDto): Promise<UserDocument> {
     return this.userModel.findUser(findUserDto);
+  }
+
+  hasUser(hasUserDto: HasUserDto): boolean {
+    return this.userModel.hasUser(hasUserDto);
   }
 
 }

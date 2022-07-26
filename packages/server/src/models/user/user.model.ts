@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { FindUserDto } from 'src/dto/user/find-user.dto';
+import { HasUserDto } from 'src/dto/user/has-user.dto';
 import { User, UserDocument } from './user.schema';
 
 @Injectable()
@@ -22,4 +23,7 @@ export class UserModel {
     return this.userSchema.findOne({userName: findUserDto.userName}).exec();
   }
 
+  hasUser(hasUserDto: HasUserDto): boolean {
+    return !!this.userSchema.findOne({userName: hasUserDto.userName}).exec();
+  }
 }
