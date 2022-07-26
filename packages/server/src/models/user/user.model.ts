@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { FindUserDto } from 'src/dto/user/find-user.dto';
 import { HasUserDto } from 'src/dto/user/has-user.dto';
+import { UpdateUserDto } from 'src/dto/user/update-user.dto';
 import { User, UserDocument } from './user.schema';
 
 @Injectable()
@@ -25,5 +26,10 @@ export class UserModel {
 
   hasUser(hasUserDto: HasUserDto): boolean {
     return !!this.userSchema.findOne({userName: hasUserDto.userName}).exec();
+  }
+
+  updateUser(updateUserDto: UpdateUserDto): boolean {
+    const {_id, ...rest} = updateUserDto;
+    return !!this.userSchema.updateOne({_id: updateUserDto._id}, {$set: rest});
   }
 }

@@ -1,10 +1,9 @@
 import { UserModel } from '@models/user/user.model';
-import { User, UserSchema } from '@models/user/user.schema';
-import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
 import { FindUserDto } from 'src/dto/user/find-user.dto';
 import { HasUserDto } from 'src/dto/user/has-user.dto';
+import { UpdateUserDto } from 'src/dto/user/update-user.dto';
 import { UserEntityService } from './user-entity.service';
 
 class UserModelMock {
@@ -13,6 +12,7 @@ class UserModelMock {
   createUser(createUserDto: CreateUserDto) {}
   hasUser(hasUserDto: HasUserDto) {}
   findUser(findUserDto: FindUserDto) {}
+  updateUser(updateUser: UpdateUserDto) {}
 }
 
 describe('UserEntityService', () => {
@@ -75,7 +75,18 @@ describe('UserEntityService', () => {
   });
 
   it('update user',() => {
-    
+    const updateUserDto = {
+      _id: 'asoeijflskjfoejfl',
+      userName: 'kkirico',
+      password: 'john6549',
+      name: 'heon'
+    };
+
+    const spyfn = jest.spyOn(userModel, 'updateUser');
+
+    userEntityService.updateUser(updateUserDto);
+
+    expect(spyfn).toHaveBeenCalledWith(updateUserDto);
   })
 
   it('get user list')
