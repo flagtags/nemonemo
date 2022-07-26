@@ -3,12 +3,14 @@ import { User, UserSchema } from '@models/user/user.schema';
 import { getModelToken, MongooseModule } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { CreateUserDto } from 'src/dto/user/create-user.dto';
+import { FindUserDto } from 'src/dto/user/find-user.dto';
 import { UserEntityService } from './user-entity.service';
 
 class UserModelMock {
   constructor() {}
 
   createUser(createUserDto: CreateUserDto) {}
+  findUser(findUserDto: FindUserDto) {}
 }
 
 describe('UserEntityService', () => {
@@ -44,4 +46,17 @@ describe('UserEntityService', () => {
 
     expect(spyfn).toHaveBeenCalledWith(createUserDto);
   });
+
+  it('find user',() => {
+    const findUserDto = {
+      userName: 'kkirico'
+    }
+
+    const spyfn = jest.spyOn(userModel, 'findUser');
+
+    userEntityService.findUser(findUserDto);
+
+    expect(spyfn).toHaveBeenCalledWith(findUserDto);
+
+  })
 });
