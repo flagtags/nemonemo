@@ -1,5 +1,5 @@
 import { UserModel } from '@models/user/user.model';
-import { UserDocument } from '@models/user/user.schema';
+import { User, UserDocument } from '@models/user/user.schema';
 import { Injectable } from '@nestjs/common';
 import { CreateUserDto } from '@dto/user/create-user.dto';
 import { FindUserDto } from '@dto/user/find-user.dto';
@@ -10,23 +10,23 @@ import { UpdateUserDto } from '@dto/user/update-user.dto';
 export class UserEntityService {
   constructor(private readonly userModel: UserModel) {}
 
-  createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
+  async createUser(createUserDto: CreateUserDto): Promise<User> {
     return this.userModel.createUser(createUserDto);
   }
 
-  findUser(findUserDto: FindUserDto): Promise<UserDocument> {
+  async findUser(findUserDto: FindUserDto): Promise<User> {
     return this.userModel.findUser(findUserDto);
   }
 
-  hasUser(hasUserDto: HasUserDto): boolean {
+  async hasUser(hasUserDto: HasUserDto): Promise<boolean> {
     return this.userModel.hasUser(hasUserDto);
   }
 
-  updateUser(updateUserDto: UpdateUserDto): boolean {
+  async updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
     return this.userModel.updateUser(updateUserDto);
   }
 
-  getUserList(): Promise<UserDocument[]> {
+  async getUserList(): Promise<User[]> {
     return this.userModel.getUserList();
   }
 }
