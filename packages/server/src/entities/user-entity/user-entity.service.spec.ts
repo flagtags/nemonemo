@@ -80,6 +80,7 @@ describe('UserEntityService', () => {
       userName: 'kkirico',
       password: 'john6549',
       name: 'heon',
+      isBanned: false,
     };
 
     const spyfn = jest.spyOn(userModel, 'updateUser');
