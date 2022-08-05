@@ -1,10 +1,10 @@
 import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from 'src/dto/user/create-user.dto';
-import { FindUserDto } from 'src/dto/user/find-user.dto';
-import { HasUserDto } from 'src/dto/user/has-user.dto';
-import { UpdateUserDto } from 'src/dto/user/update-user.dto';
+import { CreateUserDto } from '@dto/user/create-user.dto';
+import { FindUserDto } from '@dto/user/find-user.dto';
+import { HasUserDto } from '@dto/user/has-user.dto';
+import { UpdateUserDto } from '@dto/user/update-user.dto';
 
 @Injectable()
 export class UserEntityService {
@@ -26,4 +26,7 @@ export class UserEntityService {
     return this.userModel.updateUser(updateUserDto);
   }
 
+  getUserList(): Promise<UserDocument[]> {
+    return this.userModel.getUserList();
+  }
 }

@@ -1,9 +1,9 @@
 import { UserModel } from '@models/user/user.model';
 import { Test, TestingModule } from '@nestjs/testing';
-import { CreateUserDto } from 'src/dto/user/create-user.dto';
-import { FindUserDto } from 'src/dto/user/find-user.dto';
-import { HasUserDto } from 'src/dto/user/has-user.dto';
-import { UpdateUserDto } from 'src/dto/user/update-user.dto';
+import { CreateUserDto } from '@dto/user/create-user.dto';
+import { FindUserDto } from '@dto/user/find-user.dto';
+import { HasUserDto } from '@dto/user/has-user.dto';
+import { UpdateUserDto } from '@dto/user/update-user.dto';
 import { UserEntityService } from './user-entity.service';
 
 class UserModelMock {
@@ -13,6 +13,7 @@ class UserModelMock {
   hasUser(hasUserDto: HasUserDto) {}
   findUser(findUserDto: FindUserDto) {}
   updateUser(updateUser: UpdateUserDto) {}
+  getUserList() {}
 }
 
 describe('UserEntityService', () => {
@@ -49,22 +50,21 @@ describe('UserEntityService', () => {
     expect(spyfn).toHaveBeenCalledWith(createUserDto);
   });
 
-  it('find user',() => {
+  it('find user', () => {
     const findUserDto = {
-      userName: 'kkirico'
-    }
+      userName: 'kkirico',
+    };
 
     const spyfn = jest.spyOn(userModel, 'findUser');
 
     userEntityService.findUser(findUserDto);
 
     expect(spyfn).toHaveBeenCalledWith(findUserDto);
-
-  })
+  });
 
   it('has user', () => {
     const hasUserDto = {
-      userName: 'kkirico'
+      userName: 'kkirico',
     };
 
     const spyfn = jest.spyOn(userModel, 'hasUser');
@@ -74,12 +74,12 @@ describe('UserEntityService', () => {
     expect(spyfn).toHaveBeenCalledWith(hasUserDto);
   });
 
-  it('update user',() => {
+  it('update user', () => {
     const updateUserDto = {
       _id: 'asoeijflskjfoejfl',
       userName: 'kkirico',
       password: 'john6549',
-      name: 'heon'
+      name: 'heon',
     };
 
     const spyfn = jest.spyOn(userModel, 'updateUser');
@@ -87,7 +87,13 @@ describe('UserEntityService', () => {
     userEntityService.updateUser(updateUserDto);
 
     expect(spyfn).toHaveBeenCalledWith(updateUserDto);
-  })
+  });
 
-  it('get user list')
+  it('get user list', () => {
+    const spyfn = jest.spyOn(userModel, 'getUserList');
+
+    userEntityService.getUserList();
+
+    expect(spyfn).toBeCalled();
+  });
 });
