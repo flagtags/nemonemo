@@ -16,7 +16,9 @@
       "@entities/*": ["./src/entities/*"],
       "@modules/*": ["./src/modules/*"],
       "@models/*": ["./src/models/*"],
-      "@config": ["./src/config/index"]
+      "@config": ["./src/config/index"],
+      "@utils/*": ["./src/utils/*"],
+      "@dto/*": ["./src/dto/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
