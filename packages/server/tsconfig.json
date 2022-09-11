@@ -18,7 +18,8 @@
       "@models/*": ["./src/models/*"],
       "@config": ["./src/config/index"],
       "@utils/*": ["./src/utils/*"],
-      "@dto/*": ["./src/dto/*"]
+      "@dto/*": ["./src/dto/*"],
+      "@errors/*": ["./src/errors/*"]
     },
     "incremental": true,
     "skipLibCheck": true,
