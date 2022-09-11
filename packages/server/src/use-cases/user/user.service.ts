@@ -6,7 +6,7 @@ import { UserEntity } from '@entities/user-entity/user-entity.service';
 import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Injectable } from '@nestjs/common';
-import convertUserSchemaToUserEntity from '@use-cases/converter/user/user.converter';
+import convertUserDocumentToUserEntity from '@use-cases/converter/user/user.converter';
 import { DuplicatedUserError } from '@errors/user';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class UserService {
 
   async register(createUserDto: CreateUserDto): Promise<UserEntity> {
     const userDocument = await this.createUser(createUserDto);
-    const userEntity = await convertUserSchemaToUserEntity(userDocument);
+    const userEntity = await convertUserDocumentToUserEntity(userDocument);
 
     const isDuplicatedUser = await this.hasUser(createUserDto);
 

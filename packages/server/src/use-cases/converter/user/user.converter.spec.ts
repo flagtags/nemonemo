@@ -1,10 +1,18 @@
-import { User as UserSchema } from '@models/user/user.schema';
+import { UserDocument } from '@models/user/user.schema';
+import convertUserDocumentToUserEntity from './user.converter';
 
 test('Convert user schema to user entity', () => {
-  // mock을 객체로 만들고 타입만 유저 스키마로 해서 넘기자.
-  const userSchema;
+  const userDocument: UserDocument = {
+    name: 'dante',
+    userName: 'kkirico',
+    password: '1234',
+    isBanned: false,
+  } as UserDocument;
 
-  const userEntity = convertUserSchemaToUserEntity(userSchema);
+  const userEntity = convertUserDocumentToUserEntity(userDocument);
 
-  // userEntity의 속성 값들이 userSchema의 속성 값들과 같은지 확인하자.
+  // userEntity의 속성 값들이 userDocument의 속성 값들과 같은지 확인하자.
+  Object.keys(userDocument).forEach((key) => {
+    expect(userEntity[key]).toEqual(userDocument[key]);
+  });
 });
