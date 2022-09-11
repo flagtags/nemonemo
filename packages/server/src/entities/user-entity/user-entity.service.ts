@@ -1,32 +1,19 @@
-import { UserModel } from '@models/user/user.model';
-import { User, UserDocument } from '@models/user/user.schema';
+import { UserEntityDto } from '@dto/user/user-entity.dto';
 import { Injectable } from '@nestjs/common';
-import { CreateUserDto } from '@dto/user/create-user.dto';
-import { FindUserDto } from '@dto/user/find-user.dto';
-import { HasUserDto } from '@dto/user/has-user.dto';
-import { UpdateUserDto } from '@dto/user/update-user.dto';
 
-@Injectable()
-export class UserEntityService {
-  constructor(private readonly userModel: UserModel) {}
+export class UserEntity {
+  userName: string;
 
-  async createUser(createUserDto: CreateUserDto): Promise<User> {
-    return this.userModel.createUser(createUserDto);
-  }
+  name: string;
 
-  async findUser(findUserDto: FindUserDto): Promise<User> {
-    return this.userModel.findUser(findUserDto);
-  }
+  password: string;
 
-  async hasUser(hasUserDto: HasUserDto): Promise<boolean> {
-    return this.userModel.hasUser(hasUserDto);
-  }
+  isBanned: boolean;
 
-  async updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
-    return this.userModel.updateUser(updateUserDto);
-  }
-
-  async getUserList(): Promise<User[]> {
-    return this.userModel.getUserList();
+  constructor(useEntityDto: UserEntityDto) {
+    this.userName = useEntityDto.userName;
+    this.name = useEntityDto.name;
+    this.password = useEntityDto.password;
+    this.isBanned = false;
   }
 }
