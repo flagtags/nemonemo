@@ -10,9 +10,7 @@ import { User, UserDocument } from './user.schema';
 
 @Injectable()
 export class UserModel {
-  constructor(
-    @InjectModel(User.name) private userSchema: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private userSchema: Model<User>) {}
 
   createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
     const userDocument = new this.userSchema(createUserDto);
@@ -25,11 +23,11 @@ export class UserModel {
     return this.userSchema.findOne({ userName: findUserDto.userName }).exec();
   }
 
-  hasUser(hasUserDto: HasUserDto): boolean {
+  async hasUser(hasUserDto: HasUserDto): Promise<boolean> {
     return !!this.userSchema.findOne({ userName: hasUserDto.userName }).exec();
   }
 
-  updateUser(updateUserDto: UpdateUserDto): boolean {
+  async updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
     const { _id, ...restUpdatedUserDto } = updateUserDto;
 
     const filteredRestUpdatedUserDto =
