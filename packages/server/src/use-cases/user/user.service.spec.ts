@@ -1,3 +1,4 @@
+import jwt, { JwtPayload } from 'jsonwebtoken';
 import { CreateUserDto } from '@dto/user/create-user.dto';
 import { FindUserDto } from '@dto/user/find-user.dto';
 import { HasUserDto } from '@dto/user/has-user.dto';
@@ -6,8 +7,9 @@ import { UserEntity } from '@entities/user-entity/user-entity.service';
 import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DuplicatedUserError } from '@errors/user';
+import { DuplicatedUserError, UserNotFoundError } from '@errors/user';
 import { UserService } from './user.service';
+import { LoginUserDto } from '@dto/user/login-user.dto';
 
 class UserModelMock {
   async createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
@@ -139,5 +141,24 @@ describe('UserService', () => {
     await service.hasUser(hasUserDto);
 
     expect(spyfn).toHaveBeenCalledWith(hasUserDto);
+  });
+
+  describe('login', () => {
+    test('login fail', async () => {
+      const loginUserDto: LoginUserDto = {
+        userName: 'dante022',
+        password: 'john6549',
+      };
+
+      const spyfn = jest.spyOn(userModel, 'hasUser');
+      spyfn.mockResolvedValueOnce(false);
+
+      const userNotFoundError = new UserNotFoundError();
+
+      await expect(async () =>
+        service.login(loginUserDto),
+      ).rejects.toThrowError(userNotFoundError);
+    });
+
   });
 });
