@@ -1,3 +1,4 @@
+import jwt from 'jsonwebtoken';
 import { CreateUserDto } from '@dto/user/create-user.dto';
 import { FindUserDto } from '@dto/user/find-user.dto';
 import { HasUserDto } from '@dto/user/has-user.dto';
@@ -7,7 +8,8 @@ import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Injectable } from '@nestjs/common';
 import convertUserDocumentToUserEntity from '@use-cases/converter/user/user.converter';
-import { DuplicatedUserError } from '@errors/user';
+import { DuplicatedUserError, UserNotFoundError } from '@errors/user';
+import { LoginUserDto } from '@dto/user/login-user.dto';
 
 @Injectable()
 export class UserService {
@@ -33,12 +35,21 @@ export class UserService {
     const userDocument = await this.createUser(createUserDto);
     const userEntity = await convertUserDocumentToUserEntity(userDocument);
 
-    const isDuplicatedUser = await this.hasUser(createUserDto);
+    const isDuplicatedUser = await this.hasUser({
+      userName: createUserDto.userName,
+    });
 
     if (isDuplicatedUser) {
       throw new DuplicatedUserError();
     }
 
     return userEntity;
+  }
+  async login(loginUserDto: LoginUserDto): Promise<string> {
+    const canLoginUser = await this.hasUser(loginUserDto);
+
+    if (!canLoginUser) {
+      throw new UserNotFoundError();
+    }
   }
 }
