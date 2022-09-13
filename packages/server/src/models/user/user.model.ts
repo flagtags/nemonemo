@@ -24,7 +24,7 @@ export class UserModel {
   }
 
   async hasUser(hasUserDto: HasUserDto): Promise<boolean> {
-    return !!this.userSchema.findOne({ userName: hasUserDto.userName }).exec();
+    return !!this.userSchema.findOne(hasUserDto).exec();
   }
 
   async updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
