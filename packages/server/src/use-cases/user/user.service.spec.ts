@@ -71,7 +71,7 @@ describe('UserService', () => {
       expect(userEntity.isBanned).toBe(false);
     });
 
-    test('duplicated user', async () => {
+    test('duplicated user: throw DuplicatedUserError', async () => {
       const createUserDto: CreateUserDto = {
         name: 'dante',
         userName: 'dante022',
@@ -81,11 +81,11 @@ describe('UserService', () => {
       const hasUserSpyFn = jest.spyOn(service, 'hasUser');
       hasUserSpyFn.mockResolvedValueOnce(true);
 
-      const userEntity = service.register(createUserDto);
-
       const duplicatedUserError = new DuplicatedUserError();
 
-      expect(userEntity).rejects.toThrowError(duplicatedUserError);
+      expect(async () => service.register(createUserDto)).rejects.toThrowError(
+        duplicatedUserError,
+      );
     });
   });
 
