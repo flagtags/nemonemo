@@ -160,5 +160,16 @@ describe('UserService', () => {
       ).rejects.toThrowError(userNotFoundError);
     });
 
+    test('login success', async () => {
+      const loginUserDto: LoginUserDto = {
+        userName: 'dante022',
+        password: 'john6549',
+      };
+
+      const userToken = await service.login(loginUserDto);
+      const { userName: decodedUserName } = jwt.decode(userToken) as JwtPayload;
+
+      expect(loginUserDto.userName).toEqual(decodedUserName);
+    });
   });
 });
