@@ -24,7 +24,7 @@ export class UserModel {
   }
 
   async hasUser(hasUserDto: HasUserDto): Promise<boolean> {
-    return !!this.userSchema.findOne(hasUserDto).exec();
+    return !!(await this.userSchema.findOne(hasUserDto).exec());
   }
 
   async updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
@@ -33,10 +33,10 @@ export class UserModel {
     const filteredRestUpdatedUserDto =
       filterEmptyObjectField(restUpdatedUserDto);
 
-    return !!this.userSchema.updateOne(
+    return !!(await this.userSchema.updateOne(
       { _id: updateUserDto._id },
       { $set: filteredRestUpdatedUserDto },
-    );
+    ));
   }
 
   getUserList(): Promise<UserDocument[]> {
