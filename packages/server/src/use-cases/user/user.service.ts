@@ -52,8 +52,6 @@ export class UserService {
       throw new UserNotFoundError();
     }
 
-    console.log('jwt.sign', jwt);
-
     // 토큰 생성
     const userToken = jwt.sign({ userName: loginUserDto.userName }, 'flatag');
 
