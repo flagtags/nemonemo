@@ -25,7 +25,7 @@ const { protocol, url, name, password } = config.mongodb;
     }),
     UserModule,
   ],
-  controllers: [AppController, UserController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
