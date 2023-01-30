@@ -8,7 +8,11 @@ import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Injectable } from '@nestjs/common';
 import convertUserDocumentToUserEntity from '@use-cases/converter/user/user.converter';
-import { DuplicatedUserError, UserNotFoundError } from '@errors/user';
+import {
+  DuplicatedUserError,
+  UserNotFoundError,
+  NotAuthenticatedError,
+} from '@errors/user';
 import { LoginUserDto } from '@dto/user/login-user.dto';
 
 @Injectable()
@@ -32,19 +36,20 @@ export class UserService {
   }
 
   async register(createUserDto: CreateUserDto): Promise<UserEntity> {
-    const userDocument = await this.createUser(createUserDto);
-    const userEntity = await convertUserDocumentToUserEntity(userDocument);
-
     const isDuplicatedUser = await this.hasUser({
       userName: createUserDto.userName,
     });
 
-    if (isDuplicatedUser) {
+    if (!!isDuplicatedUser) {
       throw new DuplicatedUserError();
     }
 
+    const userDocument = await this.createUser(createUserDto);
+    const userEntity = await convertUserDocumentToUserEntity(userDocument);
+
     return userEntity;
   }
+
   async login(loginUserDto: LoginUserDto): Promise<string> {
     const hasUserDto = { userName: loginUserDto.userName };
     const hasUser = await this.hasUser(hasUserDto);
@@ -54,7 +59,7 @@ export class UserService {
       throw new UserNotFoundError();
     }
     if (!authenticated) {
-      throw new Error('not authenticated');
+      throw new NotAuthenticatedError();
     }
 
     // 토큰 생성
