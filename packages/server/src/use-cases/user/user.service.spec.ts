@@ -7,7 +7,11 @@ import { UserEntity } from '@entities/user-entity/user-entity.service';
 import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Test, TestingModule } from '@nestjs/testing';
-import { DuplicatedUserError, UserNotFoundError } from '@errors/user';
+import {
+  DuplicatedUserError,
+  NotAuthenticatedError,
+  UserNotFoundError,
+} from '@errors/user';
 import { UserService } from './user.service';
 import { LoginUserDto } from '@dto/user/login-user.dto';
 
@@ -144,7 +148,7 @@ describe('UserService', () => {
   });
 
   describe('login', () => {
-    test('login fail', async () => {
+    test('login fail: 유저 없음', async () => {
       const loginUserDto: LoginUserDto = {
         userName: 'dante022',
         password: 'john6549',
@@ -154,6 +158,25 @@ describe('UserService', () => {
       spyfn.mockResolvedValueOnce(false);
 
       const userNotFoundError = new UserNotFoundError();
+
+      await expect(async () =>
+        service.login(loginUserDto),
+      ).rejects.toThrowError(userNotFoundError);
+    });
+
+    test('login fail: wrong password', async () => {
+      const loginUserDto: LoginUserDto = {
+        userName: 'dante022',
+        password: 'john',
+      };
+
+      const spyfn = jest.spyOn(userModel, 'hasUser');
+      // 유저 있는지
+      spyfn.mockResolvedValueOnce(true);
+      // 비밀번호 맞는지
+      spyfn.mockResolvedValueOnce(false);
+
+      const userNotFoundError = new NotAuthenticatedError();
 
       await expect(async () =>
         service.login(loginUserDto),
