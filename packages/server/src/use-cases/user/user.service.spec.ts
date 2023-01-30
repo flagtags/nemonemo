@@ -84,12 +84,14 @@ describe('UserService', () => {
 
       const hasUserSpyFn = jest.spyOn(service, 'hasUser');
       hasUserSpyFn.mockResolvedValueOnce(true);
+      const createUserSpyfn = jest.spyOn(service, 'createUser');
 
       const duplicatedUserError = new DuplicatedUserError();
 
       expect(async () => service.register(createUserDto)).rejects.toThrowError(
         duplicatedUserError,
       );
+      expect(createUserSpyfn).not.toHaveBeenCalled();
     });
   });
 
@@ -100,11 +102,11 @@ describe('UserService', () => {
       password: 'john6549',
     };
 
-    const spyfn = jest.spyOn(userModel, 'createUser');
+    const createUserSpyfn = jest.spyOn(userModel, 'createUser');
 
     await service.createUser(createUserDto);
 
-    expect(spyfn).toHaveBeenCalledWith(createUserDto);
+    expect(createUserSpyfn).toHaveBeenCalledWith(createUserDto);
   });
 
   test('update user', async () => {
