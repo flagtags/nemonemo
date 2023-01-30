@@ -49,7 +49,7 @@ describe('UserController', () => {
       const spyFn = jest.spyOn(service, 'login');
       spyFn.mockResolvedValue(userToken);
 
-      const result = await controller.login(userName, password);
+      const result = await controller.login({ userName, password });
 
       expect(spyFn).toBeCalledWith(loginUserDto);
       expect(result).toEqual(userToken);
@@ -70,7 +70,7 @@ describe('UserController', () => {
       });
 
       try {
-        await controller.login(userName, password);
+        await controller.login({ userName, password });
         expect(spyFn).toBeCalledWith(loginUserDto);
       } catch (error) {
         expect(error).toEqual(new NotFoundException('User Not Found'));

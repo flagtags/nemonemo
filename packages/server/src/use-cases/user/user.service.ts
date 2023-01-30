@@ -46,10 +46,15 @@ export class UserService {
     return userEntity;
   }
   async login(loginUserDto: LoginUserDto): Promise<string> {
-    const canLoginUser = await this.hasUser(loginUserDto);
+    const hasUserDto = { userName: loginUserDto.userName };
+    const hasUser = await this.hasUser(hasUserDto);
+    const authenticated = await this.hasUser(loginUserDto);
 
-    if (!canLoginUser) {
+    if (!hasUser) {
       throw new UserNotFoundError();
+    }
+    if (!authenticated) {
+      throw new Error('not authenticated');
     }
 
     // 토큰 생성

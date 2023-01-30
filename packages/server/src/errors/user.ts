@@ -15,10 +15,16 @@ export class DuplicatedUserError extends Error {
 
 export class UserNotFoundError extends Error {
   code: number;
-  
+
   constructor() {
     super('User Not Found');
 
     this.code = UserError.USER_NOT_FOUND;
+  }
+}
+
+export class NotAuthenticatedError extends Error {
+  constructor() {
+    super('Not Authenticated');
   }
 }

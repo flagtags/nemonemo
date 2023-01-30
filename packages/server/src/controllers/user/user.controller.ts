@@ -8,21 +8,13 @@ import {
   Post,
 } from '@nestjs/common';
 import { UserService } from '@use-cases/user/user.service';
-
+import { LoginUserDto } from '@dto/user/login-user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @Post('login')
-  async login(
-    @Body('userName') userName: string,
-    @Body('password') password: string,
-  ) {
-    const userDTO = {
-      userName,
-      password,
-    };
-
+  async login(@Body() userDTO: LoginUserDto) {
     try {
       return await this.userService.login(userDTO);
     } catch (error) {
