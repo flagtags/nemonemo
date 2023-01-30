@@ -4,10 +4,16 @@ import { UserController } from './user.controller';
 import { UserService } from '../../use-cases/user/user.service';
 import { DuplicatedUserError, UserNotFoundError } from '@errors/user';
 import { NotFoundException } from '@nestjs/common';
+import { LoginUserDto } from '@dto/user/login-user.dto';
+import { CreateUserDto } from '@dto/user/create-user.dto';
 
 class UserServiceMock {
-  async login(userName: string, password: string) {
+  async login({ userName, password }: LoginUserDto) {
     return { userName, password };
+  }
+
+  async register({ userName, password, name }: CreateUserDto) {
+    return { userName, password, name };
   }
 }
 
@@ -78,13 +84,13 @@ describe('UserController', () => {
     });
   });
 
-  it.skip('should call register', () => {
+  it('should call register', () => {
     const name = 'name';
     const userName = 'userName';
     const password = 'password';
 
     const spyFn = jest.spyOn(service, 'register');
-    // controller.register(name, userName, password);
+    controller.register({ name, userName, password });
 
     const createUserDto = {
       name,
