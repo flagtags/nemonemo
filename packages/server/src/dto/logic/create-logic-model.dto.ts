@@ -1,5 +1,4 @@
-export class CreateLogicDto {
-  readonly _id: string;
+export class CreateLogicModelDto {
   readonly answer: boolean[][];
   readonly hintRow: number[][];
   readonly hintColumn: number[][];

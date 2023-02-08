@@ -5,7 +5,7 @@ import { filterEmptyObjectField } from '@utils/index';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
-import { CreateLogicDto } from '@dto/logic/create-logic.dto';
+import { CreateLogicModelDto } from '@dto/logic/create-logic-model.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { Logic, LogicDocmuent } from './logic.schema';
 
@@ -24,7 +24,7 @@ export class LogicModel {
     return this.logicSchema.findOne({ id: findOneLogicDto.id }).exec();
   }
 
-  createLogic(createLogicDto: CreateLogicDto): Promise<LogicDocmuent> {
+  createLogic(createLogicDto: CreateLogicModelDto): Promise<LogicDocmuent> {
     const logicDocument = new this.logicSchema(createLogicDto);
     const logic = logicDocument.save();
 
