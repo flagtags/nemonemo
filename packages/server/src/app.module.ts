@@ -2,6 +2,7 @@ import { Logger, Module } from '@nestjs/common';
 import { InjectConnection, MongooseModule } from '@nestjs/mongoose';
 import { UserController } from '@controllers/user/user.controller';
 import { UserModule } from '@modules/user/user.module';
+import { LogicModule } from '@modules/logic/logic.module';
 import config from './config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -24,6 +25,7 @@ const { protocol, url, name, password } = config.mongodb;
       },
     }),
     UserModule,
+    LogicModule,
   ],
   controllers: [AppController],
   providers: [AppService],
