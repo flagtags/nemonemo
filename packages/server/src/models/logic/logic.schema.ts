@@ -27,4 +27,4 @@ export class Logic {
   size: number;
 }
 
-export const logicSchema = SchemaFactory.createForClass(Logic);
+export const LogicSchema = SchemaFactory.createForClass(Logic);
