@@ -6,9 +6,6 @@ export type LogicDocmuent = Logic & Document;
 @Schema()
 export class Logic {
   @Prop()
-  id: string;
-
-  @Prop()
   answer: boolean[][];
 
   @Prop()

@@ -1,3 +1,3 @@
 export class FindOneLogicDto {
-  readonly id: string;
+  readonly _id: string;
 }

@@ -21,7 +21,7 @@ export class LogicModel {
   }
 
   findOneLogic(findOneLogicDto: FindOneLogicDto): Promise<LogicDocmuent> {
-    return this.logicSchema.findOne({ id: findOneLogicDto.id }).exec();
+    return this.logicSchema.findOne({ id: findOneLogicDto._id }).exec();
   }
 
   createLogic(createLogicDto: CreateLogicModelDto): Promise<LogicDocmuent> {
