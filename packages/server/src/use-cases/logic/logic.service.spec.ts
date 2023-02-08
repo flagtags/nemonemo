@@ -17,6 +17,22 @@ class LogicModelMock {
   ): Promise<LogicDocmuent> {
     return {} as LogicDocmuent;
   }
+
+  async findLogics(findLogicDto: FindLogicsDto): Promise<LogicDocmuent[]> {
+    return {} as LogicDocmuent[];
+  }
+
+  async findOneLogic(findOneLogicDto: FindOneLogicDto): Promise<LogicDocmuent> {
+    return {} as LogicDocmuent;
+  }
+
+  async updateLogic(updateLogicDto: UpdateLogicDto): Promise<boolean> {
+    return true;
+  }
+
+  async deleteLogic(deleteLogicDto: DeleteLogicDto): Promise<boolean> {
+    return true;
+  }
 }
 
 describe('로직 서비스', () => {
@@ -58,4 +74,57 @@ describe('로직 서비스', () => {
     expect(createLogicSpyfn).toHaveBeenCalledWith(logicEntity);
   });
 
+  test('로직 제공', async () => {
+    const findOneLogicDto = {
+      _id: '_id',
+    };
+
+    const findOneLogicSpyfn = jest.spyOn(logicModel, 'findOneLogic');
+    const mockedLogic = {} as LogicDocmuent;
+    findOneLogicSpyfn.mockResolvedValue(mockedLogic);
+
+    const logic = await service.findOneLogic(findOneLogicDto);
+
+    expect(findOneLogicSpyfn).toHaveBeenCalledWith(findOneLogicDto);
+    expect(logic).toEqual(mockedLogic);
+  });
+
+  test('로직 삭제', async () => {
+    const deleteLogicDto = {
+      _id: '_id',
+    };
+
+    const deleteLogicSpyfn = jest.spyOn(logicModel, 'deleteLogic');
+
+    await service.deleteLogic(deleteLogicDto);
+
+    expect(deleteLogicSpyfn).toHaveBeenCalledWith(deleteLogicDto);
+  });
+
+  test('로직 목록 요청', async () => {
+    const findLogicsDto: FindLogicsDto = {
+      pageIndex: 1,
+      pageSize: 3,
+    };
+    const findLogicSpyfn = jest.spyOn(logicModel, 'findLogics');
+    findLogicSpyfn.mockResolvedValue([{}, {}] as LogicDocmuent[]);
+
+    const logics = await service.findLogics(findLogicsDto);
+
+    expect(findLogicSpyfn).toHaveBeenCalledWith(findLogicsDto);
+    expect(logics).toEqual([{}, {}]);
+  });
+
+  test('제한시간 수정', async () => {
+    const updateLogicDto: UpdateLogicDto = {
+      _id: '_id',
+      timeLimit: 240,
+    };
+
+    const updateLogicSpyfn = jest.spyOn(logicModel, 'updateLogic');
+
+    await service.updateLogic(updateLogicDto);
+
+    expect(updateLogicSpyfn).toHaveBeenCalledWith(updateLogicDto);
+  });
 });
