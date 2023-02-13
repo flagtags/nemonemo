@@ -10,8 +10,10 @@ import {
   Query,
   Patch,
 } from '@nestjs/common';
+import { OmitType } from '@nestjs/mapped-types';
 import { LogicService } from '@use-cases/logic/logic.service';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
+class AA extends OmitType(UpdateLogicDto, ['_id'] as const) {}
 
 @Controller('logic')
 export class LogicController {
@@ -59,17 +61,18 @@ export class LogicController {
     }
   }
 
-  @Patch(':id')
+  @Patch(':_id')
   async updateLogic(
-    @Param('id') id: string,
-    @Body() updateLogicDto: UpdateLogicDto,
+    @Param('_id') _id: UpdateLogicDto['_id'],
+    @Body() updateLogicDto: AA,
   ) {
     try {
       return await this.logicService.updateLogic({
-        _id: id,
+        _id,
         ...updateLogicDto,
       });
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }

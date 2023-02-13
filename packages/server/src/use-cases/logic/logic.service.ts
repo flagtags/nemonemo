@@ -22,6 +22,8 @@ export class LogicService {
   }
 
   async findLogics(findLogicsDto: FindLogicsDto) {
+    console.log('findLogicsDto', findLogicsDto);
+
     return this.logicModel.findLogics(findLogicsDto);
   }
 
@@ -29,7 +31,7 @@ export class LogicService {
     return this.logicModel.deleteLogic(deleteLogicDto);
   }
 
-  async updateLogic(updateLogicDto: UpdateLogicDto) {
+  async updateLogic(updateLogicDto: Omit<UpdateLogicDto, 'id'>) {
     return this.logicModel.updateLogic(updateLogicDto);
   }
 }

@@ -31,15 +31,22 @@ export class LogicModel {
     return logic;
   }
 
-  async updateLogic(updateLogicDto: UpdateLogicDto): Promise<boolean> {
+  async updateLogic(
+    updateLogicDto: Omit<UpdateLogicDto, 'id'>,
+  ): Promise<boolean> {
     const { _id, ...restUpdatedLogicDto } = updateLogicDto;
 
     const filteredRestUpdateLogicDto =
       filterEmptyObjectField(restUpdatedLogicDto);
-    return !!(await this.logicSchema.updateOne(
+
+    const res = await this.logicSchema.updateOne(
       { _id: updateLogicDto._id },
       { $set: filteredRestUpdateLogicDto },
-    ));
+    );
+
+    if (res.matchedCount === 0) throw new Error('logic not found');
+
+    return true;
   }
 
   async deleteLogic(removeLogicDto: DeleteLogicDto): Promise<boolean> {
