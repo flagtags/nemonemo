@@ -1778,6 +1778,11 @@
     tslib "2.4.0"
     uuid "8.3.2"
 
+"@nestjs/mapped-types@^1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@nestjs/mapped-types/-/mapped-types-1.2.2.tgz#d9ddb143776e309dbc1a518ac1607fddac1e140e"
+  integrity sha512-3dHxLXs3M0GPiriAcCFFJQHoDFUuzTD5w6JDhE7TyfT89YKpe6tcCCIqOZWdXmt9AZjjK30RkHRSFF+QEnWFQg==
+
 "@nestjs/mongoose@^9.1.1":
   version "9.2.0"
   resolved "https://registry.yarnpkg.com/@nestjs/mongoose/-/mongoose-9.2.0.tgz#38c1faf8402c93294ead64d442d18f715b734a5f"
