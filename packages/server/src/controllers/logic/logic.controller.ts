@@ -9,10 +9,17 @@ import {
   Delete,
   Query,
   Patch,
+  UsePipes,
+  ValidationPipe,
+  ParseIntPipe,
 } from '@nestjs/common';
 import { OmitType } from '@nestjs/mapped-types';
 import { LogicService } from '@use-cases/logic/logic.service';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
+import { FindLogicsDto } from '@dto/logic/find-logics.dto';
+import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
+import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
+
 class AA extends OmitType(UpdateLogicDto, ['_id'] as const) {}
 
 @Controller('logic')
@@ -24,39 +31,40 @@ export class LogicController {
     try {
       return await this.logicService.createLogic(logicDTO);
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  @Get(':id')
-  async findOneLogic(@Param('id') id: string) {
+  @Get(':_id')
+  async findOneLogic(
+    @Param('_id', new ParseIntPipe()) _id: FindOneLogicDto['_id'],
+  ) {
     try {
-      return await this.logicService.findOneLogic({ _id: id });
+      console.log(typeof _id);
+      return await this.logicService.findOneLogic({ _id });
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }
 
-  @Delete(':id')
-  async deleteLogic(@Param('id') id: string) {
+  @Delete(':_id')
+  async deleteLogic(@Param('_id') _id: DeleteLogicDto['_id']) {
     try {
-      return await this.logicService.deleteLogic({ _id: id });
+      return await this.logicService.deleteLogic({ _id });
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }
 
   @Get()
-  async findLogics(
-    @Query('pageIndex') pageIndex: number,
-    @Query('pageSize') pageSize: number,
-  ) {
+  async findLogics(@Query() query: FindLogicsDto) {
     try {
-      return await this.logicService.findLogics({
-        pageIndex,
-        pageSize,
-      });
+      return await this.logicService.findLogics(query);
     } catch (error) {
+      console.error(error);
       throw new InternalServerErrorException(error.message);
     }
   }

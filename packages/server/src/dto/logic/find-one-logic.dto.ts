@@ -1,3 +1,6 @@
+import { IsNumber } from 'class-validator';
+
 export class FindOneLogicDto {
-  readonly _id: string;
+  @IsNumber()
+  readonly _id: number;
 }
