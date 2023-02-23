@@ -8,6 +8,7 @@ import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
 import { CreateLogicModelDto } from '@dto/logic/create-logic-model.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { Logic, LogicDocmuent } from './logic.schema';
+import { LogicNotFoundError } from '@errors/logic';
 
 @Injectable()
 export class LogicModel {
@@ -44,7 +45,7 @@ export class LogicModel {
       { $set: filteredRestUpdateLogicDto },
     );
 
-    if (res.matchedCount === 0) throw new Error('logic not found');
+    if (res.matchedCount === 0) throw new LogicNotFoundError();
 
     return true;
   }
@@ -54,7 +55,7 @@ export class LogicModel {
       .deleteOne({ _id: removeLogicDto._id })
       .exec();
 
-    if (res.deletedCount === 0) throw new Error('logic not found');
+    if (res.deletedCount === 0) throw new LogicNotFoundError();
     return true;
   }
 }
