@@ -4,6 +4,7 @@ import {
   Controller,
   Get,
   InternalServerErrorException,
+  NotFoundException,
   Post,
   Param,
   Delete,
@@ -28,45 +29,22 @@ export class LogicController {
 
   @Post()
   async createLogic(@Body() logicDTO: CreateLogicServiceDto) {
-    try {
-      return await this.logicService.createLogic(logicDTO);
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.logicService.createLogic(logicDTO);
   }
 
   @Get(':_id')
-  async findOneLogic(
-    @Param('_id', new ParseIntPipe()) _id: FindOneLogicDto['_id'],
-  ) {
-    try {
-      console.log(typeof _id);
-      return await this.logicService.findOneLogic({ _id });
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException(error.message);
-    }
+  async findOneLogic(@Param('_id') _id: FindOneLogicDto['_id']) {
+    return await this.logicService.findOneLogic({ _id });
   }
 
   @Delete(':_id')
   async deleteLogic(@Param('_id') _id: DeleteLogicDto['_id']) {
-    try {
-      return await this.logicService.deleteLogic({ _id });
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.logicService.deleteLogic({ _id });
   }
 
   @Get()
   async findLogics(@Query() query: FindLogicsDto) {
-    try {
-      return await this.logicService.findLogics(query);
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.logicService.findLogics(query);
   }
 
   @Patch(':_id')
@@ -74,14 +52,9 @@ export class LogicController {
     @Param('_id') _id: UpdateLogicDto['_id'],
     @Body() updateLogicDto: AA,
   ) {
-    try {
-      return await this.logicService.updateLogic({
-        _id,
-        ...updateLogicDto,
-      });
-    } catch (error) {
-      console.error(error);
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.logicService.updateLogic({
+      _id,
+      ...updateLogicDto,
+    });
   }
 }

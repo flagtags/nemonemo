@@ -16,25 +16,11 @@ export class UserController {
 
   @Post('login')
   async login(@Body() userDTO: LoginUserDto) {
-    try {
-      return await this.userService.login(userDTO);
-    } catch (error) {
-      if (error instanceof UserNotFoundError) {
-        throw new NotFoundException(error.message);
-      }
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.userService.login(userDTO);
   }
 
   @Post('register')
   async register(@Body() userDTO: CreateUserDto) {
-    try {
-      return await this.userService.register(userDTO);
-    } catch (error) {
-      if (error instanceof DuplicatedUserError) {
-        throw new NotFoundException(error.message);
-      }
-      throw new InternalServerErrorException(error.message);
-    }
+    return await this.userService.register(userDTO);
   }
 }
