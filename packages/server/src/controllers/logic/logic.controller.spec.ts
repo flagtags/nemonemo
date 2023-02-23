@@ -103,10 +103,7 @@ describe('로직 서비스', () => {
     const findLogicSpyfn = jest.spyOn(logicService, 'findLogics');
     findLogicSpyfn.mockResolvedValue([{}, {}] as Logic[]);
 
-    const logics = await controller.findLogics(
-      findLogicsDto.pageIndex,
-      findLogicsDto.pageSize,
-    );
+    const logics = await controller.findLogics(findLogicsDto);
 
     expect(findLogicSpyfn).toHaveBeenCalledWith(findLogicsDto);
     expect(logics).toEqual([{}, {}]);

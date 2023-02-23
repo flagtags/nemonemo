@@ -1,6 +1,6 @@
-import { IsNumber } from 'class-validator';
+import { IsMongoId } from 'class-validator';
 
 export class FindOneLogicDto {
-  @IsNumber()
-  readonly _id: number;
+  @IsMongoId()
+  readonly _id: string;
 }
