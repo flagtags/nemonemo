@@ -1,12 +1,13 @@
 import { Logger, Module } from '@nestjs/common';
-import { InjectConnection, MongooseModule } from '@nestjs/mongoose';
-import { UserController } from '@controllers/user/user.controller';
+import { MongooseModule } from '@nestjs/mongoose';
 import { UserModule } from '@modules/user/user.module';
 import { LogicModule } from '@modules/logic/logic.module';
 import config from './config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { Connection } from 'mongoose';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionFilter } from '@errors/exceptions/filter';
 
 const { protocol, url, name, password } = config.mongodb;
 @Module({
@@ -28,6 +29,12 @@ const { protocol, url, name, password } = config.mongodb;
     LogicModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
