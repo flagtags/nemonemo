@@ -10,6 +10,7 @@ import { LogicModel } from '@models/logic/logic.model';
 import { Logic, LogicDocmuent } from '@models/logic/logic.schema';
 import { LogicService } from './logic.service';
 import { LogicEntityDto } from '@dto/logic/logic-entity.dto';
+import { LogicNotFoundError } from '@errors/logic';
 
 class LogicModelMock {
   async createLogic(
@@ -89,16 +90,18 @@ describe('로직 서비스', () => {
     expect(logic).toEqual(mockedLogic);
   });
 
-  test('로직 삭제', async () => {
-    const deleteLogicDto = {
-      _id: '_id',
-    };
+  describe('로직 삭제', () => {
+    test('성공', async () => {
+      const deleteLogicDto = {
+        _id: '_id',
+      };
 
-    const deleteLogicSpyfn = jest.spyOn(logicModel, 'deleteLogic');
+      const deleteLogicSpyfn = jest.spyOn(logicModel, 'deleteLogic');
 
-    await service.deleteLogic(deleteLogicDto);
+      await service.deleteLogic(deleteLogicDto);
 
-    expect(deleteLogicSpyfn).toHaveBeenCalledWith(deleteLogicDto);
+      expect(deleteLogicSpyfn).toHaveBeenCalledWith(deleteLogicDto);
+    });
   });
 
   test('로직 목록 요청', async () => {
@@ -128,3 +131,8 @@ describe('로직 서비스', () => {
     expect(updateLogicSpyfn).toHaveBeenCalledWith(updateLogicDto);
   });
 });
+
+// TODO: 로직 수정 테스트
+test('잘못된 authorId를 넣으려고 하는 경우', () => {}); // 인증 모듈을 만들고 수정?
+
+test('업데이트 로직할 때 hintRow, hintColumn 다시 계산', () => {});
