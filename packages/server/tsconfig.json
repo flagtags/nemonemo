@@ -20,7 +20,8 @@
       "@utils/*": ["./src/utils/*"],
       "@dto/*": ["./src/dto/*"],
       "@errors/*": ["./src/errors/*"],
-      "@validator/*": ["./src/validator/*"]
+      "@validator/*": ["./src/validator/*"],
+      "@pipe/*": ["./src/pipe/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

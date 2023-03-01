@@ -70,7 +70,8 @@
       "^@dto/(.*)": "<rootDir>/dto/$1",
       "^@utils/(.*)": "<rootDir>/utils/$1",
       "^@errors/(.*)": "<rootDir>/errors/$1",
-      "^@validator/(.*)": "<rootDir>/validator/$1"
+      "^@validator/(.*)": "<rootDir>/validator/$1",
+      "^@pipe/(.*)": "<rootDir>/pipe/$1"
     },
     "moduleFileExtensions": [
       "js",
