@@ -20,8 +20,11 @@ import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
+import { AtLeastOnePropertyValidationPipe } from '@pipe/atLeastOnePropertyValidationPipe';
 
-class AA extends OmitType(UpdateLogicDto, ['_id'] as const) {}
+class IdOmitedUpdatedLogicDto extends OmitType(UpdateLogicDto, [
+  '_id',
+] as const) {}
 
 @Controller('logic')
 export class LogicController {
@@ -50,7 +53,8 @@ export class LogicController {
   @Patch(':_id')
   async updateLogic(
     @Param('_id') _id: UpdateLogicDto['_id'],
-    @Body() updateLogicDto: AA,
+    @Body(new AtLeastOnePropertyValidationPipe())
+    updateLogicDto: IdOmitedUpdatedLogicDto,
   ) {
     return await this.logicService.updateLogic({
       _id,
