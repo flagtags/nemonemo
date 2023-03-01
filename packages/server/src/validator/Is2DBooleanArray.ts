@@ -1,8 +1,4 @@
-import {
-  ValidationOptions,
-  registerDecorator,
-  ValidationArguments,
-} from 'class-validator';
+import { ValidationOptions, registerDecorator } from 'class-validator';
 
 const Is2DBooleanArray =
   (validationOptions?: ValidationOptions) =>
