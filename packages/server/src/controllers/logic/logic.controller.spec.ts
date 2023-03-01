@@ -21,12 +21,12 @@ class LogicServiceMock {
     return {} as Logic;
   }
 
-  async updateLogic(updateLogicDto: UpdateLogicDto): Promise<boolean> {
-    return true;
+  async updateLogic(updateLogicDto: UpdateLogicDto): Promise<number> {
+    return 0;
   }
 
-  async deleteLogic(deleteLogicDto: DeleteLogicDto): Promise<boolean> {
-    return true;
+  async deleteLogic(deleteLogicDto: DeleteLogicDto): Promise<number> {
+    return 0;
   }
 }
 

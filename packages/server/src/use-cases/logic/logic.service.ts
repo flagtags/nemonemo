@@ -6,6 +6,8 @@ import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
+import { HintCalculatorEntity } from '@entities/hint-calculator-entity/hint-calculator-entity';
+import { LogicNotFoundError } from '@errors/logic';
 
 @Injectable()
 export class LogicService {
@@ -14,24 +16,54 @@ export class LogicService {
   async createLogic(createLogicServiceDto: CreateLogicServiceDto) {
     const logicEntity = new LogicEntity(createLogicServiceDto);
 
-    return this.logicModel.createLogic(logicEntity);
+    const { response } = await this.logicModel.createLogic(logicEntity);
+    return response;
   }
 
   async findOneLogic(findOneLogicDto: FindOneLogicDto) {
-    return this.logicModel.findOneLogic(findOneLogicDto);
+    const { response, matched } = await this.logicModel.findOneLogic(
+      findOneLogicDto,
+    );
+
+    if (matched === 0) throw new LogicNotFoundError();
+    return response;
   }
 
   async findLogics(findLogicsDto: FindLogicsDto) {
-    console.log('findLogicsDto', findLogicsDto);
+    const { response } = await this.logicModel.findLogics(findLogicsDto);
 
-    return this.logicModel.findLogics(findLogicsDto);
+    return response;
   }
 
   async deleteLogic(deleteLogicDto: DeleteLogicDto) {
-    return this.logicModel.deleteLogic(deleteLogicDto);
+    const { response, matched } = await this.logicModel.deleteLogic(
+      deleteLogicDto,
+    );
+
+    if (matched === 0) throw new LogicNotFoundError();
+    return response;
   }
 
   async updateLogic(updateLogicDto: Omit<UpdateLogicDto, 'id'>) {
-    return this.logicModel.updateLogic(updateLogicDto);
+    let updateLogicModelDto;
+    if (updateLogicDto.answer) {
+      const hints = HintCalculatorEntity.getHints(updateLogicDto.answer);
+      updateLogicModelDto = {
+        ...updateLogicDto,
+        hintRow: hints.row,
+        hintColumn: hints.column,
+        size: updateLogicDto.answer.length,
+      };
+    } else {
+      updateLogicModelDto = updateLogicDto;
+    }
+
+    const { response, matched } = await this.logicModel.updateLogic(
+      updateLogicModelDto,
+    );
+
+    if (matched === 0) throw new LogicNotFoundError();
+
+    return response;
   }
 }

@@ -9,32 +9,54 @@ import { CreateLogicModelDto } from '@dto/logic/create-logic-model.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { Logic, LogicDocmuent } from './logic.schema';
 import { LogicNotFoundError } from '@errors/logic';
+import { IModelResponse } from '@models/response';
 
 @Injectable()
 export class LogicModel {
   constructor(@InjectModel(Logic.name) private logicSchema: Model<Logic>) {}
 
-  findLogics(findLogicDto: FindLogicsDto): Promise<LogicDocmuent[]> {
+  async findLogics(
+    findLogicDto: FindLogicsDto,
+  ): Promise<IModelResponse<LogicDocmuent[]>> {
     const { pageSize, pageIndex } = findLogicDto;
-    const skipNum = pageSize * (pageIndex - 1);
+    const skipNum = pageSize * pageIndex;
 
-    return this.logicSchema.find().limit(pageSize).skip(skipNum).exec();
+    const res = await this.logicSchema
+      .find()
+      .limit(pageSize)
+      .skip(skipNum)
+      .exec();
+
+    return {
+      response: res,
+      matched: res.length,
+    };
   }
 
-  findOneLogic(findOneLogicDto: FindOneLogicDto): Promise<LogicDocmuent> {
-    return this.logicSchema.findOne({ id: findOneLogicDto._id }).exec();
+  async findOneLogic(
+    findOneLogicDto: FindOneLogicDto,
+  ): Promise<IModelResponse<LogicDocmuent>> {
+    const res = await this.logicSchema
+      .findOne({ _id: findOneLogicDto._id })
+      .exec();
+    return {
+      response: res,
+      matched: res ? 1 : 0,
+    };
   }
 
-  createLogic(createLogicDto: CreateLogicModelDto): Promise<LogicDocmuent> {
+  async createLogic(
+    createLogicDto: CreateLogicModelDto,
+  ): Promise<IModelResponse<LogicDocmuent>> {
     const logicDocument = new this.logicSchema(createLogicDto);
-    const logic = logicDocument.save();
+    const logic = await logicDocument.save();
 
-    return logic;
+    return { response: logic };
   }
 
   async updateLogic(
     updateLogicDto: Omit<UpdateLogicDto, 'id'>,
-  ): Promise<boolean> {
+  ): Promise<IModelResponse<number>> {
     const { _id, ...restUpdatedLogicDto } = updateLogicDto;
 
     const filteredRestUpdateLogicDto =
@@ -45,17 +67,23 @@ export class LogicModel {
       { $set: filteredRestUpdateLogicDto },
     );
 
-    if (res.matchedCount === 0) throw new LogicNotFoundError();
-
-    return true;
+    return {
+      response: res.modifiedCount,
+      matched: res.matchedCount,
+    };
   }
 
-  async deleteLogic(removeLogicDto: DeleteLogicDto): Promise<boolean> {
+  async deleteLogic(
+    removeLogicDto: DeleteLogicDto,
+  ): Promise<IModelResponse<number>> {
     const res = await this.logicSchema
       .deleteOne({ _id: removeLogicDto._id })
       .exec();
 
-    if (res.deletedCount === 0) throw new LogicNotFoundError();
-    return true;
+    return {
+      response: res.deletedCount,
+      matched: res.deletedCount,
+      affected: res.deletedCount,
+    };
   }
 }
