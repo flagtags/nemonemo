@@ -1,3 +1,4 @@
+import { EmptyRequestError } from '@errors/common';
 import { LogicNotFoundError } from '@errors/logic';
 import {
   DuplicatedUserError,
@@ -15,6 +16,7 @@ export default class ExceptionFactory {
   static createException(error: Error) {
     switch (error.constructor) {
       case DuplicatedUserError:
+      case EmptyRequestError:
         return new BadRequestException(error.message);
       case UserNotFoundError:
       case LogicNotFoundError:
