@@ -19,7 +19,9 @@
       "@config": ["./src/config/index"],
       "@utils/*": ["./src/utils/*"],
       "@dto/*": ["./src/dto/*"],
-      "@errors/*": ["./src/errors/*"]
+      "@errors/*": ["./src/errors/*"],
+      "@validator/*": ["./src/validator/*"],
+      "@pipe/*": ["./src/pipe/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

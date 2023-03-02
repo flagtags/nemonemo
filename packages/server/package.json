@@ -23,6 +23,7 @@
   "dependencies": {
     "@nestjs/common": "^8.0.0",
     "@nestjs/core": "^8.0.0",
+    "@nestjs/mapped-types": "^1.2.2",
     "@nestjs/mongoose": "^9.1.1",
     "@nestjs/platform-express": "^8.0.0",
     "class-transformer": "^0.5.1",
@@ -68,7 +69,9 @@
       "^@config/(.*)": "<rootDir>/config/$1",
       "^@dto/(.*)": "<rootDir>/dto/$1",
       "^@utils/(.*)": "<rootDir>/utils/$1",
-      "^@errors/(.*)": "<rootDir>/errors/$1"
+      "^@errors/(.*)": "<rootDir>/errors/$1",
+      "^@validator/(.*)": "<rootDir>/validator/$1",
+      "^@pipe/(.*)": "<rootDir>/pipe/$1"
     },
     "moduleFileExtensions": [
       "js",
