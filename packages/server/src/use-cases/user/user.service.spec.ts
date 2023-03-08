@@ -4,6 +4,7 @@ import { FindUserDto } from '@dto/user/find-user.dto';
 import { HasUserDto } from '@dto/user/has-user.dto';
 import { UpdateUserDto } from '@dto/user/update-user.dto';
 import { UserEntity } from '@entities/user-entity/user-entity.service';
+import { IModelResponse } from '@models/response';
 import { UserModel } from '@models/user/user.model';
 import { UserDocument } from '@models/user/user.schema';
 import { Test, TestingModule } from '@nestjs/testing';
@@ -16,20 +17,35 @@ import { UserService } from './user.service';
 import { LoginUserDto } from '@dto/user/login-user.dto';
 
 class UserModelMock {
-  async createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
-    return createUserDto as UserDocument;
+  async createUser(
+    createUserDto: CreateUserDto,
+  ): Promise<IModelResponse<UserDocument>> {
+    return { response: createUserDto as UserDocument, affected: 1 };
   }
 
-  async findUser(findUserDto: FindUserDto): Promise<UserDocument> {
-    return findUserDto as UserDocument;
+  async findUser(
+    findUserDto: FindUserDto,
+  ): Promise<IModelResponse<UserDocument>> {
+    return {
+      response: findUserDto as UserDocument,
+      matched: 1,
+    };
   }
 
-  async hasUser(hasUserDto: HasUserDto): Promise<Boolean> {
-    return !!hasUserDto;
+  async hasUser(hasUserDto: HasUserDto): Promise<IModelResponse<Boolean>> {
+    return {
+      response: !!hasUserDto,
+      matched: 1,
+    };
   }
 
-  async updateUser(updateUserDto: UpdateUserDto): Promise<Boolean> {
-    return !!updateUserDto;
+  async updateUser(
+    updateUserDto: UpdateUserDto,
+  ): Promise<IModelResponse<Boolean>> {
+    return {
+      response: !!updateUserDto,
+      matched: 1,
+    };
   }
 }
 
@@ -157,7 +173,10 @@ describe('UserService', () => {
       };
 
       const spyfn = jest.spyOn(userModel, 'hasUser');
-      spyfn.mockResolvedValueOnce(false);
+      spyfn.mockResolvedValueOnce({
+        response: false,
+        matched: 1,
+      });
 
       const userNotFoundError = new UserNotFoundError();
 
@@ -174,9 +193,15 @@ describe('UserService', () => {
 
       const spyfn = jest.spyOn(userModel, 'hasUser');
       // 유저 있는지
-      spyfn.mockResolvedValueOnce(true);
+      spyfn.mockResolvedValueOnce({
+        response: true,
+        matched: 1,
+      });
       // 비밀번호 맞는지
-      spyfn.mockResolvedValueOnce(false);
+      spyfn.mockResolvedValueOnce({
+        response: false,
+        matched: 1,
+      });
 
       const userNotFoundError = new NotAuthenticatedError();
 

@@ -19,20 +19,29 @@ import { LoginUserDto } from '@dto/user/login-user.dto';
 export class UserService {
   constructor(private readonly userModel: UserModel) {}
 
-  createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
-    return this.userModel.createUser(createUserDto);
+  async createUser(createUserDto: CreateUserDto): Promise<UserDocument> {
+    const { response } = await this.userModel.createUser(createUserDto);
+    return response;
   }
 
-  findUser(findUserDto: FindUserDto): Promise<UserDocument> {
-    return this.userModel.findUser(findUserDto);
+  async findUser(findUserDto: FindUserDto): Promise<UserDocument> {
+    const { response } = await this.userModel.findUser(findUserDto);
+    return response;
   }
 
-  hasUser(hasUserDto: HasUserDto): Promise<boolean> {
-    return this.userModel.hasUser(hasUserDto);
+  async hasUser(hasUserDto: HasUserDto): Promise<boolean> {
+    const { response } = await this.userModel.hasUser(hasUserDto);
+    return response;
   }
 
-  updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
-    return this.userModel.updateUser(updateUserDto);
+  async updateUser(updateUserDto: UpdateUserDto): Promise<boolean> {
+    const { response, matched } = await this.userModel.updateUser(
+      updateUserDto,
+    );
+
+    if (!matched) throw new UserNotFoundError();
+
+    return response;
   }
 
   async register(createUserDto: CreateUserDto): Promise<UserEntity> {
