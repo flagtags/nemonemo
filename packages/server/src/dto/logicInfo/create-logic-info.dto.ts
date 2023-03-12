@@ -10,7 +10,7 @@ export class CreateLogicInfoDto {
   @IsNumber()
   readonly likes: number;
   @IsNumber()
-  readonly averageSolveTimeMs: number;
+  readonly averageSolvedTimeMs: number;
   @IsNumber()
-  readonly bestSolveTimeMs: number;
+  readonly bestSolvedTimeMs: number;
 }

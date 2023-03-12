@@ -24,10 +24,10 @@ export class LogicInfo {
   likes: number;
 
   @Prop()
-  averageSolveTimeMs: number;
+  averageSolvedTimeMs: number;
 
   @Prop()
-  bestSolveTimeMs: number;
+  bestSolvedTimeMs: number;
 }
 
 export const LogicSchema = SchemaFactory.createForClass(LogicInfo);

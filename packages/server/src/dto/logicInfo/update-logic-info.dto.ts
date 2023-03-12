@@ -14,8 +14,8 @@ export class UpdateLogicInfoDto {
   readonly likes?: number;
   @IsNumber()
   @IsOptional()
-  readonly averageSolveTimeMs?: number;
+  readonly averageSolvedTimeMs?: number;
   @IsNumber()
   @IsOptional()
-  readonly bestSolveTimeMs?: number;
+  readonly bestSolvedTimeMs?: number;
 }
