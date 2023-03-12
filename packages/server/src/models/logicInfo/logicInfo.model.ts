@@ -33,7 +33,7 @@ export class LogicInfoModel {
     };
   }
 
-  async updateLogicInfoDto(updateLogicInfoDto: UpdateLogicInfoDto) {
+  async updateLogicInfo(updateLogicInfoDto: UpdateLogicInfoDto) {
     const { logicId, ...restUpdatedLogicInfoDto } = updateLogicInfoDto;
 
     const filteredRestUpdateLogicIdDto = filterEmptyObjectField(
@@ -51,7 +51,7 @@ export class LogicInfoModel {
     };
   }
 
-  async deleteLogic(removeLogicInfoDto: DeleteLogicInfoDto) {
+  async deleteLogicInfo(removeLogicInfoDto: DeleteLogicInfoDto) {
     const res = await this.logicInfoSchema
       .deleteOne({ logicId: removeLogicInfoDto.logicId })
       .exec();
@@ -60,6 +60,38 @@ export class LogicInfoModel {
       response: res.deletedCount,
       matched: res.deletedCount,
       affected: res.deletedCount,
+    };
+  }
+
+  async increaseViews(updateLogicInfoDto: UpdateLogicInfoDto) {
+    const res = await this.logicInfoSchema.updateOne(
+      { logicId: updateLogicInfoDto.logicId },
+      {
+        $set: {
+          views: { $inc: 1 },
+        },
+      },
+    );
+
+    return {
+      response: res.modifiedCount,
+      match: res.matchedCount,
+    };
+  }
+
+  async increaseLikes(updateLogicInfoDto: UpdateLogicInfoDto) {
+    const res = await this.logicInfoSchema.updateOne(
+      { logicId: updateLogicInfoDto.logicId },
+      {
+        $set: {
+          likes: { $inc: 1 },
+        },
+      },
+    );
+
+    return {
+      response: res.modifiedCount,
+      match: res.matchedCount,
     };
   }
 }
