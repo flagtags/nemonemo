@@ -67,15 +67,13 @@ export class LogicInfoModel {
     const res = await this.logicInfoSchema.updateOne(
       { logicId: updateLogicInfoDto.logicId },
       {
-        $set: {
-          views: { $inc: 1 },
-        },
+        $inc: { views: 1 },
       },
     );
 
     return {
       response: res.modifiedCount,
-      match: res.matchedCount,
+      matched: res.matchedCount,
     };
   }
 
@@ -83,15 +81,13 @@ export class LogicInfoModel {
     const res = await this.logicInfoSchema.updateOne(
       { logicId: updateLogicInfoDto.logicId },
       {
-        $set: {
-          likes: { $inc: 1 },
-        },
+        $inc: { likes: 1 },
       },
     );
 
     return {
       response: res.modifiedCount,
-      match: res.matchedCount,
+      matched: res.matchedCount,
     };
   }
 }

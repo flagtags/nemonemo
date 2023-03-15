@@ -30,4 +30,4 @@ export class LogicInfo {
   bestSolvedTimeMs: number;
 }
 
-export const LogicSchema = SchemaFactory.createForClass(LogicInfo);
+export const LogicInfoSchema = SchemaFactory.createForClass(LogicInfo);
