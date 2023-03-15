@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { LogicInfoService } from './logic-info.service';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
+import { LogicNotFoundError } from '@errors/logic';
 
 jest.mock('@models/logicInfo/logicInfo.model');
 
@@ -19,36 +20,70 @@ describe('Logic Info Service', () => {
     mocekdLogicInfoModel = jest.mocked(logicInfoModel, true);
   });
 
-  test('views increment 1', async () => {
-    const updateLogicInfoDto: UpdateLogicInfoDto = {
-      logicId: 'asdf',
-    };
-    mocekdLogicInfoModel.increaseViews.mockResolvedValue({
-      response: 1,
-      match: 1,
+  describe('Views increment 1', () => {
+    test('views increment 1', async () => {
+      const updateLogicInfoDto: UpdateLogicInfoDto = {
+        logicId: 'asdf',
+      };
+      mocekdLogicInfoModel.increaseViews.mockResolvedValue({
+        response: 1,
+        matched: 1,
+      });
+
+      await logicInfoService.increaseViews(updateLogicInfoDto.logicId);
+
+      expect(mocekdLogicInfoModel.increaseViews).toHaveBeenCalledWith(
+        updateLogicInfoDto,
+      );
     });
 
-    await logicInfoService.increaseViews(updateLogicInfoDto.logicId);
+    test('없는 logicId 일 때', async () => {
+      const updateLogicInfoDto: UpdateLogicInfoDto = {
+        logicId: 'asdf',
+      };
 
-    expect(mocekdLogicInfoModel.increaseViews).toHaveBeenCalledWith(
-      updateLogicInfoDto,
-    );
+      mocekdLogicInfoModel.increaseViews.mockResolvedValue({
+        response: 0,
+        matched: 0,
+      });
+
+      await expect(async () =>
+        logicInfoService.increaseViews(updateLogicInfoDto.logicId),
+      ).rejects.toThrowError(new LogicNotFoundError());
+    });
   });
 
-  test('likes increment 1', async () => {
-    const updateLogicInfoDto: UpdateLogicInfoDto = {
-      logicId: 'asdf',
-    };
+  describe('likes increment 1', () => {
+    test('likes increment 1', async () => {
+      const updateLogicInfoDto: UpdateLogicInfoDto = {
+        logicId: 'asdf',
+      };
 
-    mocekdLogicInfoModel.increaseLikes.mockResolvedValue({
-      response: 1,
-      match: 1,
+      mocekdLogicInfoModel.increaseLikes.mockResolvedValue({
+        response: 1,
+        matched: 1,
+      });
+
+      await logicInfoService.increaseLikes(updateLogicInfoDto.logicId);
+
+      expect(mocekdLogicInfoModel.increaseLikes).toHaveBeenCalledWith(
+        updateLogicInfoDto,
+      );
     });
 
-    await logicInfoService.increaseLikes(updateLogicInfoDto.logicId);
+    test('없는 logicId 일 때', async () => {
+      const updateLogicInfoDto: UpdateLogicInfoDto = {
+        logicId: 'asdf',
+      };
 
-    expect(mocekdLogicInfoModel.increaseLikes).toHaveBeenCalledWith(
-      updateLogicInfoDto,
-    );
+      mocekdLogicInfoModel.increaseLikes.mockResolvedValue({
+        response: 0,
+        matched: 0,
+      });
+
+      await expect(async () =>
+        logicInfoService.increaseLikes(updateLogicInfoDto.logicId),
+      ).rejects.toThrowError(new LogicNotFoundError());
+    });
   });
 });
