@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Model, Connection } from 'mongoose';
 import { filterEmptyObjectField } from '@utils/index';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
@@ -8,12 +8,18 @@ import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
 import { CreateLogicModelDto } from '@dto/logic/create-logic-model.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { Logic, LogicDocmuent } from './logic.schema';
+import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { LogicNotFoundError } from '@errors/logic';
 import { IModelResponse } from '@models/response';
+import { CreateLogicInfoDto } from '@dto/logicInfo/create-logic-info.dto';
 
 @Injectable()
 export class LogicModel {
-  constructor(@InjectModel(Logic.name) private logicSchema: Model<Logic>) {}
+  constructor(
+    @InjectModel(Logic.name) private logicSchema: Model<Logic>,
+    private readonly logicInfoModel: LogicInfoModel,
+    @InjectConnection() private readonly connection: Connection,
+  ) {}
 
   async findLogics(
     findLogicDto: FindLogicsDto,
@@ -51,7 +57,35 @@ export class LogicModel {
     const logicDocument = new this.logicSchema(createLogicDto);
     const logic = await logicDocument.save();
 
-    return { response: logic };
+    const createLogicInfoDto: CreateLogicInfoDto = {
+      logicId: logic._id.toString(),
+      views: 0,
+      likes: 0,
+      solvedCount: 0,
+      averageSolvedTimeMs: 0,
+      bestSolvedTimeMs: Infinity,
+    };
+
+    const session = await this.connection.startSession();
+
+    try {
+      session.startTransaction({
+        readConcern: { level: 'snapshot' },
+        writeConcern: { w: 'majority' },
+      });
+
+      await this.logicInfoModel.createLogicInfo(createLogicInfoDto);
+
+      await session.commitTransaction();
+      await session.endSession();
+
+      return {
+        response: logic,
+      };
+    } catch (error) {
+      session.abortTransaction();
+      throw error;
+    }
   }
 
   async updateLogic(

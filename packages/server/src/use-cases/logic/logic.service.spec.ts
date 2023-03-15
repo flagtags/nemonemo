@@ -3,7 +3,7 @@ import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
 import { CreateLogicServiceDto } from '@dto/logic/create-logic-service.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
-
+import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogicEntity } from '@entities/logic-entity/logic-entity.service';
 import { LogicModel } from '@models/logic/logic.model';
@@ -12,6 +12,9 @@ import { LogicService } from './logic.service';
 import { LogicEntityDto } from '@dto/logic/logic-entity.dto';
 import { LogicNotFoundError } from '@errors/logic';
 import { IModelResponse } from '@models/response';
+import { getConnectionToken } from '@nestjs/mongoose';
+
+jest.mock('@models/logicInfo/logicInfo.model');
 
 class LogicModelMock {
   async createLogic(
@@ -50,6 +53,8 @@ class LogicModelMock {
 describe('로직 서비스', () => {
   let service: LogicService;
   let logicModel: LogicModelMock;
+  let mocekdLogicInfoModel: jest.Mocked<LogicInfoModel>;
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
@@ -58,11 +63,18 @@ describe('로직 서비스', () => {
           provide: LogicModel,
           useClass: LogicModelMock,
         },
+        {
+          provide: getConnectionToken('DB'),
+          useValue: {},
+        },
+        LogicInfoModel,
       ],
     }).compile();
 
     service = module.get<LogicService>(LogicService);
     logicModel = module.get<LogicModelMock>(LogicModel);
+    const logicInfoModel = module.get<LogicInfoModel>(LogicInfoModel);
+    mocekdLogicInfoModel = jest.mocked(logicInfoModel, true);
   });
 
   test('로직 제작', async () => {

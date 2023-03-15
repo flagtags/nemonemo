@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { LogicModel } from '@models/logic/logic.model';
+import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { CreateLogicServiceDto } from '@dto/logic/create-logic-service.dto';
+import { CreateLogicInfoDto } from '@dto/logicInfo/create-logic-info.dto';
 import { LogicEntity } from '@entities/logic-entity/logic-entity.service';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
@@ -11,13 +13,17 @@ import { LogicNotFoundError } from '@errors/logic';
 
 @Injectable()
 export class LogicService {
-  constructor(private readonly logicModel: LogicModel) {}
+  constructor(
+    private readonly logicModel: LogicModel,
+    private readonly logicInfoModel: LogicInfoModel,
+  ) {}
 
   async createLogic(createLogicServiceDto: CreateLogicServiceDto) {
     const logicEntity = new LogicEntity(createLogicServiceDto);
-
-    const { response } = await this.logicModel.createLogic(logicEntity);
-    return response;
+    const { response: logicResponse } = await this.logicModel.createLogic(
+      logicEntity,
+    );
+    return logicResponse;
   }
 
   async findOneLogic(findOneLogicDto: FindOneLogicDto) {
