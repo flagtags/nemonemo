@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional, IsMongoId } from 'class-validator';
+import { IsMongoId, IsNumber } from 'class-validator';
 
 export class LogicInfoEntityDto {
   @IsMongoId()
