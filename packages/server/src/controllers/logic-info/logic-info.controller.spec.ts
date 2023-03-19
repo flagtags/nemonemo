@@ -28,8 +28,16 @@ describe('로직 서비스', () => {
   test('좋아요 늘리기', async () => {
     const logicId: UpdateLogicInfoDto['logicId'] = '_id';
 
-    await controller.increaseLikes('_id');
+    await controller.toggleLikes('_id');
 
-    expect(mockedLogicInfoService.increaseLikes).toHaveBeenCalledWith(logicId);
+    expect(mockedLogicInfoService.toggleLikes).toHaveBeenCalledWith(logicId);
+  });
+
+  test('조회수 늘리기', async () => {
+    const logicId: UpdateLogicInfoDto['logicId'] = '_id';
+
+    await controller.increaseViews('_id');
+
+    expect(mockedLogicInfoService.increaseViews).toHaveBeenCalledWith(logicId);
   });
 });
