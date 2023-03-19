@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel, InjectConnection } from '@nestjs/mongoose';
-import { Model, Connection } from 'mongoose';
+import { Model, Connection, ClientSession } from 'mongoose';
 import { filterEmptyObjectField } from '@utils/index';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
@@ -53,39 +53,14 @@ export class LogicModel {
 
   async createLogic(
     createLogicDto: CreateLogicModelDto,
+    session?: ClientSession,
   ): Promise<IModelResponse<LogicDocmuent>> {
     const logicDocument = new this.logicSchema(createLogicDto);
-    const logic = await logicDocument.save();
+    const logic = await logicDocument.save({ session });
 
-    const createLogicInfoDto: CreateLogicInfoDto = {
-      logicId: logic._id.toString(),
-      views: 0,
-      likes: 0,
-      solvedCount: 0,
-      averageSolvedTimeMs: 0,
-      bestSolvedTimeMs: Infinity,
+    return {
+      response: logic,
     };
-
-    const session = await this.connection.startSession();
-
-    try {
-      session.startTransaction({
-        readConcern: { level: 'snapshot' },
-        writeConcern: { w: 'majority' },
-      });
-
-      await this.logicInfoModel.createLogicInfo(createLogicInfoDto);
-
-      await session.commitTransaction();
-      await session.endSession();
-
-      return {
-        response: logic,
-      };
-    } catch (error) {
-      session.abortTransaction();
-      throw error;
-    }
   }
 
   async updateLogic(
