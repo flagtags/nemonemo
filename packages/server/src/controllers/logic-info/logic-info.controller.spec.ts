@@ -1,13 +1,8 @@
-import { FindLogicsDto } from '@dto/logic/find-logics.dto';
-import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
-import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
-import { CreateLogicServiceDto } from '@dto/logic/create-logic-service.dto';
-import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
-import { Test, TestingModule } from '@nestjs/testing';
-import { LogicInfo } from '@models/logicInfo/logicInfo.schema';
-import { LogicInfoController } from './logic-info.controller';
-import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
+import { Test, TestingModule } from '@nestjs/testing';
+import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
+import { LogicInfoController } from './logic-info.controller';
+import { LikeDto } from '@dto/logicInfo/like-dto';
 
 jest.mock('@use-cases/logic-info/logic-info.service');
 
@@ -26,11 +21,14 @@ describe('로직 서비스', () => {
   });
 
   test('좋아요 늘리기', async () => {
-    const logicId: UpdateLogicInfoDto['logicId'] = '_id';
+    const likeDto: LikeDto = {
+      logicId: '_id',
+      userId: '_id',
+    };
 
-    await controller.toggleLikes('_id');
+    await controller.toggleLikes(likeDto);
 
-    expect(mockedLogicInfoService.toggleLikes).toHaveBeenCalledWith(logicId);
+    expect(mockedLogicInfoService.toggleLikes).toHaveBeenCalledWith(likeDto);
   });
 
   test('조회수 늘리기', async () => {
