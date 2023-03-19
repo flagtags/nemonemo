@@ -1,11 +1,10 @@
-import { Injectable } from '@nestjs/common';
-import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
+import { LikeDto } from '@dto/logicInfo/like-dto';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
 import { LogicNotFoundError } from '@errors/logic';
 import { LikesHistoryModel } from '@models/likesHisory/likesHistory.model';
-import { LikeDto } from '@dto/logicInfo/like-dto';
+import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { TransactionPlugin } from '@models/transactionPlugin';
-import { IModelResponse } from '@models/response';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
 export class LogicInfoService {
@@ -32,17 +31,19 @@ export class LogicInfoService {
         userId,
       },
     );
-    const { response, matched } = this.transactionPlugin.execute(async () => {
-      if (likeHistoryMatched)
-        await this.likesHistoryModel.deleteLike({ logicId, userId });
-      else await this.likesHistoryModel.createLike({ logicId, userId });
+    const { response, matched } = await this.transactionPlugin.execute(
+      async () => {
+        if (likeHistoryMatched)
+          await this.likesHistoryModel.deleteLike({ logicId, userId });
+        else await this.likesHistoryModel.createLike({ logicId, userId });
 
-      const calculateLikes = likeHistoryMatched
-        ? this.logicInfoModel.decreaseLikes
-        : this.logicInfoModel.increaseLikes;
+        const calculateLikes = likeHistoryMatched
+          ? this.logicInfoModel.decreaseLikes
+          : this.logicInfoModel.increaseLikes;
 
-      return await calculateLikes({ logicId });
-    });
+        return await calculateLikes({ logicId });
+      },
+    );
 
     if (!matched) throw new LogicNotFoundError();
     return response;

@@ -1,12 +1,13 @@
+import { LikeDto } from '@dto/logicInfo/like-dto';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
 import { LogicNotFoundError } from '@errors/logic';
-import { LikesHistoryModel } from '@models/likesHisory/likesHistory.model';
+import { LikesHistoryModel } from '../../models/likesHisory/likesHistory.model';
 import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogicInfoService } from './logic-info.service';
 
 jest.mock('@models/logicInfo/logicInfo.model');
-jest.mock('@models/likesHistory/likesHistory.model');
+jest.mock('../../models/likesHisory/likesHistory.model');
 
 describe('Logic Info Service', () => {
   let logicInfoService: LogicInfoService;
@@ -64,11 +65,12 @@ describe('Logic Info Service', () => {
         response: false,
       });
 
-      const updateLogicInfoDto: UpdateLogicInfoDto = {
+      const updateLogicInfoDto: LikeDto = {
         logicId: 'asdf',
+        userId: 'asdf',
       };
 
-      await logicInfoService.toggleLikes(updateLogicInfoDto.logicId);
+      await logicInfoService.toggleLikes(updateLogicInfoDto);
 
       expect(mocekdLogicInfoModel.increaseLikes).toHaveBeenCalledWith(
         updateLogicInfoDto,
@@ -84,11 +86,12 @@ describe('Logic Info Service', () => {
         response: false,
       });
 
-      const updateLogicInfoDto: UpdateLogicInfoDto = {
+      const updateLogicInfoDto: LikeDto = {
         logicId: 'asdf',
+        userId: 'asdf',
       };
 
-      await logicInfoService.toggleLikes(updateLogicInfoDto.logicId);
+      await logicInfoService.toggleLikes(updateLogicInfoDto);
 
       expect(mocekdLogicInfoModel.increaseLikes).not.toHaveBeenCalledWith(
         updateLogicInfoDto,
@@ -100,8 +103,9 @@ describe('Logic Info Service', () => {
     });
 
     test('없는 logicId 일 때', async () => {
-      const updateLogicInfoDto: UpdateLogicInfoDto = {
+      const updateLogicInfoDto: LikeDto = {
         logicId: 'asdf',
+        userId: 'asdf',
       };
 
       mocekdLogicInfoModel.increaseLikes.mockResolvedValue({
@@ -110,7 +114,7 @@ describe('Logic Info Service', () => {
       });
 
       await expect(async () =>
-        logicInfoService.toggleLikes(updateLogicInfoDto.logicId),
+        logicInfoService.toggleLikes(updateLogicInfoDto),
       ).rejects.toThrowError(new LogicNotFoundError());
     });
   });

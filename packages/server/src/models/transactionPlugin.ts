@@ -9,7 +9,7 @@ export class TransactionPlugin {
 
   async execute<T>(
     callback: (session: ClientSession) => Promise<IModelResponse<T>>,
-  ) {
+  ): Promise<IModelResponse<T>> {
     const session = await this.connection.startSession();
 
     const res = await session.withTransaction(() => callback(session), {
@@ -19,6 +19,6 @@ export class TransactionPlugin {
 
     await session.endSession();
 
-    return res;
+    return res as IModelResponse<T>;
   }
 }

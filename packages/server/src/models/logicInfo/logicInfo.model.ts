@@ -1,13 +1,12 @@
-import { Model } from 'mongoose';
-import { InjectModel } from '@nestjs/mongoose';
-import { Injectable } from '@nestjs/common';
-import { LogicInfo, LogicInfoDocmuent } from './logicInfo.schema';
-import { LogicNotFoundError } from '@errors/logic';
-import { filterEmptyObjectField } from '@utils/index';
 import { CreateLogicInfoDto } from '@dto/logicInfo/create-logic-info.dto';
+import { DeleteLogicInfoDto } from '@dto/logicInfo/delete-logic-info.dto';
 import { FindOneLogicInfoDto } from '@dto/logicInfo/findOneLogicInfo.dto';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
-import { DeleteLogicInfoDto } from '@dto/logicInfo/delete-logic-info.dto';
+import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/mongoose';
+import { filterEmptyObjectField } from '@utils/index';
+import { Model, ClientSession } from 'mongoose';
+import { LogicInfo } from './logicInfo.schema';
 
 @Injectable()
 export class LogicInfoModel {
@@ -15,9 +14,12 @@ export class LogicInfoModel {
     @InjectModel(LogicInfo.name) private logicInfoSchema: Model<LogicInfo>,
   ) {}
 
-  async createLogicInfo(createLogicInfoDto: CreateLogicInfoDto) {
+  async createLogicInfo(
+    createLogicInfoDto: CreateLogicInfoDto,
+    session?: ClientSession,
+  ) {
     const logicInfoDocument = new this.logicInfoSchema(createLogicInfoDto);
-    const logicInfo = await logicInfoDocument.save();
+    const logicInfo = await logicInfoDocument.save({ session });
 
     return { response: logicInfo };
   }
@@ -82,6 +84,20 @@ export class LogicInfoModel {
       { logicId: updateLogicInfoDto.logicId },
       {
         $inc: { likes: 1 },
+      },
+    );
+
+    return {
+      response: res.modifiedCount,
+      matched: res.matchedCount,
+    };
+  }
+
+  async decreaseLikes(updateLogicInfoDto: UpdateLogicInfoDto) {
+    const res = await this.logicInfoSchema.updateOne(
+      { logicId: updateLogicInfoDto.logicId },
+      {
+        $inc: { likes: -1 },
       },
     );
 
