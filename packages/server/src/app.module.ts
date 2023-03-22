@@ -1,14 +1,14 @@
-import { Logger, Module } from '@nestjs/common';
-import { MongooseModule } from '@nestjs/mongoose';
-import { UserModule } from '@modules/user/user.module';
+import { AllExceptionFilter } from '@errors/exceptions/filter';
 import { LogicModule } from '@modules/logic/logic.module';
 import { LogicInfoModule } from '@modules/logicInfo/logicInfo.module';
-import config from './config';
+import { UserModule } from '@modules/user/user.module';
+import { Logger, Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
+import { MongooseModule } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { Connection } from 'mongoose';
-import { APP_FILTER } from '@nestjs/core';
-import { AllExceptionFilter } from '@errors/exceptions/filter';
+import config from './config';
 
 const { protocol, url, name, password } = config.mongodb;
 @Module({
