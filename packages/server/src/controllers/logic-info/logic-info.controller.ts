@@ -1,9 +1,11 @@
-import { Controller, Param, Post } from '@nestjs/common';
-import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
-import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
 import { LikeDto } from '@dto/logicInfo/like-dto';
+import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
+import { Controller, Param, Post, UseGuards } from '@nestjs/common';
+import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
+import { AuthGuard } from 'src/guards/authGuard';
 
 @Controller('logicInfo')
+@UseGuards(AuthGuard)
 export class LogicInfoController {
   constructor(private readonly logicInfoService: LogicInfoService) {}
 
