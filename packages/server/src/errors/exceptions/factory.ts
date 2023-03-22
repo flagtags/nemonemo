@@ -4,6 +4,7 @@ import {
   DuplicatedUserError,
   NotAuthenticatedError,
   UserNotFoundError,
+  NotAuthorizedError,
 } from '@errors/user';
 import {
   BadRequestException,
@@ -22,6 +23,7 @@ export default class ExceptionFactory {
       case LogicNotFoundError:
         return new NotFoundException(error.message);
       case NotAuthenticatedError:
+      case NotAuthorizedError:
         return new UnauthorizedException(error.message);
 
       default:
