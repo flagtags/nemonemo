@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { InjectModel, InjectConnection } from '@nestjs/mongoose';
+import { Model, Connection, ClientSession } from 'mongoose';
 import { filterEmptyObjectField } from '@utils/index';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
@@ -8,12 +8,18 @@ import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
 import { CreateLogicModelDto } from '@dto/logic/create-logic-model.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { Logic, LogicDocmuent } from './logic.schema';
+import { LogicInfoModel } from '@models/logicInfo/logicInfo.model';
 import { LogicNotFoundError } from '@errors/logic';
 import { IModelResponse } from '@models/response';
+import { CreateLogicInfoDto } from '@dto/logicInfo/create-logic-info.dto';
 
 @Injectable()
 export class LogicModel {
-  constructor(@InjectModel(Logic.name) private logicSchema: Model<Logic>) {}
+  constructor(
+    @InjectModel(Logic.name) private logicSchema: Model<Logic>,
+    private readonly logicInfoModel: LogicInfoModel,
+    @InjectConnection() private readonly connection: Connection,
+  ) {}
 
   async findLogics(
     findLogicDto: FindLogicsDto,
@@ -47,11 +53,14 @@ export class LogicModel {
 
   async createLogic(
     createLogicDto: CreateLogicModelDto,
+    session?: ClientSession,
   ): Promise<IModelResponse<LogicDocmuent>> {
     const logicDocument = new this.logicSchema(createLogicDto);
-    const logic = await logicDocument.save();
+    const logic = await logicDocument.save({ session });
 
-    return { response: logic };
+    return {
+      response: logic,
+    };
   }
 
   async updateLogic(

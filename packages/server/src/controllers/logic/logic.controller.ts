@@ -56,9 +56,13 @@ export class LogicController {
     @Body(new AtLeastOnePropertyValidationPipe())
     updateLogicDto: IdOmitedUpdatedLogicDto,
   ) {
-    return await this.logicService.updateLogic({
-      _id,
-      ...updateLogicDto,
-    });
+    try {
+      return await this.logicService.updateLogic({
+        _id,
+        ...updateLogicDto,
+      });
+    } catch (error) {
+      console.error('in try catch');
+    }
   }
 }

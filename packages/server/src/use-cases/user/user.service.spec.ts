@@ -104,9 +104,9 @@ describe('UserService', () => {
 
       const duplicatedUserError = new DuplicatedUserError();
 
-      expect(async () => service.register(createUserDto)).rejects.toThrowError(
-        duplicatedUserError,
-      );
+      await expect(async () =>
+        service.register(createUserDto),
+      ).rejects.toThrowError(duplicatedUserError);
       expect(createUserSpyfn).not.toHaveBeenCalled();
     });
   });
