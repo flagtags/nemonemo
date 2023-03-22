@@ -14,6 +14,7 @@ import {
   NotAuthenticatedError,
 } from '@errors/user';
 import { LoginUserDto } from '@dto/user/login-user.dto';
+import config from '@config';
 
 @Injectable()
 export class UserService {
@@ -72,7 +73,10 @@ export class UserService {
     }
 
     // 토큰 생성
-    const userToken = jwt.sign({ userName: loginUserDto.userName }, 'flatag');
+    const userToken = jwt.sign(
+      { userName: loginUserDto.userName },
+      config.jwtSecret,
+    );
 
     return userToken;
   }

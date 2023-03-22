@@ -21,9 +21,6 @@ export class AuthGuard implements CanActivate {
     const { token } = request.cookies;
 
     try {
-      const encoded = Jwt.sign({ userName: 'j03y14' }, config.jwtSecret);
-      console.log(encoded);
-      // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyTmFtZSI6ImowM3kxNCIsImlhdCI6MTY3OTQ5NDYxMn0.jolvdnxXys_g5fRa2b1-kX--JV38GQ91XZlhZYm60xg
       const res = Jwt.verify(token, config.jwtSecret);
 
       if (typeof res === 'string') throw new NotAuthorizedError();
