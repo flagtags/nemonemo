@@ -25,6 +25,7 @@ export default class Fetcher {
   async get<T>() {
     const { data } = await axios.get<T>(this.url, {
       params: this.query,
+      withCredentials: true,
     });
 
     return data;
@@ -33,6 +34,7 @@ export default class Fetcher {
   async post<T>(body: object) {
     const { data } = await axios.post<T>(this.url, body, {
       params: this.query,
+      withCredentials: true,
     });
 
     return data;
@@ -41,6 +43,7 @@ export default class Fetcher {
   async patch<T>(body: object) {
     const { data } = await axios.patch<T>(this.url, body, {
       params: this.query,
+      withCredentials: true,
     });
 
     return data;
@@ -49,6 +52,7 @@ export default class Fetcher {
   async delete<T>() {
     const { data } = await axios.delete<T>(this.url, {
       params: this.query,
+      withCredentials: true,
     });
 
     return data;

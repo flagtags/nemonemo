@@ -13,7 +13,10 @@ export class UserController {
     @Res({ passthrough: true }) response: Response,
   ) {
     const token = await this.userService.login(userDTO);
-    response.cookie('token', token);
+    response.cookie('token', token, {
+      httpOnly: true,
+      secure: true,
+    });
   }
 
   @Post('register')
