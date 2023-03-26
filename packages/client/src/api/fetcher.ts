@@ -8,7 +8,7 @@ export default class Fetcher {
   query: Query;
 
   constructor(path: string) {
-    this.host = 'http://localhost:9999';
+    this.host = 'http://localhost:3000';
     this.path = path;
     this.query = {};
   }
@@ -19,7 +19,7 @@ export default class Fetcher {
   }
 
   get url() {
-    return `${this.host}/${this.path}`;
+    return `${this.host}${this.path}`;
   }
 
   async get<T>() {
