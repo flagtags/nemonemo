@@ -1,8 +1,16 @@
+// Login 헤더
+// 아이디, 비밀번호 텍스필드(palceholder)
+// login button
+
 import React from 'react';
 import { AxiosError } from 'axios';
 import { screen, render } from '@testing-library/react';
 import Login from '.';
 import Fetcher from '../../../api/fetcher';
+
+jest.mock('../../../api/fetcher');
+
+const MockedFetcher = jest.mocked(Fetcher, true);
 
 describe('로그인 컴포넌트', () => {
   beforeEach(() => {
@@ -28,6 +36,28 @@ describe('로그인 컴포넌트', () => {
           name: '로그인',
         }),
       ).not.toBe(null);
+    });
+  });
+
+  describe('로그인 시도', () => {
+    beforeEach(() => {
+      const loginButton = screen.getByRole('button', {
+        name: '로그인',
+      });
+
+      loginButton.click();
+    });
+
+    test('로그인 성공 ', () => {
+      expect(window.location).toBe('http://localhost:3000/');
+    });
+
+    test('로그인 실패 ', () => {
+      window.alert = jest.fn();
+
+      MockedFetcher.prototype.post.mockRejectedValue(new AxiosError('로그인 실패!'));
+
+      expect(window.alert).toBeCalledWith('로그인 실패!');
     });
   });
 });
