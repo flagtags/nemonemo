@@ -2,9 +2,8 @@
 // 아이디, 비밀번호 텍스필드(palceholder)
 // login button
 
-import React from 'react';
+import { render, screen } from '@testing-library/react';
 import { AxiosError } from 'axios';
-import { screen, render } from '@testing-library/react';
 import Login from '.';
 import Fetcher from '../../../api/fetcher';
 
