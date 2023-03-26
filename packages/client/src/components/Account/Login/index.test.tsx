@@ -1,9 +1,6 @@
-// Login 헤더
-// 아이디, 비밀번호 텍스필드(palceholder)
-// login button
-
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { AxiosError } from 'axios';
+import { StaticRouter } from 'react-router-dom/server';
 import Login from '.';
 import Fetcher from '../../../api/fetcher';
 
@@ -13,7 +10,11 @@ const MockedFetcher = jest.mocked(Fetcher, true);
 
 describe('로그인 컴포넌트', () => {
   beforeEach(() => {
-    render(<Login />);
+    render(
+      <StaticRouter location="http://localhost:9999/account">
+        <Login />
+      </StaticRouter>,
+    );
   });
 
   describe('렌더링', () => {
@@ -39,16 +40,18 @@ describe('로그인 컴포넌트', () => {
   });
 
   describe('로그인 시도', () => {
+    let loginButton: HTMLButtonElement;
     beforeEach(() => {
-      const loginButton = screen.getByRole('button', {
+      loginButton = screen.getByRole('button', {
         name: '로그인',
       });
-
-      loginButton.click();
     });
 
-    test('로그인 성공 ', () => {
-      expect(window.location).toBe('http://localhost:3000/');
+    test('로그인 성공 ', async () => {
+      MockedFetcher.prototype.post.mockResolvedValue({});
+      loginButton.click();
+
+      expect(window.location.pathname).toBe('/');
     });
 
     test('로그인 실패 ', () => {
@@ -56,7 +59,9 @@ describe('로그인 컴포넌트', () => {
 
       MockedFetcher.prototype.post.mockRejectedValue(new AxiosError('로그인 실패!'));
 
-      expect(window.alert).toBeCalledWith('로그인 실패!');
+      loginButton.click();
+
+      waitFor(() => expect(window.alert).toBeCalledWith('로그인 실패!'));
     });
   });
 });

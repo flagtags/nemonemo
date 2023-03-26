@@ -14,11 +14,11 @@ const Login = () => {
         userName,
         password,
       })
-      .then(() => {
+      .then((response) => {
         redirect('/');
       })
       .catch((error) => {
-        window.alert('로그인 실패!!');
+        window.alert('로그인 실패!');
       });
   };
 
