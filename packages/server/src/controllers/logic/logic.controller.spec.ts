@@ -7,6 +7,9 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { Logic } from '@models/logic/logic.schema';
 import { LogicController } from './logic.controller';
 import { LogicService } from '@use-cases/logic/logic.service';
+import { AuthGuard } from '@guards/authGuard';
+
+jest.mock('@guards/authGuard');
 
 class LogicServiceMock {
   async createLogic(createLogicDto: CreateLogicServiceDto): Promise<Logic> {
@@ -42,6 +45,7 @@ describe('로직 서비스', () => {
           provide: LogicService,
           useClass: LogicServiceMock,
         },
+        AuthGuard,
       ],
     }).compile();
 

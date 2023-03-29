@@ -3,8 +3,10 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
 import { LogicInfoController } from './logic-info.controller';
 import { LikeDto } from '@dto/logicInfo/like-dto';
+import { AuthGuard } from '@guards/authGuard';
 
 jest.mock('@use-cases/logic-info/logic-info.service');
+jest.mock('@guards/authGuard');
 
 describe('로직 서비스', () => {
   let controller: LogicInfoController;
@@ -12,7 +14,7 @@ describe('로직 서비스', () => {
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      providers: [LogicInfoController, LogicInfoService],
+      providers: [LogicInfoController, LogicInfoService, AuthGuard],
     }).compile();
 
     controller = module.get<LogicInfoController>(LogicInfoController);

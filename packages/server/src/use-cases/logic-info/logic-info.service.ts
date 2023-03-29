@@ -18,34 +18,35 @@ export class LogicInfoService {
     const { response, matched } = await this.logicInfoModel.increaseViews({
       logicId,
     });
-
     if (!matched) throw new LogicNotFoundError();
-
     return response;
   }
 
   async toggleLikes({ logicId, userId }: LikeDto) {
+    const { matched: logicMatched } =
+      await this.logicInfoModel.findOneLogicInfo({ logicId });
+
+    if (!logicMatched) throw new LogicNotFoundError();
+
     const { matched: likeHistoryMatched } = await this.likesHistoryModel.hasOne(
       {
         logicId,
         userId,
       },
     );
-    const { response, matched } = await this.transactionPlugin.execute(
-      async () => {
-        if (likeHistoryMatched)
-          await this.likesHistoryModel.deleteLike({ logicId, userId });
-        else await this.likesHistoryModel.createLike({ logicId, userId });
 
+    const { response, matched } = await this.transactionPlugin.execute(
+      async (session) => {
+        if (likeHistoryMatched)
+          await this.likesHistoryModel.deleteLike({ logicId, userId }, session);
+        else
+          await this.likesHistoryModel.createLike({ logicId, userId }, session);
         const calculateLikes = likeHistoryMatched
           ? this.logicInfoModel.decreaseLikes
           : this.logicInfoModel.increaseLikes;
-
-        return await calculateLikes({ logicId });
+        return await calculateLikes({ logicId }, session);
       },
     );
-
-    if (!matched) throw new LogicNotFoundError();
     return response;
   }
 }
