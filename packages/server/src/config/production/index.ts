@@ -5,6 +5,7 @@ const configs = {
     name: 'flagtags',
     password: '',
   },
+  jwtSecret: 'flagtag',
 };
 
 export default configs;

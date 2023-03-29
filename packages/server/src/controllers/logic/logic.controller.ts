@@ -1,33 +1,30 @@
 import { CreateLogicServiceDto } from '@dto/logic/create-logic-service.dto';
+import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
+import { FindLogicsDto } from '@dto/logic/find-logics.dto';
+import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
+import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
 import {
   Body,
   Controller,
-  Get,
-  InternalServerErrorException,
-  NotFoundException,
-  Post,
-  Param,
   Delete,
-  Query,
+  Get,
+  Param,
   Patch,
-  UsePipes,
-  ValidationPipe,
-  ParseIntPipe,
+  Post,
+  Query,
+  UseGuards,
 } from '@nestjs/common';
 import { OmitType } from '@nestjs/mapped-types';
-import { LogicService } from '@use-cases/logic/logic.service';
-import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
-import { FindLogicsDto } from '@dto/logic/find-logics.dto';
-import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
-import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { AtLeastOnePropertyValidationPipe } from '@pipe/atLeastOnePropertyValidationPipe';
-import { AuthGuard } from '@guards/authGuard';
+import { LogicService } from '@use-cases/logic/logic.service';
+import { AuthGuard } from 'src/guards/authGuard';
 
 class IdOmitedUpdatedLogicDto extends OmitType(UpdateLogicDto, [
   '_id',
 ] as const) {}
 
 @Controller('logic')
+@UseGuards(AuthGuard)
 export class LogicController {
   constructor(private readonly logicService: LogicService) {}
 
