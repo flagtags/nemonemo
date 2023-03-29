@@ -2,11 +2,11 @@ import { CreateLogicInfoDto } from '@dto/logicInfo/create-logic-info.dto';
 import { DeleteLogicInfoDto } from '@dto/logicInfo/delete-logic-info.dto';
 import { FindOneLogicInfoDto } from '@dto/logicInfo/findOneLogicInfo.dto';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
+import { LogicInfo } from '@models/logicInfo/logicInfo.schema';
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { filterEmptyObjectField } from '@utils/index';
-import { Model, ClientSession } from 'mongoose';
-import { LogicInfo } from './logicInfo.schema';
+import { ClientSession, Model } from 'mongoose';
 
 @Injectable()
 export class LogicInfoModel {
@@ -79,13 +79,18 @@ export class LogicInfoModel {
     };
   }
 
-  async increaseLikes(updateLogicInfoDto: UpdateLogicInfoDto) {
-    const res = await this.logicInfoSchema.updateOne(
-      { logicId: updateLogicInfoDto.logicId },
-      {
-        $inc: { likes: 1 },
-      },
-    );
+  async increaseLikes(
+    updateLogicInfoDto: UpdateLogicInfoDto,
+    session: ClientSession,
+  ) {
+    const res = await this.logicInfoSchema
+      .updateOne(
+        { logicId: updateLogicInfoDto.logicId },
+        {
+          $inc: { likes: 1 },
+        },
+      )
+      .session(session);
 
     return {
       response: res.modifiedCount,
@@ -93,13 +98,18 @@ export class LogicInfoModel {
     };
   }
 
-  async decreaseLikes(updateLogicInfoDto: UpdateLogicInfoDto) {
-    const res = await this.logicInfoSchema.updateOne(
-      { logicId: updateLogicInfoDto.logicId },
-      {
-        $inc: { likes: -1 },
-      },
-    );
+  async decreaseLikes(
+    updateLogicInfoDto: UpdateLogicInfoDto,
+    session: ClientSession,
+  ) {
+    const res = await this.logicInfoSchema
+      .updateOne(
+        { logicId: updateLogicInfoDto.logicId },
+        {
+          $inc: { likes: -1 },
+        },
+      )
+      .session(session);
 
     return {
       response: res.modifiedCount,

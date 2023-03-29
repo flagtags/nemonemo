@@ -2,6 +2,7 @@ import { Controller, Param, Post } from '@nestjs/common';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
 import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
 import { LikeDto } from '@dto/logicInfo/like-dto';
+import { AuthGuard } from '@guards/authGuard';
 
 @Controller('logicInfo')
 export class LogicInfoController {

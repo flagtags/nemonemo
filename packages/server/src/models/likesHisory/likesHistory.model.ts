@@ -2,7 +2,7 @@ import { LikeDto } from '@dto/logicInfo/like-dto';
 import { IModelResponse } from '@models/response';
 import { Injectable } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
-import { Connection, Model } from 'mongoose';
+import { ClientSession, Connection, Model } from 'mongoose';
 import { LikesHistory, LikesHistoryDocument } from './likesHistory.schema';
 
 @Injectable()
@@ -25,16 +25,25 @@ export class LikesHistoryModel {
 
   async createLike(
     likeDto: LikeDto,
+    session?: ClientSession,
   ): Promise<IModelResponse<LikesHistoryDocument>> {
-    const likeHistory = await new this.likeHistorySchema(likeDto).save();
+    const likeHistory = await new this.likeHistorySchema(likeDto).save({
+      session,
+    });
 
     return {
       response: likeHistory,
     };
   }
 
-  async deleteLike(likeDto: LikeDto): Promise<IModelResponse<number>> {
-    const res = await this.likeHistorySchema.deleteOne(likeDto).exec();
+  async deleteLike(
+    likeDto: LikeDto,
+    session?: ClientSession,
+  ): Promise<IModelResponse<number>> {
+    const res = await this.likeHistorySchema
+      .deleteOne(likeDto)
+      .session(session)
+      .exec();
 
     return {
       response: res.deletedCount,

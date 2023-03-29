@@ -21,6 +21,7 @@ import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { AtLeastOnePropertyValidationPipe } from '@pipe/atLeastOnePropertyValidationPipe';
+import { AuthGuard } from '@guards/authGuard';
 
 class IdOmitedUpdatedLogicDto extends OmitType(UpdateLogicDto, [
   '_id',
