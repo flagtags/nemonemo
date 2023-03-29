@@ -21,7 +21,8 @@
       "@dto/*": ["./src/dto/*"],
       "@errors/*": ["./src/errors/*"],
       "@validator/*": ["./src/validator/*"],
-      "@pipe/*": ["./src/pipe/*"]
+      "@pipe/*": ["./src/pipe/*"],
+      "@guards/*": ["./src/guards/*"]
     },
     "incremental": true,
     "skipLibCheck": true,

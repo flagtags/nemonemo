@@ -4,6 +4,7 @@ import { Controller, Param, Post, UseGuards } from '@nestjs/common';
 import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
 import { AuthGuard } from 'src/guards/authGuard';
 
+
 @Controller('logicInfo')
 @UseGuards(AuthGuard)
 export class LogicInfoController {

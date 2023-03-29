@@ -6,6 +6,7 @@ import { DuplicatedUserError, UserNotFoundError } from '@errors/user';
 import { NotFoundException } from '@nestjs/common';
 import { LoginUserDto } from '@dto/user/login-user.dto';
 import { CreateUserDto } from '@dto/user/create-user.dto';
+import { Response } from 'express';
 
 class UserServiceMock {
   async login({ userName, password }: LoginUserDto) {
@@ -55,10 +56,22 @@ describe('UserController', () => {
       const spyFn = jest.spyOn(service, 'login');
       spyFn.mockResolvedValue(userToken);
 
-      const result = await controller.login({ userName, password });
+      const res = {
+        query: {},
+        header: {},
+        data: null,
+        json(payload) {
+          this.data = JSON.stringify(payload);
+        },
+        cookie(name, value, options) {
+          this.header[name] = value;
+        },
+      } as unknown as Response;
+
+      await controller.login({ userName, password }, res);
 
       expect(spyFn).toBeCalledWith(loginUserDto);
-      expect(result).toEqual(userToken);
+      expect(res.header['token']).toEqual(userToken);
     });
 
     it('login fail: User not found', async () => {
@@ -76,7 +89,7 @@ describe('UserController', () => {
       });
 
       try {
-        await controller.login({ userName, password });
+        await controller.login({ userName, password }, null);
         expect(spyFn).toBeCalledWith(loginUserDto);
       } catch (error) {
         expect(error).toEqual(new NotFoundException('User Not Found'));
