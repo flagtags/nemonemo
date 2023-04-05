@@ -1,9 +1,9 @@
+import { LikeDto } from '@dto/logicInfo/like-dto';
 import { UpdateLogicInfoDto } from '@dto/logicInfo/update-logic-info.dto';
+import { AuthGuard } from '@guards/authGuard';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogicInfoService } from '@use-cases/logic-info/logic-info.service';
 import { LogicInfoController } from './logic-info.controller';
-import { LikeDto } from '@dto/logicInfo/like-dto';
-import { AuthGuard } from '@guards/authGuard';
 
 jest.mock('@use-cases/logic-info/logic-info.service');
 jest.mock('@guards/authGuard');

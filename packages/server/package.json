@@ -68,12 +68,13 @@
       "^@entities/(.*)$": "<rootDir>/entities/$1",
       "^@modules/(.*)$": "<rootDir>/modules/$1",
       "^@models/(.*)": "<rootDir>/models/$1",
-      "^@config/(.*)": "<rootDir>/config/$1",
+      "^@config": "<rootDir>/config/index.ts",
       "^@dto/(.*)": "<rootDir>/dto/$1",
       "^@utils/(.*)": "<rootDir>/utils/$1",
       "^@errors/(.*)": "<rootDir>/errors/$1",
       "^@validator/(.*)": "<rootDir>/validator/$1",
-      "^@pipe/(.*)": "<rootDir>/pipe/$1"
+      "^@pipe/(.*)": "<rootDir>/pipe/$1",
+      "^@guards/(.*)": "<rootDir>/guards/$1"
     },
     "moduleFileExtensions": [
       "js",
