@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { redirect, useNavigate } from 'react-router-dom';
 import Fetcher from '../../../api/fetcher';
+import { PasswordValidator, NameValidator } from '@/service/account';
+import validateForm from '@/util/validateForm';
 
 const Login = () => {
   const [userName, setUserName] = useState('');
@@ -10,20 +12,30 @@ const Login = () => {
   const onLoginPress = () => {
     const loginFetcher = new Fetcher('/user/login');
 
-    loginFetcher
-      .post({
-        userName,
-        password,
-      })
-      .then(() => {
-        console.log('로그인 성공!');
+    const onSuccess = () => {
+      loginFetcher
+        .post({
+          userName,
+          password,
+        })
+        .then(() => {
+          navigate('/');
+        })
+        .catch((error) => {
+          console.error(error);
+          window.alert('로그인 실패!');
+        });
 
-        navigate('/');
-      })
-      .catch((error) => {
-        console.error(error);
-        window.alert('로그인 실패!');
+      const validators = [
+        new NameValidator(userName),
+        new PasswordValidator(password),
+      ];
+
+      validateForm({
+        onSuccess,
+        validators,
       });
+    };
   };
 
   return (

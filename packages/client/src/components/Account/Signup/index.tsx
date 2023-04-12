@@ -1,13 +1,12 @@
 import { useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Fetcher from '../../../api/fetcher';
 import validateForm from '../../../util/validateForm';
-
-interface IInput {
-  userName: string;
-  password: string;
-  name: string;
-}
+import {
+  PasswordValidator,
+  NameValidator,
+  UserNameValidator,
+} from '@/service/account';
 
 const SignUp = () => {
   const [userName, setUserName] = useState('');
@@ -17,21 +16,6 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const onSignUpPress = () => {
-    const inputs = {
-      userName,
-      password,
-      name,
-    };
-
-    const onFail = (key: keyof typeof validationMessage) => {
-      const validationMessage = {
-        userName: '아이디를 입력해주세요.',
-        password: '비밀번호를 입력해주세요.',
-        name: '이름을 입력해주세요.',
-      };
-      window.alert(validationMessage[key]);
-    };
-
     const onSuccess = () => {
       new Fetcher('/user/register')
         .post({
@@ -48,14 +32,13 @@ const SignUp = () => {
         });
     };
 
-    const validate = (value: string) => !!value;
-    const validators = {
-      userName: validate,
-      password: validate,
-      name: validate,
-    };
+    const validators = [
+      new UserNameValidator(userName),
+      new PasswordValidator(password),
+      new NameValidator(name),
+    ];
 
-    validateForm({ inputs, onSuccess, onFail, validators });
+    validateForm({ onSuccess, validators });
   };
 
   return (
