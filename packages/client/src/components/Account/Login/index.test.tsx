@@ -19,7 +19,9 @@ describe('로그인 컴포넌트', () => {
 
   describe('렌더링', () => {
     test('헤더에 "로그인"이라고 표시된다.', () => {
-      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('로그인');
+      expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
+        '로그인',
+      );
     });
 
     test('아이디 입력창 렌더링 ', () => {
@@ -55,9 +57,11 @@ describe('로그인 컴포넌트', () => {
     });
 
     test('로그인 실패 ', () => {
-      window.alert = jest.fn();
+      // window.alert = jest.fn();
 
-      MockedFetcher.prototype.post.mockRejectedValue(new AxiosError('로그인 실패!'));
+      MockedFetcher.prototype.post.mockRejectedValue(
+        new AxiosError('로그인 실패!'),
+      );
 
       loginButton.click();
 

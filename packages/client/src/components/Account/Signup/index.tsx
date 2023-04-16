@@ -27,8 +27,11 @@ const SignUp = () => {
           navigate('/');
         })
         .catch((error) => {
-          console.error(error);
+          // console.error(error);
+          // @ts-ignore
+          window.alert.name2 = 'real alert';
           window.alert('회원가입 실패!');
+          console.log('real alert', window.alert);
         });
     };
 
