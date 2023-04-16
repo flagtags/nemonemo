@@ -5,10 +5,13 @@ import userEvent from '@testing-library/user-event';
 import { StaticRouter } from 'react-router-dom/server';
 import SingUp from './index';
 import { log } from 'console';
+import alert from '@/util/alert';
 
 jest.mock('../../../api/fetcher');
+jest.mock('@/util/alert');
 
 const MockedFetcher = jest.mocked(Fetcher, true);
+const mockedAlert = jest.mocked(alert, true);
 
 describe('회원가입', () => {
   beforeEach(() => {
@@ -78,13 +81,10 @@ describe('회원가입', () => {
       });
 
       test('회원가입 실패 ', async () => {
-        window.alert = jest.fn().mockImplementation(function func() {
-          console.log('test alert!!!!!!', window.alert);
-        });
+        // window.alert = jest.fn().mockImplementation(function func() {
+        //   console.log('test alert!!!!!!', window.alert);
+        // });
         const testFn = jest.fn();
-
-        // @ts-ignore
-        window.alert.name3 = 'test alert';
 
         MockedFetcher.prototype.post.mockRejectedValue(
           new AxiosError('회원가입 실패!'),
@@ -92,15 +92,12 @@ describe('회원가입', () => {
 
         registerButton.click();
 
-        console.log('test alert', window.alert);
-
         // await waitFor(() => {});
         await waitFor(
           async () => {
-            console.log('in waitfor', window.alert);
             // expect(testFn).toBeCalled();
             // expect(true).toBe(false);
-            expect(window.alert).not.toHaveBeenCalled();
+            expect(mockedAlert).not.toHaveBeenCalled();
           },
           {
             timeout: 10000,
