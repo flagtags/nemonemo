@@ -7,7 +7,6 @@ import {
   NameValidator,
   UserNameValidator,
 } from '@/service/account';
-import alert from '@/util/alert';
 
 const SignUp = () => {
   const [userName, setUserName] = useState('');
@@ -28,11 +27,7 @@ const SignUp = () => {
           navigate('/');
         })
         .catch((error) => {
-          // console.error(error);
-          // @ts-ignore
-          // window.alert.name2 = 'real alert';
-          alert('회원가입 실패!');
-          // console.log('real alert', alert);
+          window.alert('회원가입 실패!');
         });
     };
 
