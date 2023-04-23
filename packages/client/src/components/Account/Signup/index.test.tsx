@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { AxiosError } from 'axios';
 import Fetcher from '../../../api/fetcher';
 import userEvent from '@testing-library/user-event';
-import { StaticRouter } from 'react-router-dom/server';
+import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import SingUp from './index';
 
 jest.mock('../../../api/fetcher');
@@ -10,12 +10,20 @@ jest.mock('../../../api/fetcher');
 const MockedFetcher = jest.mocked(Fetcher, true);
 
 describe('회원가입', () => {
+  let router: ReturnType<typeof createMemoryRouter>;
+
   beforeEach(() => {
-    render(
-      <StaticRouter location="http://localhost:9999/account">
-        <SingUp />
-      </StaticRouter>,
+    router = createMemoryRouter(
+      [
+        { path: '/account', element: <SingUp /> },
+        { path: '/', element: null },
+      ],
+      {
+        initialEntries: ['/account'],
+      },
     );
+
+    render(<RouterProvider router={router} />);
   });
   describe('렌더링', () => {
     test('헤더에 "회원가입"이라고 표시된다.', () => {
@@ -72,8 +80,7 @@ describe('회원가입', () => {
         MockedFetcher.prototype.post.mockResolvedValue({});
 
         registerButton.click();
-
-        expect(window.location.pathname).toBe('/');
+        await waitFor(() => expect(router.state.location.pathname).toBe('/'));
       });
 
       test('회원가입 실패 ', async () => {
