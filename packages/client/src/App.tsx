@@ -1,8 +1,10 @@
+import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import styled from 'styled-components';
 import getLogic from './api/getLogic';
 import './App.css';
-import Login from './components/Account/Login';
+import Account from './pages/account';
+import ErrorBoundary from './components/ErrorBoundary';
 
 const Container = styled.div`
   display: flex;
@@ -11,20 +13,23 @@ const Container = styled.div`
 
 function App() {
   const logic = getLogic();
-  return (
-    <BrowserRouter>
-      <Routes>
-        <Route
-          path="/"
-          element={<></>}
-        />
 
-        <Route
-          path="/account"
-          element={<Login />}
-        />
-      </Routes>
-    </BrowserRouter>
+  return (
+    <ErrorBoundary>
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<></>}
+          />
+
+          <Route
+            path="/account"
+            element={<Account />}
+          />
+        </Routes>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 
