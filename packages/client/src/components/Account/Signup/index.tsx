@@ -24,9 +24,10 @@ const SignUp = () => {
           name,
         })
         .then(() => {
-          navigate('/');
+          navigate('/acoount');
         })
         .catch((error) => {
+          console.error(error);
           window.alert('회원가입 실패!');
         });
     };
