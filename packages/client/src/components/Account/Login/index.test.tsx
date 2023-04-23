@@ -43,10 +43,18 @@ describe('로그인 컴포넌트', () => {
 
   describe('로그인 시도', () => {
     let loginButton: HTMLButtonElement;
+    let idInput: HTMLInputElement;
+    let passwordInput: HTMLInputElement;
+
     beforeEach(() => {
+      idInput = screen.getByPlaceholderText('아이디');
+      passwordInput = screen.getByPlaceholderText('비밀번호');
       loginButton = screen.getByRole('button', {
         name: '로그인',
       });
+
+      userEvent.type(idInput, 'id');
+      userEvent.type(passwordInput, 'password');
     });
 
     test('로그인 성공 ', async () => {
