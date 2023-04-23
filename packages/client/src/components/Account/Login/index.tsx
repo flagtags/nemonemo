@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { redirect, useNavigate, useNavigation } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Fetcher from '../../../api/fetcher';
-import { PasswordValidator, NameValidator } from '@/service/account';
+import { PasswordValidator, UserNameValidator } from '@/service/account';
 import validateForm from '@/util/validateForm';
 
 const Login = () => {
@@ -27,7 +27,7 @@ const Login = () => {
         });
     };
     const validators = [
-      new NameValidator(userName),
+      new UserNameValidator(userName),
       new PasswordValidator(password),
     ];
 
