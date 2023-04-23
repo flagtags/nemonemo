@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
+import { redirect, useNavigate, useNavigation } from 'react-router-dom';
 import Fetcher from '../../../api/fetcher';
 import { PasswordValidator, NameValidator } from '@/service/account';
 import validateForm from '@/util/validateForm';
@@ -22,20 +22,19 @@ const Login = () => {
           navigate('/');
         })
         .catch((error) => {
-          console.error(error);
+          // console.error(error);
           window.alert('로그인 실패!');
         });
-
-      const validators = [
-        new NameValidator(userName),
-        new PasswordValidator(password),
-      ];
-
-      validateForm({
-        onSuccess,
-        validators,
-      });
     };
+    const validators = [
+      new NameValidator(userName),
+      new PasswordValidator(password),
+    ];
+
+    validateForm({
+      onSuccess,
+      validators,
+    });
   };
 
   return (
