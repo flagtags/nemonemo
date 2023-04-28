@@ -1,13 +1,13 @@
+import { CreateLogicServiceDto } from '@dto/logic/create-logic-service.dto';
+import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
-import { CreateLogicServiceDto } from '@dto/logic/create-logic-service.dto';
-import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
-import { Test, TestingModule } from '@nestjs/testing';
-import { Logic } from '@models/logic/logic.schema';
-import { LogicController } from './logic.controller';
-import { LogicService } from '@use-cases/logic/logic.service';
 import { AuthGuard } from '@guards/authGuard';
+import { Logic } from '@models/logic/logic.schema';
+import { Test, TestingModule } from '@nestjs/testing';
+import { LogicService } from '@use-cases/logic/logic.service';
+import { LogicController } from './logic.controller';
 
 jest.mock('@guards/authGuard');
 

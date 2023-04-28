@@ -3,6 +3,7 @@ import { DeleteLogicDto } from '@dto/logic/delete-logic.dto';
 import { FindLogicsDto } from '@dto/logic/find-logics.dto';
 import { FindOneLogicDto } from '@dto/logic/find-one-logic.dto';
 import { UpdateLogicDto } from '@dto/logic/update-logic.dto';
+import { AuthGuard } from '@guards/authGuard';
 import {
   Body,
   Controller,
@@ -17,7 +18,6 @@ import {
 import { OmitType } from '@nestjs/mapped-types';
 import { AtLeastOnePropertyValidationPipe } from '@pipe/atLeastOnePropertyValidationPipe';
 import { LogicService } from '@use-cases/logic/logic.service';
-import { AuthGuard } from 'src/guards/authGuard';
 
 class IdOmitedUpdatedLogicDto extends OmitType(UpdateLogicDto, [
   '_id',
