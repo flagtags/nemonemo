@@ -1,10 +1,12 @@
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import styled from 'styled-components';
 import getLogic from './api/getLogic';
 import './App.css';
 import Account from './pages/account';
 import ErrorBoundary from './components/ErrorBoundary';
+import List from './pages/list';
 
 const Container = styled.div`
   display: flex;
@@ -13,23 +15,31 @@ const Container = styled.div`
 
 function App() {
   const logic = getLogic();
+  const queryClient = new QueryClient();
 
   return (
-    <ErrorBoundary>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={<></>}
-          />
+    <QueryClientProvider client={queryClient}>
+      <ErrorBoundary>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path="/"
+              element={<></>}
+            />
 
-          <Route
-            path="/account"
-            element={<Account />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </ErrorBoundary>
+            <Route
+              path="/account"
+              element={<Account />}
+            />
+
+            <Route
+              path="/list"
+              element={<List />}
+            />
+          </Routes>
+        </BrowserRouter>
+      </ErrorBoundary>
+    </QueryClientProvider>
   );
 }
 
