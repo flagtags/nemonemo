@@ -1,16 +1,68 @@
 import Fetcher from '@/api/fetcher';
-import { useQuery } from 'react-query';
+import useMeasuredRef from '@/hooks/useMeasuredRef';
+import { useEffect, useRef, useState } from 'react';
+import { useInfiniteQuery, useQuery } from 'react-query';
+import Logic from './Item';
+
+interface ILogic {
+  _id: string;
+  title: string;
+  authorId: string;
+  size: number;
+  timeLimit: number;
+}
+
+const pageSize = 10;
+
+// 리팩토링? 테스트?
 
 const List = () => {
-  const pageIndex = 0;
-  const pageSize = 10;
+  const [target, setRef] = useMeasuredRef<HTMLDivElement>();
+  const intersectionObserverRef = useRef<IntersectionObserver>();
 
-  const { isLoading, isError, data } = useQuery(
-    ['logicList', pageIndex, pageSize],
-    new Fetcher('/logic').setQuery({ pageIndex: 0, pageSize: 10 }).get,
+  const { data, isError, isLoading, fetchNextPage, hasNextPage } =
+    useInfiniteQuery<ILogic[]>(
+      ['logicList', pageSize],
+      ({ pageParam = 0 }) => {
+        return new Fetcher('/logic')
+          .setQuery({ pageIndex: pageParam, pageSize })
+          .get();
+      },
+      {
+        getNextPageParam: (lastPage, allPages) => {
+          if (lastPage.length < pageSize) return;
+          return allPages.length;
+        },
+      },
+    );
+
+  if (!hasNextPage && target) {
+    intersectionObserverRef.current?.unobserve(target);
+  }
+
+
+  const logics = data.pages.flat();
+
+  return (
+    <>
+      <h1>로직 목록</h1>
+      <div
+        style={{
+          flexDirection: 'column',
+          display: 'flex',
+        }}
+      >
+        {logics.map((logic) => (
+          <Logic
+            key={logic._id}
+            data={logic}
+          />
+        ))}
+      </div>
+
+      <div ref={setRef} />
+    </>
   );
-
-  return <h1>로직 목록</h1>;
 };
 
 export default List;
