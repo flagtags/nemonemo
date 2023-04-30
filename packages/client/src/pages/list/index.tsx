@@ -40,7 +40,29 @@ const List = () => {
     intersectionObserverRef.current?.unobserve(target);
   }
 
+  useEffect(() => {
+    if (!target) return;
+    const intersectionHandler = async (
+      entries: IntersectionObserverEntry[],
+    ) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && hasNextPage) fetchNextPage();
+      });
+    };
 
+    intersectionObserverRef.current =
+      intersectionObserverRef.current ||
+      new IntersectionObserver(intersectionHandler);
+
+    intersectionObserverRef.current.observe(target);
+
+    return () => {
+      if (!intersectionObserverRef.current) return;
+      intersectionObserverRef.current.unobserve(target);
+    };
+  }, [target]);
+
+  if (isError || isLoading || !data) return null;
   const logics = data.pages.flat();
 
   return (
