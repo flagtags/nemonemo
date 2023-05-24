@@ -11,6 +11,10 @@ export default class Fetcher {
     this.host = 'http://localhost:3000';
     this.path = path;
     this.query = {};
+    this.post = this.post.bind(this);
+    this.get = this.get.bind(this);
+    this.patch = this.patch.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
   setQuery = (query: Query) => {
@@ -22,39 +26,39 @@ export default class Fetcher {
     return `${this.host}${this.path}`;
   }
 
-  get = async <T>() => {
+  async get<T>() {
     const { data } = await axios.get<T>(this.url, {
       params: this.query,
       withCredentials: true,
     });
 
     return data;
-  };
+  }
 
-  post = async <T>(body: object) => {
+  async post<T>(body: object) {
     const { data } = await axios.post<T>(this.url, body, {
       params: this.query,
       withCredentials: true,
     });
 
     return data;
-  };
+  }
 
-  patch = async <T>(body: object) => {
+  async patch<T>(body: object) {
     const { data } = await axios.patch<T>(this.url, body, {
       params: this.query,
       withCredentials: true,
     });
 
     return data;
-  };
+  }
 
-  delete = async <T>() => {
+  async delete<T>() {
     const { data } = await axios.delete<T>(this.url, {
       params: this.query,
       withCredentials: true,
     });
 
     return data;
-  };
+  }
 }
