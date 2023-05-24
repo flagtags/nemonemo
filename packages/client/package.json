@@ -58,6 +58,7 @@
     "@types/jest-in-case": "^1.0.5",
     "@types/lodash": "^4.14.178",
     "@types/styled-components": "^5.1.23",
+    "intersection-observer": "^0.12.2",
     "jest-in-case": "^1.0.2",
     "react-app-rewire-alias": "^1.1.7",
     "react-app-rewired": "^2.2.1"
