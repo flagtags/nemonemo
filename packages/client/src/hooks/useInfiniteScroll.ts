@@ -1,5 +1,4 @@
 import { useEffect, useRef } from 'react';
-import Fetcher from '@/api/fetcher';
 import {
   QueryFunction,
   QueryKey,
@@ -20,7 +19,7 @@ const useInfiniteScroll = <T>(
   const [target, setRef] = useMeasuredRef<HTMLDivElement>();
   const intersectionObserverRef = useRef<IntersectionObserver>();
 
-  const { data, isError, isLoading, fetchNextPage, hasNextPage } =
+  const { data, isLoading, fetchNextPage, hasNextPage, error } =
     useInfiniteQuery<T[]>(queryKeys, queryFn, queryOptions);
 
   if (!hasNextPage && target) {
@@ -51,7 +50,7 @@ const useInfiniteScroll = <T>(
 
   const flattenData = data && flatFn(data.pages);
 
-  return { setRef, data: flattenData, isLoading, isError };
+  return { setRef, data: flattenData, isLoading };
 };
 
 export default useInfiniteScroll;

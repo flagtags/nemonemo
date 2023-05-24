@@ -1,4 +1,5 @@
 import Fetcher from '@/api/fetcher';
+import options from '@/config/reactQuery/options';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import Logic from './Item';
 
@@ -17,7 +18,6 @@ const List = () => {
     setRef,
     data: logics,
     isLoading,
-    isError,
   } = useInfiniteScroll<ILogic>(
     ['logicList', pageSize],
     ({ pageParam = 0 }) => {
@@ -30,11 +30,11 @@ const List = () => {
         if (lastPage.length < pageSize) return;
         return allPages.length;
       },
+      ...options,
     },
     (data) => data.flat(),
   );
 
-  if (isLoading || isError || !logics) return null;
   return (
     <>
       <h1>로직 목록</h1>
@@ -44,12 +44,14 @@ const List = () => {
           display: 'flex',
         }}
       >
-        {logics.map((logic) => (
-          <Logic
-            key={logic._id}
-            data={logic}
-          />
-        ))}
+        {!isLoading && logics
+          ? logics.map((logic) => (
+              <Logic
+                key={logic._id}
+                data={logic}
+              />
+            ))
+          : null}
       </div>
 
       <div ref={setRef} />

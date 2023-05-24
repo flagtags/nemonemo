@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import styled from 'styled-components';
@@ -7,6 +7,7 @@ import './App.css';
 import Account from './pages/account';
 import ErrorBoundary from './components/ErrorBoundary';
 import List from './pages/list';
+import { Redirect } from './components/Redirect';
 
 const Container = styled.div`
   display: flex;
@@ -19,26 +20,32 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <ErrorBoundary>
-        <BrowserRouter>
-          <Routes>
-            <Route
-              path="/"
-              element={<></>}
-            />
+      <BrowserRouter>
+        <Routes>
+          <Route
+            path="/"
+            element={<></>}
+          />
 
-            <Route
-              path="/account"
-              element={<Account />}
-            />
+          <Route
+            path="/account"
+            element={<Account />}
+          />
 
-            <Route
-              path="/list"
-              element={<List />}
-            />
-          </Routes>
-        </BrowserRouter>
-      </ErrorBoundary>
+          {/*  */}
+
+          <Route
+            path="/list"
+            element={
+              <ErrorBoundary fallback={<Redirect path="/account" />}>
+                <Suspense fallback="loading 중...">
+                  <List />
+                </Suspense>
+              </ErrorBoundary>
+            }
+          />
+        </Routes>
+      </BrowserRouter>
     </QueryClientProvider>
   );
 }
