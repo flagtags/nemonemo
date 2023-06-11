@@ -131,6 +131,7 @@ describe('List', () => {
     });
 
     test('비로그인 시 리다이렉트', async () => {
+      // 비로그인을 목록 api 요청했을 때 401 에러 나오면 비로그인으로 생각함
       jest.spyOn(Fetcher.prototype, 'get').mockRejectedValue(
         new AxiosError(
           'Requset failed with status code 401',
@@ -143,6 +144,14 @@ describe('List', () => {
         ),
       );
 
+      jest
+        .spyOn(IntersectionObserver.prototype, 'takeRecords')
+        .mockReturnValueOnce([
+          {
+            isIntersecting: false,
+          } as IntersectionObserverEntry,
+        ]);
+
       render(
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary fallback={<Redirect path="/account" />}>
@@ -152,6 +161,7 @@ describe('List', () => {
       );
 
       await waitFor(() => {
+        expect(Fetcher.prototype.get).toThrowError();
         expect(router.state.location.pathname).toBe('/account');
       });
     });
