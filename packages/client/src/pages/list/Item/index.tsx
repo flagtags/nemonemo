@@ -1,3 +1,5 @@
+import { useEffect, useRef } from 'react';
+
 interface ILogic {
   _id: string;
   title: string;
@@ -8,9 +10,16 @@ interface ILogic {
 
 const Logic = ({ data }: { data: ILogic }) => {
   const { title, authorId, size, timeLimit } = data;
+  const ref = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+  });
 
   return (
     <button
+      ref={ref}
+      role={'logicListItem'}
       style={{
         display: 'flex',
         flex: 1,
@@ -24,7 +33,7 @@ const Logic = ({ data }: { data: ILogic }) => {
         justifyContent: 'space-between',
       }}
     >
-      <h1>{title}</h1>
+      <h2>{title}</h2>
 
       <div>
         <h5>author: {authorId}</h5>

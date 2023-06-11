@@ -44,14 +44,12 @@ const List = () => {
           display: 'flex',
         }}
       >
-        {!isLoading && logics
-          ? logics.map((logic) => (
-              <Logic
-                key={logic._id}
-                data={logic}
-              />
-            ))
-          : null}
+        {logics.map((logic) => (
+          <Logic
+            key={logic._id}
+            data={logic}
+          />
+        ))}
       </div>
 
       <div ref={setRef} />

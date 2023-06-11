@@ -37,7 +37,7 @@ describe('List', () => {
   describe('목록 렌더링 테스트', () => {
     beforeEach(() => {
       jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(
-        Array.from([2, 3, 4, 5, 6, 7, 8, 10, 11], (id) => {
+        Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (id) => {
           return {
             _id: id,
             title: `title${id}`,
@@ -65,7 +65,15 @@ describe('List', () => {
       );
     });
 
-    test('초기 목록 렌더링', () => {
+    test('초기 목록 렌더링', async () => {
+      jest
+        .spyOn(IntersectionObserver.prototype, 'takeRecords')
+        .mockReturnValue([
+          {
+            isIntersecting: false,
+          } as IntersectionObserverEntry,
+        ]);
+
       render(
         <QueryClientProvider client={queryClient}>
           <ErrorBoundary fallback={<Redirect path="/account" />}>
@@ -74,7 +82,52 @@ describe('List', () => {
         </QueryClientProvider>,
       );
 
-      expect(screen.getAllByRole('logicListItem').length).toBe(15);
+      await waitFor(() => {
+        expect(screen.getAllByRole('logicListItem').length).toBe(10);
+      });
+    });
+
+    test('스크롤 후 next page 목록 렌더링', async () => {
+      jest.clearAllMocks();
+      jest
+        .spyOn(IntersectionObserver.prototype, 'takeRecords')
+        .mockReturnValueOnce([
+          {
+            isIntersecting: true,
+          } as IntersectionObserverEntry,
+        ]);
+
+      render(
+        <QueryClientProvider client={queryClient}>
+          <ErrorBoundary fallback={<Redirect path="/account" />}>
+            <RouterProvider router={router} />
+          </ErrorBoundary>
+        </QueryClientProvider>,
+      );
+
+      jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(
+        Array.from([11, 12, 13, 14, 15, 16], (id) => {
+          return {
+            _id: id,
+            title: `title${id}`,
+            authorId: 1,
+            size: 1,
+            timeLimit: 1,
+          };
+        }),
+      );
+
+      jest
+        .spyOn(IntersectionObserver.prototype, 'takeRecords')
+        .mockReturnValueOnce([
+          {
+            isIntersecting: false,
+          } as IntersectionObserverEntry,
+        ]);
+
+      await waitFor(() => {
+        expect(screen.getAllByRole('logicListItem').length).toBe(16);
+      });
     });
 
     test('비로그인 시 리다이렉트', async () => {

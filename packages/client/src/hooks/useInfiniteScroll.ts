@@ -48,7 +48,7 @@ const useInfiniteScroll = <T>(
     };
   }, [target]);
 
-  const flattenData = data && flatFn(data.pages);
+  const flattenData = (data && flatFn(data.pages)) || [];
 
   return { setRef, data: flattenData, isLoading };
 };
