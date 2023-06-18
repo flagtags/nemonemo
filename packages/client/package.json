@@ -32,7 +32,8 @@
       "axios": "axios/dist/node/axios.cjs",
       "^@/(.*)$": "<rootDir>/src/$1"
     },
-    "testURL": "http://localhost:3000"
+    "testURL": "http://localhost:3000",
+    "clearMocks": true
   },
   "eslintConfig": {
     "extends": [

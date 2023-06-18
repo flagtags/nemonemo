@@ -21,9 +21,14 @@ const List = () => {
   } = useInfiniteScroll<ILogic>(
     ['logicList', pageSize],
     ({ pageParam = 0 }) => {
-      return new Fetcher('/logic')
-        .setQuery({ pageIndex: pageParam, pageSize })
-        .get();
+      try {
+        return new Fetcher('/logic')
+          .setQuery({ pageIndex: pageParam, pageSize })
+          .get();
+      } catch (error) {
+        console.log('useInfiniteScroll fetch function error', error);
+        throw error;
+      }
     },
     {
       getNextPageParam: (lastPage, allPages) => {

@@ -80,6 +80,7 @@ describe('회원가입', () => {
         MockedFetcher.prototype.post.mockResolvedValue({});
 
         registerButton.click();
+
         await waitFor(() => expect(router.state.location.pathname).toBe('/'));
       });
 
