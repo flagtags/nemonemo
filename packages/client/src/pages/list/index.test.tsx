@@ -11,10 +11,10 @@ import { Suspense } from 'react';
 
 describe('List', () => {
   let router: ReturnType<typeof createMemoryRouter>;
-  let queryClient = new QueryClient();
+  let queryClient: QueryClient;
 
   beforeEach(() => {
-    console.log('before each');
+    queryClient = new QueryClient();
     router = createMemoryRouter(
       [
         { path: '/account', element: null },
@@ -36,86 +36,29 @@ describe('List', () => {
   });
 
   afterEach(() => {
-    console.log('mock clear');
     jest.restoreAllMocks();
   });
 
-  describe('List not rendering', () => {
-    console.log('List not rendering describe');
-    test('비로그인 시 리다이렉트', async () => {
-      console.log('비로그인 시 리다이렉트 test');
-      // 비로그인을 목록 api 요청했을 때 401 에러 나오면 비로그인으로 생각함
-      const tempFetcherGet = Fetcher.prototype.get;
-      const spyOnFn = jest
-        .spyOn(Fetcher.prototype, 'get')
-        .mockImplementationOnce(async () => {
-          throw new AxiosError(
-            'Requset failed with status code 401',
-            'ERR_BAD_REQUEST',
-            undefined,
-            undefined,
-            {
-              status: 401,
-            } as AxiosResponse,
-          );
-        });
-
-      jest
-        .spyOn(IntersectionObserver.prototype, 'takeRecords')
-        .mockReturnValueOnce([
-          {
-            isIntersecting: false,
-          } as IntersectionObserverEntry,
-        ]);
-
-      render(
-        <QueryClientProvider client={queryClient}>
-          <ErrorBoundary fallback={<Redirect path="/account" />}>
-            <RouterProvider router={router} />
-          </ErrorBoundary>
-        </QueryClientProvider>,
-      );
-
-      await waitFor(() => expect(Fetcher.prototype.get).toBeCalledTimes(1));
-
-      await waitFor(() => {
-        expect(router.state.location.pathname).toBe('/account');
-      });
-
-      Fetcher.prototype.get = tempFetcherGet;
-      console.log('after 비로그인', Fetcher.prototype.get.toString());
-    });
-  });
-
   describe('목록 렌더링 테스트', () => {
-    beforeEach(() => {
-      console.log('목록 렌더링 테스트의 before each');
-    });
-
     test('페이지 헤더', async () => {
-      console.log('페이지 헤더 테스트');
-
-      const res = Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (id) => {
-        return {
-          _id: id,
-          title: `title${id}`,
-          authorId: 1,
-          size: 1,
-          timeLimit: 1,
-        };
-      });
-
-      jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(res);
+      jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(
+        Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (id) => {
+          return {
+            _id: id,
+            title: `title${id}`,
+            authorId: 1,
+            size: 1,
+            timeLimit: 1,
+          };
+        }),
+      );
 
       render(
         <QueryClientProvider client={queryClient}>
-          <ErrorBoundary fallback={<Redirect path="/account" />}>
-            <RouterProvider router={router} />
-          </ErrorBoundary>
+          <RouterProvider router={router} />
         </QueryClientProvider>,
       );
 
-      await waitFor(() => expect(Fetcher.prototype.get).toBeCalledTimes(1));
       await waitFor(() =>
         expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
           '로직 목록',
@@ -123,8 +66,7 @@ describe('List', () => {
       );
     });
 
-    test.skip('초기 목록 렌더링', async () => {
-      console.log('초기 목록 렌더링');
+    test('초기 목록 렌더링', async () => {
       jest
         .spyOn(IntersectionObserver.prototype, 'takeRecords')
         .mockReturnValue([
@@ -133,11 +75,21 @@ describe('List', () => {
           } as IntersectionObserverEntry,
         ]);
 
+      jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(
+        Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (id) => {
+          return {
+            _id: id,
+            title: `title${id}`,
+            authorId: 1,
+            size: 1,
+            timeLimit: 1,
+          };
+        }),
+      );
+
       render(
         <QueryClientProvider client={queryClient}>
-          <ErrorBoundary fallback={<Redirect path="/account" />}>
-            <RouterProvider router={router} />
-          </ErrorBoundary>
+          <RouterProvider router={router} />
         </QueryClientProvider>,
       );
 
@@ -146,8 +98,7 @@ describe('List', () => {
       });
     });
 
-    test.skip('스크롤 후 next page 목록 렌더링', async () => {
-      console.log('스크롤 후 next page 목록 렌더링 test');
+    test('스크롤 후 next page 목록 렌더링', async () => {
       jest
         .spyOn(IntersectionObserver.prototype, 'takeRecords')
         .mockReturnValueOnce([
@@ -156,11 +107,21 @@ describe('List', () => {
           } as IntersectionObserverEntry,
         ]);
 
+      jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(
+        Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (id) => {
+          return {
+            _id: id,
+            title: `title${id}`,
+            authorId: 1,
+            size: 1,
+            timeLimit: 1,
+          };
+        }),
+      );
+
       render(
         <QueryClientProvider client={queryClient}>
-          <ErrorBoundary fallback={<Redirect path="/account" />}>
-            <RouterProvider router={router} />
-          </ErrorBoundary>
+          <RouterProvider router={router} />
         </QueryClientProvider>,
       );
 
@@ -187,6 +148,38 @@ describe('List', () => {
       await waitFor(() => {
         expect(screen.getAllByRole('logicListItem').length).toBe(16);
       });
+    });
+  });
+
+  test('비로그인 시 리다이렉트', async () => {
+    jest.spyOn(Fetcher.prototype, 'get').mockImplementationOnce(async () => {
+      throw new AxiosError(
+        'Requset failed with status code 401',
+        'ERR_BAD_REQUEST',
+        undefined,
+        undefined,
+        {
+          status: 401,
+        } as AxiosResponse,
+      );
+    });
+
+    jest
+      .spyOn(IntersectionObserver.prototype, 'takeRecords')
+      .mockReturnValueOnce([
+        {
+          isIntersecting: false,
+        } as IntersectionObserverEntry,
+      ]);
+
+    render(
+      <QueryClientProvider client={queryClient}>
+        <RouterProvider router={router} />
+      </QueryClientProvider>,
+    );
+
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe('/account');
     });
   });
 });
