@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { Link } from 'react-router-dom';
 
 interface ILogic {
   _id: string;
@@ -10,14 +11,15 @@ interface ILogic {
 
 const Logic = ({ data }: { data: ILogic }) => {
   const { title, authorId, size, timeLimit } = data;
-  const ref = useRef<HTMLButtonElement>(null);
+  const ref = useRef<HTMLAnchorElement>(null);
 
   useEffect(() => {
     if (!ref.current) return;
   });
 
   return (
-    <button
+    <Link
+      to={`/game/${data._id}`}
       ref={ref}
       role={'logicListItem'}
       style={{
@@ -41,7 +43,7 @@ const Logic = ({ data }: { data: ILogic }) => {
         <h5>size: {size}</h5>
         <h5>time: {timeLimit}</h5>
       </div>
-    </button>
+    </Link>
   );
 };
 

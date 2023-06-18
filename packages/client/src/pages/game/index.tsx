@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import getLogic from '../../api/getLogic';
 import Header from '../../components/Header';
 import LogicPaper from '../../components/LogicPaper';
-import './App.css';
 
 const Container = styled.div`
   display: flex;

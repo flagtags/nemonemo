@@ -7,6 +7,7 @@ import './App.css';
 import Account from './pages/account';
 import ErrorBoundary from './components/ErrorBoundary';
 import List from './pages/list';
+import Game from './pages/game';
 import { Redirect } from './components/Redirect';
 
 const Container = styled.div`
@@ -33,6 +34,11 @@ function App() {
           />
 
           {/*  */}
+
+          <Route
+            path="/game/:logicId"
+            element={<Game />}
+          />
 
           <Route
             path="/list"
