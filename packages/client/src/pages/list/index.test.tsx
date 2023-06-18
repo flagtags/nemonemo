@@ -76,12 +76,14 @@ describe('List', () => {
         </QueryClientProvider>,
       );
 
+      await waitFor(() => expect(Fetcher.prototype.get).toBeCalledTimes(1));
+
       await waitFor(() => {
         expect(router.state.location.pathname).toBe('/account');
       });
 
       Fetcher.prototype.get = tempFetcherGet;
-      console.log('after 비로그인', Fetcher.prototype.get);
+      console.log('after 비로그인', Fetcher.prototype.get.toString());
     });
   });
 
@@ -92,8 +94,6 @@ describe('List', () => {
 
     test('페이지 헤더', async () => {
       console.log('페이지 헤더 테스트');
-
-      console.log(Fetcher.prototype.get);
 
       const res = Array.from([1, 2, 3, 4, 5, 6, 7, 8, 9, 10], (id) => {
         return {
@@ -106,8 +106,6 @@ describe('List', () => {
       });
 
       jest.spyOn(Fetcher.prototype, 'get').mockResolvedValue(res);
-
-      // console.log(Fetcher.prototype.get());
 
       render(
         <QueryClientProvider client={queryClient}>

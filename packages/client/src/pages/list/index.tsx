@@ -14,6 +14,7 @@ interface ILogic {
 const pageSize = 10;
 
 const List = () => {
+  console.log('list component');
   const {
     setRef,
     data: logics,
