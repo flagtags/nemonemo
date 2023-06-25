@@ -2,25 +2,46 @@ import styled from 'styled-components';
 import getLogic from '../../api/getLogic';
 import Header from '../../components/Header';
 import LogicPaper from '../../components/LogicPaper';
+import Fetcher from '../../api/fetcher';
+import { useParams } from 'react-router-dom';
+import { ILogic } from '@/types/logic';
+import { useQuery } from 'react-query';
+import options from '@/config/reactQuery/options';
+import { useMemo } from 'react';
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
 `;
 
-function App() {
-  const logic = getLogic();
+const convertSolution = (solution: boolean[][]) =>
+  solution.map((row) => row.map((col) => (col ? 1 : 0)));
+
+function Game() {
+  const { logicId } = useParams();
+  if (!logicId) throw new Error('logic id is not defined');
+
+  const { data: logic } = useQuery(
+    ['logic', logicId],
+    ({ queryKey }) => new Fetcher(`/logic/${queryKey[1]}`).get<ILogic>(),
+    options,
+  );
+
+  if (!logic) throw new Error('logic empty');
+
+  const { title, answer, size } = logic;
+  const numberSolution = useMemo(() => convertSolution(answer), [answer]);
 
   return (
     <Container className="nemonemologic">
-      <Header title={logic.title} />
+      <Header title={title} />
       <LogicPaper
-        rowLength={10}
-        colLength={10}
-        solution={logic.solution}
+        rowLength={size}
+        colLength={size}
+        solution={numberSolution}
       />
     </Container>
   );
 }
 
-export default App;
+export default Game;

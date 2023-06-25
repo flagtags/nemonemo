@@ -1,13 +1,6 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-
-interface ILogic {
-  _id: string;
-  title: string;
-  authorId: string;
-  size: number;
-  timeLimit: number;
-}
+import { ILogic } from '@/types/logic';
 
 const Logic = ({ data }: { data: ILogic }) => {
   const { title, authorId, size, timeLimit } = data;

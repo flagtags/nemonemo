@@ -1,15 +1,8 @@
 import Fetcher from '@/api/fetcher';
 import options from '@/config/reactQuery/options';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { ILogic } from '@/types/logic';
 import Logic from './Item';
-
-interface ILogic {
-  _id: string;
-  title: string;
-  authorId: string;
-  size: number;
-  timeLimit: number;
-}
 
 const pageSize = 10;
 
