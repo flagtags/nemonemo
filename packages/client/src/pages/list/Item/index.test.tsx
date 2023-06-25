@@ -11,6 +11,13 @@ describe('list item', () => {
       authorId: 'j03y14',
       size: 10,
       timeLimit: 10000,
+      answer: [
+        [false, true, false],
+        [false, true, false],
+        [false, true, false],
+      ],
+      hintRow: [[1], [1], [1]],
+      hintColumn: [[0], [3], [0]],
     };
 
     const router = createMemoryRouter(

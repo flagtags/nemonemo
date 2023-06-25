@@ -75,7 +75,11 @@ export default function LogicPaper({
     }
   }, [answerCellStates, solution]);
 
-  const onContextMenu = (e: React.MouseEvent, rowIndex: number, colIndex: number) => {
+  const onContextMenu = (
+    e: React.MouseEvent,
+    rowIndex: number,
+    colIndex: number,
+  ) => {
     e.preventDefault();
 
     if (answerCellStates[rowIndex][colIndex] === CELL_STATE.NOTHING) {
@@ -86,34 +90,45 @@ export default function LogicPaper({
   };
 
   return (
-    <table>
+    <table role="logic-paper">
       <tbody>
-      <tr role={'column-hint-row'}>
-        <th />
-        {hints.column.map((colHints: number[], columnIndex) => (
-          <HintCell key={columnIndex} direction='column' role='column-hint' hints={colHints} />
-        ))}
-      </tr>
-      {Array(rowLength)
-        .fill(0)
-        .map((_, rowIndex) => (
-          <tr key={rowIndex}>
-            <HintCell direction='row' role='row-hint' hints={hints.row[rowIndex]} />
-            {Array(colLength)
-              .fill(0)
-              .map((_, columnIndex) => (
-                <Td key={columnIndex}>
-                  <Cell
-                    rowIndex={rowIndex}
-                    columnIndex={columnIndex}
-                    state={answerCellStates[rowIndex][columnIndex]}
-                    onClick={() => onClick(rowIndex, columnIndex)}
-                    onContextMenu={(e: React.MouseEvent) => onContextMenu(e, rowIndex, columnIndex)}
-                  />
-                </Td>
-              ))}
-          </tr>
-        ))}
+        <tr role={'column-hint-row'}>
+          <th />
+          {hints.column.map((colHints: number[], columnIndex) => (
+            <HintCell
+              key={columnIndex}
+              direction="column"
+              role="column-hint"
+              hints={colHints}
+            />
+          ))}
+        </tr>
+        {Array(rowLength)
+          .fill(0)
+          .map((_, rowIndex) => (
+            <tr key={rowIndex}>
+              <HintCell
+                direction="row"
+                role="row-hint"
+                hints={hints.row[rowIndex]}
+              />
+              {Array(colLength)
+                .fill(0)
+                .map((_, columnIndex) => (
+                  <Td key={columnIndex}>
+                    <Cell
+                      rowIndex={rowIndex}
+                      columnIndex={columnIndex}
+                      state={answerCellStates[rowIndex][columnIndex]}
+                      onClick={() => onClick(rowIndex, columnIndex)}
+                      onContextMenu={(e: React.MouseEvent) =>
+                        onContextMenu(e, rowIndex, columnIndex)
+                      }
+                    />
+                  </Td>
+                ))}
+            </tr>
+          ))}
       </tbody>
     </table>
   );
