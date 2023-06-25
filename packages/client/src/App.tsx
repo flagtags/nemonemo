@@ -37,7 +37,13 @@ function App() {
 
           <Route
             path="/game/:logicId"
-            element={<Game />}
+            element={
+              <ErrorBoundary fallback={<Redirect path="/" />}>
+                <Suspense fallback="loading 중...">
+                  <Game />
+                </Suspense>
+              </ErrorBoundary>
+            }
           />
 
           <Route
