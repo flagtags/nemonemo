@@ -1,6 +1,6 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { AxiosError } from 'axios';
-import Fetcher from '../../../api/fetcher';
+import Fetcher from '@/api/fetcher';
 import userEvent from '@testing-library/user-event';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import SingUp from './index';
@@ -80,6 +80,7 @@ describe('회원가입', () => {
         MockedFetcher.prototype.post.mockResolvedValue({});
 
         registerButton.click();
+
         await waitFor(() => expect(router.state.location.pathname).toBe('/'));
       });
 

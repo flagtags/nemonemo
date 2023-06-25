@@ -11,12 +11,16 @@ export default class Fetcher {
     this.host = 'http://localhost:3000';
     this.path = path;
     this.query = {};
+    this.post = this.post.bind(this);
+    this.get = this.get.bind(this);
+    this.patch = this.patch.bind(this);
+    this.delete = this.delete.bind(this);
   }
 
-  setQuery(query: Query) {
+  setQuery = (query: Query) => {
     this.query = query;
     return this;
-  }
+  };
 
   get url() {
     return `${this.host}${this.path}`;
