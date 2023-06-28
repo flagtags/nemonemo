@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { ILogic } from '@/types/logic';
+import { IBoard } from '@/types/logic';
 
-const Logic = ({ data }: { data: ILogic }) => {
+const Logic = ({ data }: { data: IBoard }) => {
   const { title, authorId, size, timeLimit } = data;
   const ref = useRef<HTMLAnchorElement>(null);
 

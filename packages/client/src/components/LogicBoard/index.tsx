@@ -1,10 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import Cell from '../Cell';
-import { CELL_STATE, IHint } from '../type';
-import HintCell from '../Hints/HintCell';
-import getHints from '../getHints';
+import Cell from './Cell';
+import { CELL_STATE, IHint } from '@/types/logic';
+import HintCell from './Hints/HintCell';
 
 const Td = styled.td`
   height: 30px;

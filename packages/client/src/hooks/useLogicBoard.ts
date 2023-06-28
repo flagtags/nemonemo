@@ -1,4 +1,4 @@
-import { CELL_STATE } from '@/components/LogicPaper/type';
+import { CELL_STATE } from '@/types/logic';
 import _ from 'lodash';
 import { useReducer } from 'react';
 

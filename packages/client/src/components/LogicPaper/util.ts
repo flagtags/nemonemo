@@ -1,4 +1,4 @@
-import { CELL_STATE } from './type';
+import { CELL_STATE } from '@/types/logic';
 
 export type ICellStateAlt = 'fill' | 'blank' | 'nothing';
 
@@ -8,7 +8,7 @@ export const cellStateMap = {
   nothing: CELL_STATE.NOTHING,
 };
 
-export const getStateFromAlt = (cells: HTMLElement[]) => (
+export const getStateFromAlt = (cells: HTMLElement[]) =>
   cells.map((cell) => {
     const cellImage = cell.getElementsByTagName('img')[0];
     if (!cellImage) return CELL_STATE.BLANK;
@@ -17,5 +17,4 @@ export const getStateFromAlt = (cells: HTMLElement[]) => (
     if (cellAlt === null) throw new Error('cell alt is missing');
 
     return cellStateMap[cellAlt as ICellStateAlt];
-  })
-);
+  });

@@ -49,9 +49,9 @@ describe('로직 팩토리', () => {
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       '네모네모 로직을 직접 만들어봐요!',
     );
-    expect(screen.getByLabelText('제목')).toBeInTheDocument();
-    expect(screen.getByLabelText('제한시간')).toBeInTheDocument();
-    expect(screen.getByLabelText('사이즈')).toBeInTheDocument();
+    expect(screen.getByLabelText('제목 :')).toBeInTheDocument();
+    expect(screen.getByLabelText('제한시간 :')).toBeInTheDocument();
+    expect(screen.getByLabelText('사이즈 :')).toBeInTheDocument();
     expect(screen.getByRole('logic-form')).toBeInTheDocument();
     expect(screen.getByRole('apply-size')).toBeInTheDocument();
     expect(screen.getByRole('submit')).toBeInTheDocument();

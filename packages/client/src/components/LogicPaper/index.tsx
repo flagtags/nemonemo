@@ -1,11 +1,9 @@
 import React, { useEffect, useReducer } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import Cell from './Cell';
-import { CELL_STATE } from './type';
-import HintCell from './Hints/HintCell';
-import getHints from './getHints';
-import LogicBoard from './LogicBoard';
+import { CELL_STATE } from '@/types/logic';
+import getHints from '@/service/logic/getHints';
+import LogicBoard from '../LogicBoard';
 import useLogicBoard from '@/hooks/useLogicBoard';
 
 const Td = styled.td`

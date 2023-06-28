@@ -14,7 +14,7 @@ describe('Game page 테스트', () => {
     queryClient = new QueryClient();
   });
 
-  test('logicId가 params에 없으면 리스트으로 리다이렉트', async () => {
+  test('잘못된 logicId가 있으면 리스트으로 리다이렉트', async () => {
     const router = createMemoryRouter(
       [
         {

@@ -1,24 +1,47 @@
 import userEvent from '@testing-library/user-event';
-import { render, screen, queryAllByCoordinateId, waitFor } from '../../test-utils';
+import {
+  render,
+  screen,
+  queryAllByCoordinateId,
+  waitFor,
+} from '../../test-utils';
 import { getStateFromAlt } from './util';
-import { CELL_SOLUTION_STATE, CELL_STATE } from './type';
+import { CELL_SOLUTION_STATE, CELL_STATE } from '@/types/logic';
 import LogicPaper from '.';
 import { testBlankstate, testFillState, testNothingState } from './testUtil';
-import getHints from './getHints';
+import getHints from '@/service/logic/getHints';
 import cases from 'jest-in-case';
 
 describe('로직 페이퍼 렌더링', () => {
   test('솔루션 2차원 배열의 행, 열만큼 로직 페이퍼 렌더링.', () => {
     const solution = [
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+      ],
     ];
 
     const rowLength = solution.length;
     const colLength = solution[0].length;
 
-    render(<LogicPaper rowLength={rowLength} colLength={colLength} solution={solution} />);
+    render(
+      <LogicPaper
+        rowLength={rowLength}
+        colLength={colLength}
+        solution={solution}
+      />,
+    );
 
     expect(screen.getAllByRole('row')).toHaveLength(rowLength);
     expect(screen.getAllByRole('cell')).toHaveLength(rowLength * colLength);
@@ -33,12 +56,30 @@ describe('로직 페이퍼 클릭 처리', () => {
 
   beforeEach(() => {
     const solution = [
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.FILL],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.FILL,
+      ],
     ];
     // eslint-disable-next-line testing-library/no-render-in-setup
-    render(<LogicPaper rowLength={3} colLength={3} solution={solution} />);
+    render(
+      <LogicPaper
+        rowLength={3}
+        colLength={3}
+        solution={solution}
+      />,
+    );
     [firstCell, ...restCells] = screen.getAllByRole('cell_button');
     cellStates = getStateFromAlt(restCells);
   });
@@ -106,36 +147,72 @@ describe('힌트 숫자를 클릭하면 삭선처리', () => {
 
   beforeEach(() => {
     const solution = [
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
     ];
 
     // eslint-disable-next-line testing-library/no-render-in-setup
-    render(<LogicPaper rowLength={3} colLength={3} solution={solution} />);
+    render(
+      <LogicPaper
+        rowLength={3}
+        colLength={3}
+        solution={solution}
+      />,
+    );
 
     [firstHintNumber, ...restHintNumbers] = screen.getAllByRole('hint_button');
 
-    expect(firstHintNumber).not.toHaveStyle({ 'text-decoration': 'line-through', color: 'blue' });
+    expect(firstHintNumber).not.toHaveStyle({
+      'text-decoration': 'line-through',
+      color: 'blue',
+    });
     restHintNumbers.forEach((restHintNumber) => {
-      expect(restHintNumber).not.toHaveStyle({ 'text-decoration': 'line-through', color: 'blue' });
+      expect(restHintNumber).not.toHaveStyle({
+        'text-decoration': 'line-through',
+        color: 'blue',
+      });
     });
   });
 
   test('클릭 처리', () => {
     userEvent.click(firstHintNumber);
-    expect(firstHintNumber).toHaveStyle({ 'text-decoration': 'line-through', color: 'blue' });
+    expect(firstHintNumber).toHaveStyle({
+      'text-decoration': 'line-through',
+      color: 'blue',
+    });
     restHintNumbers.forEach((restHintNumber) => {
-      expect(restHintNumber).not.toHaveStyle({ 'text-decoration': 'line-through', color: 'blue' });
+      expect(restHintNumber).not.toHaveStyle({
+        'text-decoration': 'line-through',
+        color: 'blue',
+      });
     });
   });
 
   test('클릭 두 번 처리', () => {
     userEvent.click(firstHintNumber);
     userEvent.click(firstHintNumber);
-    expect(firstHintNumber).not.toHaveStyle({ 'text-decoration': 'line-through', color: 'blue' });
+    expect(firstHintNumber).not.toHaveStyle({
+      'text-decoration': 'line-through',
+      color: 'blue',
+    });
     restHintNumbers.forEach((restHintNumber) => {
-      expect(restHintNumber).not.toHaveStyle({ 'text-decoration': 'line-through', color: 'blue' });
+      expect(restHintNumber).not.toHaveStyle({
+        'text-decoration': 'line-through',
+        color: 'blue',
+      });
     });
   });
 });
@@ -153,9 +230,21 @@ const testCases = {
     ],
 
     solution: [
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
     ],
   },
 
@@ -173,9 +262,21 @@ const testCases = {
     ],
 
     solution: [
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
     ],
   },
 
@@ -193,9 +294,21 @@ const testCases = {
     ],
 
     solution: [
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
-      [CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK],
-      [CELL_SOLUTION_STATE.FILL, CELL_SOLUTION_STATE.BLANK, CELL_SOLUTION_STATE.FILL],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
+      [
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+      ],
+      [
+        CELL_SOLUTION_STATE.FILL,
+        CELL_SOLUTION_STATE.BLANK,
+        CELL_SOLUTION_STATE.FILL,
+      ],
     ],
   },
 };
@@ -210,15 +323,23 @@ describe('클릭 시 정답 반응 처리', () => {
       solution: CELL_SOLUTION_STATE[][];
       clicks: { coordinate: number[]; buttonType: string }[];
     }) => {
-      window.alert = jest.fn()
+      window.alert = jest.fn();
 
-      render(<LogicPaper rowLength={3} colLength={3} solution={solution} />);
+      render(
+        <LogicPaper
+          rowLength={3}
+          colLength={3}
+          solution={solution}
+        />,
+      );
 
       clicks.map(({ coordinate: [row, column], buttonType }) => {
         // row, column을 받아서 클릭 할 버튼들의 좌표를 받아옴
         const clickedButton = screen.queryAllByCoordinateId(row, column)[0];
         // 각 좌표를 클릭함
-        userEvent.click(clickedButton, { button: buttonType === 'left' ? 0 : 2 });
+        userEvent.click(clickedButton, {
+          button: buttonType === 'left' ? 0 : 2,
+        });
       });
 
       expect(window.alert).toBeCalledWith('정답입니다!');
