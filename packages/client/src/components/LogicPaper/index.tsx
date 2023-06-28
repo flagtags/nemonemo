@@ -23,7 +23,10 @@ export default function LogicPaper({
   colLength: number;
   solution: number[][];
 }) {
-  const [cellStates, changeCellState] = useLogicBoard({ rowLength, colLength });
+  const { cellStates, changeCellState } = useLogicBoard({
+    rowLength,
+    colLength,
+  });
 
   const hints = getHints(solution);
 
@@ -47,12 +50,14 @@ export default function LogicPaper({
   }, [cellStates, solution]);
 
   return (
-    <LogicBoard
-      cellStates={cellStates}
-      changeCellState={changeCellState}
-      hints={hints}
-      rowLength={rowLength}
-      colLength={colLength}
-    />
+    <div role="logic-paper">
+      <LogicBoard
+        cellStates={cellStates}
+        changeCellState={changeCellState}
+        hints={hints}
+        rowLength={rowLength}
+        colLength={colLength}
+      />
+    </div>
   );
 }

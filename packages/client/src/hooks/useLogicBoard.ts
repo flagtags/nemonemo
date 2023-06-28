@@ -9,7 +9,10 @@ const useLogicBoard = ({
   rowLength: number;
   colLength: number;
 }) => {
-  const cellStateReducer = (state: CELL_STATE[][], action: any): any => {
+  const cellStateReducer = (
+    state: CELL_STATE[][],
+    action: any,
+  ): CELL_STATE[][] => {
     const tempCellStates = _.cloneDeep(state);
 
     switch (action.toBe) {
@@ -22,6 +25,8 @@ const useLogicBoard = ({
       case CELL_STATE.NOTHING:
         tempCellStates[action.rowIndex][action.colIndex] = CELL_STATE.NOTHING;
         return tempCellStates;
+      default:
+        return state;
     }
   };
 
@@ -32,7 +37,7 @@ const useLogicBoard = ({
       .map(() => Array(colLength).fill(CELL_STATE.BLANK)),
   );
 
-  return [cellStates, changeCellState];
+  return { cellStates, changeCellState };
 };
 
 export default useLogicBoard;

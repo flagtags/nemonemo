@@ -12,7 +12,7 @@ export interface ILogic {
 export enum CELL_STATE {
   BLANK = 0,
   FILL = 1,
-  NOTHING = -1,
+  NOTHING = 2,
 }
 
 export enum CELL_SOLUTION_STATE {

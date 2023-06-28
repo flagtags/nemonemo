@@ -1,3 +1,5 @@
+import LogicForm from '@/components/LogicForm';
+import { useState } from 'react';
 import styled from 'styled-components';
 
 const Label = styled.label`
@@ -25,6 +27,8 @@ const Button = styled.button`
 `;
 
 const LogicFactory = () => {
+  const [size, setSize] = useState(5);
+
   return (
     <>
       <h1>네모네모 로직을 직접 만들어봐요!</h1>
@@ -39,7 +43,10 @@ const LogicFactory = () => {
 
       <Label>
         사이즈 :
-        <Input type="number" />
+        <Input
+          type="number"
+          onChange={(e) => setSize(+e.target.value)}
+        />
         <Button
           role="apply-size"
           color="lightblue"
@@ -47,6 +54,8 @@ const LogicFactory = () => {
           적용
         </Button>
       </Label>
+
+      <LogicForm size={size} />
 
       <Button
         role="submit"

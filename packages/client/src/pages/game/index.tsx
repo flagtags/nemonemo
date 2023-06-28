@@ -4,7 +4,7 @@ import Header from '../../components/Header';
 import LogicPaper from '../../components/LogicPaper';
 import Fetcher from '../../api/fetcher';
 import { useParams } from 'react-router-dom';
-import { IBoard } from '@/types/logic';
+import { ILogic } from '@/types/logic';
 import { useQuery } from 'react-query';
 import options from '@/config/reactQuery/options';
 import { useMemo } from 'react';
@@ -19,10 +19,11 @@ const convertSolution = (solution: boolean[][]) =>
 
 function Game() {
   const { logicId } = useParams();
+  if (!logicId) throw new Error('logic id is not defined');
 
   const { data: logic } = useQuery(
     ['logic', logicId],
-    ({ queryKey }) => new Fetcher(`/logic/${queryKey[1]}`).get<IBoard>(),
+    ({ queryKey }) => new Fetcher(`/logic/${queryKey[1]}`).get<ILogic>(),
     options,
   );
 

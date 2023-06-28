@@ -1,9 +1,7 @@
 import React, { useEffect, useReducer } from 'react';
 import _ from 'lodash';
 import styled from 'styled-components';
-import { CELL_STATE } from './type';
-import HintCell from './Hints/HintCell';
-import getHints from './getHints';
+import getHints from '@/service/logic/getHints';
 import LogicBoard from '@/components//LogicBoard';
 import useLogicBoard from '@/hooks/useLogicBoard';
 
@@ -15,26 +13,23 @@ const Td = styled.td`
   vertical-align: middle;
 `;
 
-export default function LogicForm({
-  rowLength,
-  colLength,
-  solution,
-}: {
-  rowLength: number;
-  colLength: number;
-  solution: number[][];
-}) {
-  const [cellStates, changeCellState] = useLogicBoard({ rowLength, colLength });
+export default function LogicForm({ size }: { size: number }) {
+  const { cellStates, changeCellState } = useLogicBoard({
+    rowLength: size,
+    colLength: size,
+  });
 
-  const hints = getHints(solution);
+  const hints = getHints(cellStates);
 
   return (
-    <LogicBoard
-      cellStates={cellStates}
-      changeCellState={changeCellState}
-      hints={hints}
-      rowLength={rowLength}
-      colLength={colLength}
-    />
+    <div role="logic-form">
+      <LogicBoard
+        cellStates={cellStates}
+        changeCellState={changeCellState}
+        hints={hints}
+        rowLength={size}
+        colLength={size}
+      />
+    </div>
   );
 }

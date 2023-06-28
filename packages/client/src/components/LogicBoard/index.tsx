@@ -57,7 +57,7 @@ export default function LogicBoard({
   };
 
   return (
-    <table role="logic-paper">
+    <table role="logic-board">
       <tbody>
         <tr role={'column-hint-row'}>
           <th />

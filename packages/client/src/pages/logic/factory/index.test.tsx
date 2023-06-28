@@ -58,7 +58,7 @@ describe('로직 팩토리', () => {
   });
 
   test('사이즈 입력에 따른 격자 크기 조정', () => {
-    const sizeInput = screen.getByLabelText('사이즈');
+    const sizeInput = screen.getByLabelText('사이즈 :');
     const applyButton = screen.getByRole('apply-size');
 
     userEvent.type(sizeInput, '3');

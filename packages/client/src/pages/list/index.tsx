@@ -1,7 +1,7 @@
 import Fetcher from '@/api/fetcher';
 import options from '@/config/reactQuery/options';
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
-import { IBoard } from '@/types/logic';
+import { ILogic } from '@/types/logic';
 import Logic from './Item';
 
 const pageSize = 10;
@@ -12,7 +12,7 @@ const List = () => {
     setRef,
     data: logics,
     isLoading,
-  } = useInfiniteScroll<IBoard>(
+  } = useInfiniteScroll<ILogic>(
     ['logicList', pageSize],
     ({ pageParam = 0 }) => {
       try {
