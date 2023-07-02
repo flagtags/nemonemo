@@ -13,11 +13,16 @@ import {
   Patch,
   Post,
   Query,
+  Req,
   UseGuards,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { OmitType } from '@nestjs/mapped-types';
 import { AtLeastOnePropertyValidationPipe } from '@pipe/atLeastOnePropertyValidationPipe';
 import { LogicService } from '@use-cases/logic/logic.service';
+import config from '@config';
+import Jwt from 'jsonwebtoken';
+import { NotAuthorizedError } from '@errors/user';
 
 class IdOmitedUpdatedLogicDto extends OmitType(UpdateLogicDto, [
   '_id',
@@ -29,8 +34,19 @@ export class LogicController {
   constructor(private readonly logicService: LogicService) {}
 
   @Post()
-  async createLogic(@Body() logicDTO: CreateLogicServiceDto) {
-    return await this.logicService.createLogic(logicDTO);
+  async createLogic(
+    @Body() logicDTO: CreateLogicServiceDto,
+    @Req() request: Request,
+  ) {
+    const { token } = request.cookies;
+
+    const res = Jwt.verify(token, config.jwtSecret);
+
+    if (typeof res === 'string') throw new NotAuthorizedError();
+
+    const authorId = res._id;
+
+    return await this.logicService.createLogic({ ...logicDTO, authorId });
   }
 
   @Get(':_id')
