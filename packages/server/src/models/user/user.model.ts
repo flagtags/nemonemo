@@ -29,9 +29,7 @@ export class UserModel {
     findUserDto: FindUserDto,
   ): Promise<IModelResponse<UserDocument>> {
     return {
-      response: await this.userSchema
-        .findOne({ userName: findUserDto.userName })
-        .exec(),
+      response: await this.userSchema.findOne(findUserDto).exec(),
       matched: 1,
     };
   }
