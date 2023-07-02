@@ -13,15 +13,7 @@ const Td = styled.td`
   vertical-align: middle;
 `;
 
-export default function LogicBoard({
-  rowLength,
-  colLength,
-  hints,
-  cellStates,
-  changeCellState,
-}: {
-  rowLength: number;
-  colLength: number;
+interface ILogicBoardProps {
   hints: IHint;
   cellStates: CELL_STATE[][];
   changeCellState: ({
@@ -33,7 +25,13 @@ export default function LogicBoard({
     colIndex: number;
     toBe: CELL_STATE;
   }) => void;
-}) {
+}
+
+export default function LogicBoard({
+  hints,
+  cellStates,
+  changeCellState,
+}: ILogicBoardProps) {
   const onClick = (rowIndex: number, colIndex: number) => {
     if (cellStates[rowIndex][colIndex] === CELL_STATE.FILL) {
       changeCellState({ toBe: CELL_STATE.BLANK, rowIndex, colIndex });
@@ -61,16 +59,18 @@ export default function LogicBoard({
       <tbody>
         <tr role={'column-hint-row'}>
           <th />
-          {hints.column.map((colHints: number[], columnIndex) => (
-            <HintCell
-              key={columnIndex}
-              direction="column"
-              role="column-hint"
-              hints={colHints}
-            />
-          ))}
+          {hints.column.map((colHints: number[], columnIndex) => {
+            return (
+              <HintCell
+                key={columnIndex}
+                direction="column"
+                role="column-hint"
+                hints={colHints}
+              />
+            );
+          })}
         </tr>
-        {Array(rowLength)
+        {Array(cellStates.length)
           .fill(0)
           .map((_, rowIndex) => (
             <tr key={rowIndex}>
@@ -79,7 +79,7 @@ export default function LogicBoard({
                 role="row-hint"
                 hints={hints.row[rowIndex]}
               />
-              {Array(colLength)
+              {Array(cellStates[rowIndex].length)
                 .fill(0)
                 .map((_, columnIndex) => (
                   <Td key={columnIndex}>

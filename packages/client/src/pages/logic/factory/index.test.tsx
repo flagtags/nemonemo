@@ -8,7 +8,7 @@ import { Redirect } from '@/components/Redirect';
 import { Suspense } from 'react';
 import { createMemoryRouter, RouterProvider } from 'react-router-dom';
 import { render, screen } from '@testing-library/react';
-import LogicFactory from '.';
+import LogicFactory, { DEFAULT_SIZE } from '.';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import userEvent from '@testing-library/user-event';
 
@@ -62,6 +62,8 @@ describe('로직 팩토리', () => {
     const applyButton = screen.getByRole('apply-size');
 
     userEvent.type(sizeInput, '3');
+    expect(screen.getAllByRole('row')).toHaveLength(DEFAULT_SIZE);
+
     userEvent.click(applyButton);
 
     expect(screen.getAllByRole('row')).toHaveLength(3);

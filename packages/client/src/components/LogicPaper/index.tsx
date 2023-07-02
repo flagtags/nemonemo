@@ -6,14 +6,6 @@ import getHints from '@/service/logic/getHints';
 import LogicBoard from '../LogicBoard';
 import useLogicBoard from '@/hooks/useLogicBoard';
 
-const Td = styled.td`
-  height: 30px;
-  width: 30px;
-  border: 2px solid black;
-  text-align: center;
-  vertical-align: middle;
-`;
-
 export default function LogicPaper({
   rowLength,
   colLength,
@@ -55,8 +47,6 @@ export default function LogicPaper({
         cellStates={cellStates}
         changeCellState={changeCellState}
         hints={hints}
-        rowLength={rowLength}
-        colLength={colLength}
       />
     </div>
   );

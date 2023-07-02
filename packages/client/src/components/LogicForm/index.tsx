@@ -27,8 +27,6 @@ export default function LogicForm({ size }: { size: number }) {
         cellStates={cellStates}
         changeCellState={changeCellState}
         hints={hints}
-        rowLength={size}
-        colLength={size}
       />
     </div>
   );

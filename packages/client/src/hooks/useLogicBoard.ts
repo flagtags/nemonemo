@@ -1,6 +1,6 @@
 import { CELL_STATE } from '@/types/logic';
 import _ from 'lodash';
-import { useReducer } from 'react';
+import { useEffect, useReducer } from 'react';
 
 const useLogicBoard = ({
   rowLength,
@@ -14,6 +14,12 @@ const useLogicBoard = ({
     action: any,
   ): CELL_STATE[][] => {
     const tempCellStates = _.cloneDeep(state);
+
+    if (action.init === true) {
+      return Array(action.rowLength)
+        .fill(0)
+        .map(() => Array(action.colLength).fill(CELL_STATE.BLANK));
+    }
 
     switch (action.toBe) {
       case CELL_STATE.FILL:
@@ -36,6 +42,10 @@ const useLogicBoard = ({
       .fill(0)
       .map(() => Array(colLength).fill(CELL_STATE.BLANK)),
   );
+
+  useEffect(() => {
+    changeCellState({ init: true, rowLength, colLength });
+  }, [rowLength, colLength]);
 
   return { cellStates, changeCellState };
 };

@@ -26,8 +26,11 @@ const Button = styled.button`
   color: white;
 `;
 
+export const DEFAULT_SIZE = 5;
+
 const LogicFactory = () => {
-  const [size, setSize] = useState(5);
+  const [size, setSize] = useState(DEFAULT_SIZE);
+  const [sizeInputValue, setSizeInputValue] = useState(DEFAULT_SIZE);
 
   return (
     <>
@@ -45,9 +48,10 @@ const LogicFactory = () => {
         사이즈 :
         <Input
           type="number"
-          onChange={(e) => setSize(+e.target.value)}
+          onChange={(e) => setSizeInputValue(+e.target.value)}
         />
         <Button
+          onClick={() => setSize(sizeInputValue)}
           role="apply-size"
           color="lightblue"
         >
