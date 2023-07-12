@@ -23,6 +23,7 @@ import { LogicService } from '@use-cases/logic/logic.service';
 import config from '@config';
 import Jwt from 'jsonwebtoken';
 import { NotAuthorizedError } from '@errors/user';
+import { CreateLogicControllerDto } from '@dto/logic/create-logic-controller.dto';
 
 class IdOmitedUpdatedLogicDto extends OmitType(UpdateLogicDto, [
   '_id',
@@ -35,7 +36,7 @@ export class LogicController {
 
   @Post()
   async createLogic(
-    @Body() logicDTO: CreateLogicServiceDto,
+    @Body() logicDTO: CreateLogicControllerDto,
     @Req() request: Request,
   ) {
     const { token } = request.cookies;
