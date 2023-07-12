@@ -45,7 +45,8 @@ const LogicFactory = () => {
     new Fetcher('/logic').post({
       title: title,
       answer: cellStates,
-      timeLimit: timeLimit,
+      timeLimit,
+      size,
     });
   };
 
@@ -57,6 +58,7 @@ const LogicFactory = () => {
         <Input
           type="text"
           value={title}
+          onFocus={(e) => e.target.select()}
           onChange={(e) => setTitle(e.target.value)}
         />
       </Label>
@@ -64,8 +66,13 @@ const LogicFactory = () => {
         제한시간 :
         <Input
           type="number"
-          value={timeLimit}
-          onChange={(e) => setTimeLimit(+e.target.value)}
+          value={timeLimit ? timeLimit : ''}
+          onFocus={(e) => {
+            setTimeLimit(0);
+          }}
+          onChange={(e) => {
+            setTimeLimit(+e.target.value);
+          }}
         />
       </Label>
 
@@ -73,6 +80,7 @@ const LogicFactory = () => {
         사이즈 :
         <Input
           type="number"
+          onFocus={(e) => e.target.select()}
           onChange={(e) => setSizeInputValue(+e.target.value)}
         />
         <Button

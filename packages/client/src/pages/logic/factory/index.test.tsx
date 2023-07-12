@@ -12,6 +12,7 @@ import LogicFactory, { DEFAULT_SIZE } from '.';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import userEvent from '@testing-library/user-event';
 import Fetcher from '@/api/fetcher';
+import { CELL_STATE } from '@/types/logic';
 
 jest.mock('../../../api/fetcher');
 
@@ -74,10 +75,79 @@ describe('로직 팩토리', () => {
     expect(screen.getAllByRole('row')).toHaveLength(3);
   });
 
-  test('로직 제출', () => {
+  test('로직 제출', async () => {
     const submitButton = screen.getByRole('submit');
+    const titleInput = screen.getByLabelText('제목 :');
+    const timeLimit = screen.getByLabelText('제한시간 :');
+    const size = screen.getByLabelText('사이즈 :');
+    const applyButton = screen.getByRole('apply-size');
+    const [firstCell, ...restCells] = screen.getAllByRole('cell_button');
+
+    userEvent.type(titleInput, 'title');
+    timeLimit.focus();
+    userEvent.type(timeLimit, '30000');
+    userEvent.type(size, '6');
+    userEvent.click(applyButton);
+
+    userEvent.click(firstCell);
+
     userEvent.click(submitButton);
 
     expect(MockedFetcher).toBeCalledWith('/logic');
+    expect(MockedFetcher.prototype.post).toBeCalledWith({
+      title: 'title',
+      timeLimit: 30000,
+      size: 6,
+      answer: [
+        [
+          CELL_STATE.FILL,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+        ],
+        [
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+        ],
+        [
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+        ],
+        [
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+        ],
+        [
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+        ],
+        [
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+          CELL_STATE.BLANK,
+        ],
+      ],
+    });
   });
 });
