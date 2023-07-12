@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import Cell from './Cell';
 import { CELL_STATE, IHint } from '@/types/logic';
 import HintCell from './Hints/HintCell';
+import { IChangeCellState } from '@/hooks/useLogicBoard';
 
 const Td = styled.td`
   height: 30px;
@@ -16,15 +17,7 @@ const Td = styled.td`
 interface ILogicBoardProps {
   hints: IHint;
   cellStates: CELL_STATE[][];
-  changeCellState: ({
-    rowIndex,
-    colIndex,
-    toBe,
-  }: {
-    rowIndex: number;
-    colIndex: number;
-    toBe: CELL_STATE;
-  }) => void;
+  changeCellState: React.Dispatch<IChangeCellState>;
 }
 
 export default function LogicBoard({

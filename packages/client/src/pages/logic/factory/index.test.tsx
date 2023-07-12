@@ -11,6 +11,11 @@ import { render, screen } from '@testing-library/react';
 import LogicFactory, { DEFAULT_SIZE } from '.';
 import { QueryClient, QueryClientProvider } from 'react-query';
 import userEvent from '@testing-library/user-event';
+import Fetcher from '@/api/fetcher';
+
+jest.mock('../../../api/fetcher');
+
+const MockedFetcher = jest.mocked(Fetcher, true);
 
 describe('로직 팩토리', () => {
   let router;
@@ -69,5 +74,10 @@ describe('로직 팩토리', () => {
     expect(screen.getAllByRole('row')).toHaveLength(3);
   });
 
-  test('로직 제출', () => {});
+  test('로직 제출', () => {
+    const submitButton = screen.getByRole('submit');
+    userEvent.click(submitButton);
+
+    expect(MockedFetcher).toBeCalledWith('/logic');
+  });
 });

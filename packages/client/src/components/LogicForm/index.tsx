@@ -3,7 +3,11 @@ import _ from 'lodash';
 import styled from 'styled-components';
 import getHints from '@/service/logic/getHints';
 import LogicBoard from '@/components//LogicBoard';
-import useLogicBoard from '@/hooks/useLogicBoard';
+import useLogicBoard, {
+  IChangeCellState,
+  IChangeCellStateAction,
+} from '@/hooks/useLogicBoard';
+import { CELL_STATE } from '@/types/logic';
 
 const Td = styled.td`
   height: 30px;
@@ -13,12 +17,15 @@ const Td = styled.td`
   vertical-align: middle;
 `;
 
-export default function LogicForm({ size }: { size: number }) {
-  const { cellStates, changeCellState } = useLogicBoard({
-    rowLength: size,
-    colLength: size,
-  });
-
+export default function LogicForm({
+  size,
+  cellStates,
+  changeCellState,
+}: {
+  size: number;
+  cellStates: CELL_STATE[][];
+  changeCellState: React.Dispatch<IChangeCellState>;
+}) {
   const hints = getHints(cellStates);
 
   return (
