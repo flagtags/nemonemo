@@ -13,9 +13,7 @@ import { NotAuthorizedError } from '@errors/user';
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(@Inject(UserService) private readonly userService: UserService) {}
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();
 
     const { token } = request.cookies;
@@ -25,8 +23,9 @@ export class AuthGuard implements CanActivate {
 
       if (typeof res === 'string') throw new NotAuthorizedError();
 
-      const userName = res.userName;
-      const hasUser = this.userService.hasUser({ userName });
+      const userId = res._id;
+      const hasUser = await this.userService.hasUser({ _id: userId });
+
       if (hasUser) {
         return true;
       }
