@@ -42,12 +42,20 @@ const LogicFactory = () => {
   });
 
   const onSubmitPress = () => {
-    new Fetcher('/logic').post({
-      title: title,
-      answer: cellStates,
-      timeLimit,
-      size,
-    });
+    new Fetcher('/logic')
+      .post({
+        title: title,
+        answer: cellStates,
+        timeLimit,
+        size,
+      })
+      .then(() => {
+        alert('로직 생성 성공!');
+      })
+      .catch((e) => {
+        alert('로직 생성 실패!');
+        console.error(e);
+      });
   };
 
   return (

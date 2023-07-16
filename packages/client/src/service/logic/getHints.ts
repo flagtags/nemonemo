@@ -4,7 +4,7 @@ import _ from 'lodash';
 export function splitSum(array: CELL_STATE[]): number[] {
   return array
     .join('')
-    .split(CELL_STATE.BLANK.toString())
+    .split(/0|2/)
     .reduce<number[]>((acc, cellState: string) => {
       if (!cellState) return acc;
       return [...acc, cellState.length];

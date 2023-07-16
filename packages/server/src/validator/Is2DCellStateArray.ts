@@ -1,10 +1,10 @@
 import { ValidationOptions, registerDecorator } from 'class-validator';
 
-const Is2DBooleanArray =
+const Is2DCellStateArray =
   (validationOptions?: ValidationOptions) =>
   (object: Object, propertyName: string) => {
     registerDecorator({
-      name: 'is2DBooleanArray',
+      name: 'Is2DCellStateArray',
       target: object.constructor,
       propertyName: propertyName,
       options: validationOptions,
@@ -15,7 +15,7 @@ const Is2DBooleanArray =
             value.every(
               (row) =>
                 Array.isArray(row) &&
-                row.every((item) => typeof item === 'boolean'),
+                row.every((item) => item === 0 || item === 1 || item === 2),
             )
           );
         },
@@ -23,4 +23,4 @@ const Is2DBooleanArray =
     });
   };
 
-export default Is2DBooleanArray;
+export default Is2DCellStateArray;
