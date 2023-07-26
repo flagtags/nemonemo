@@ -5,7 +5,7 @@ import {
   IsOptional,
   IsMongoId,
 } from 'class-validator';
-import Is2DCellStateArray from '@validator/Is2DCellStateArray';
+import { Is2DCellStateArray } from '@validator/Is2DCellStateArray';
 
 export class UpdateLogicDto {
   @IsMongoId()
