@@ -19,8 +19,11 @@ const Is2DCellStateArray =
             )
           );
         },
+        defaultMessage: () => {
+          return 'here is the message';
+        },
       },
     });
   };
 
-export default Is2DCellStateArray;
+export { Is2DCellStateArray };
