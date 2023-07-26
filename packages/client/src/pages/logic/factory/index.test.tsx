@@ -14,7 +14,7 @@ import userEvent from '@testing-library/user-event';
 import Fetcher from '@/api/fetcher';
 import { CELL_STATE } from '@/types/logic';
 
-jest.mock('../../../api/fetcher');
+jest.mock('@/api/fetcher');
 
 const MockedFetcher = jest.mocked(Fetcher, true);
 
@@ -76,6 +76,8 @@ describe('로직 팩토리', () => {
   });
 
   test('로직 제출', async () => {
+    MockedFetcher.prototype.post.mockResolvedValue(undefined);
+
     const submitButton = screen.getByRole('submit');
     const titleInput = screen.getByLabelText('제목 :');
     const timeLimit = screen.getByLabelText('제한시간 :');
