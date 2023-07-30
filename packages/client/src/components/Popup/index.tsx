@@ -3,6 +3,7 @@ import styled from 'styled-components';
 interface IPopup {
   close: () => void;
   children: React.ReactNode;
+  isOpen: boolean;
 }
 
 const Background = styled.div`
@@ -21,7 +22,9 @@ const Container = styled.div`
   background-color: white;
 `;
 
-const Popup = ({ close, children }: IPopup) => {
+const Popup = ({ close, children, isOpen }: IPopup) => {
+  if (!isOpen) return null;
+
   return (
     <Background onClick={() => close()}>
       <Container>{children}</Container>

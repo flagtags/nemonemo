@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { useState, useEffect } from 'react';
+import Popup from '@/components/Popup';
 
 interface IProps {
   timeLimit: number;
@@ -16,6 +17,7 @@ const formatTime = (time: number) => {
 const Timer = ({ timeLimit }: IProps) => {
   const [startTime, setStartTime] = useState<number>();
   const [timeOnView, setTimeOnView] = useState<number>(formatTime(timeLimit));
+  const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
   const onStart = () => {
     setStartTime(Date.now());
@@ -34,7 +36,7 @@ const Timer = ({ timeLimit }: IProps) => {
         setStartTime(undefined);
         setTimeOnView(formatTime(timeLimit));
 
-        window.alert('시간 초과');
+        setIsPopupOpen(true);
         return;
       }
     }, 1000);
@@ -54,6 +56,15 @@ const Timer = ({ timeLimit }: IProps) => {
       </button>
 
       <div role={'remainTimeView'}>{timeOnView} 초</div>
+
+      <Popup
+        isOpen={isPopupOpen}
+        close={() => {
+          setIsPopupOpen(false);
+        }}
+      >
+        <div>팝업</div>
+      </Popup>
     </Container>
   );
 };
