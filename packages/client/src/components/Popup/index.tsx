@@ -27,7 +27,13 @@ const Popup = ({ close, children, isOpen }: IPopup) => {
 
   return (
     <Background onClick={() => close()}>
-      <Container>{children}</Container>
+      <Container
+        onClick={(e: React.MouseEvent) => {
+          e.stopPropagation();
+        }}
+      >
+        {children}
+      </Container>
     </Background>
   );
 };
