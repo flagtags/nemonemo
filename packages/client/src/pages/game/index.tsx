@@ -8,10 +8,14 @@ import { ILogic } from '@/types/logic';
 import { useQuery } from 'react-query';
 import options from '@/config/reactQuery/options';
 import { useMemo } from 'react';
+import { time } from 'console';
+import Timer from './Timer';
 
 const Container = styled.div`
   display: flex;
   justify-content: center;
+  flex-direction: column;
+  padding: 16px;
 `;
 
 const convertSolution = (solution: boolean[][]) =>
@@ -29,12 +33,19 @@ function Game() {
 
   if (!logic) throw new Error('logic empty');
 
-  const { title, answer, size } = logic;
+  const { title, answer, size, timeLimit, authorId } = logic;
+
+  console.log(authorId);
+
   const numberSolution = useMemo(() => convertSolution(answer), [answer]);
 
   return (
     <Container className="nemonemologic">
       <Header title={title} />
+      <h6> author: {authorId} </h6>
+
+      <Timer timeLimit={timeLimit} />
+
       <LogicPaper
         rowLength={size}
         colLength={size}
@@ -45,3 +56,5 @@ function Game() {
 }
 
 export default Game;
+
+// alert만 띄운다 -> 계속하기(timer 멈춤) OR 다시하기(paper 비우기, timer 처음 부터)
