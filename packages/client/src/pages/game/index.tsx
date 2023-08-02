@@ -35,16 +35,19 @@ function Game() {
 
   const { title, answer, size, timeLimit, authorId } = logic;
 
-  console.log(authorId);
-
   const numberSolution = useMemo(() => convertSolution(answer), [answer]);
+
+  const initGame = () => null;
 
   return (
     <Container className="nemonemologic">
       <Header title={title} />
       <h6> author: {authorId} </h6>
 
-      <Timer timeLimit={timeLimit} />
+      <Timer
+        timeLimit={timeLimit}
+        initGame={initGame}
+      />
 
       <LogicPaper
         rowLength={size}
@@ -56,5 +59,3 @@ function Game() {
 }
 
 export default Game;
-
-// alert만 띄운다 -> 계속하기(timer 멈춤) OR 다시하기(paper 비우기, timer 처음 부터)

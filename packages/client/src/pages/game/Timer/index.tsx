@@ -4,22 +4,41 @@ import Popup from '@/components/Popup';
 
 interface IProps {
   timeLimit: number;
+  initGame: () => void;
 }
 
 const Container = styled.div`
   width: 300px;
 `;
 
+const PopupContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+`;
+const PopupButton = styled.button`
+  border: 1px solid black;
+  padding-top: 8px;
+  padding-left: 16px;
+  padding-right: 16px;
+  padding-bottom: 8px;
+`;
+
+const Spacer = styled.div`
+  width: 16px;
+  height: 16px;
+`;
+
 const formatTime = (time: number) => {
   return Math.round(time / 1000);
 };
 
-const Timer = ({ timeLimit }: IProps) => {
+const Timer = ({ timeLimit, initGame }: IProps) => {
   const [startTime, setStartTime] = useState<number>();
   const [timeOnView, setTimeOnView] = useState<number>(formatTime(timeLimit));
   const [isPopupOpen, setIsPopupOpen] = useState<boolean>(false);
 
-  const onStart = () => {
+  const startTimer = () => {
     setStartTime(Date.now());
   };
 
@@ -34,8 +53,6 @@ const Timer = ({ timeLimit }: IProps) => {
 
       if (remainTime <= 0) {
         setStartTime(undefined);
-        setTimeOnView(formatTime(timeLimit));
-
         setIsPopupOpen(true);
         return;
       }
@@ -46,10 +63,21 @@ const Timer = ({ timeLimit }: IProps) => {
     };
   }, [startTime]);
 
+  const onContinue = () => {
+    setIsPopupOpen(false);
+  };
+
+  const onRestart = () => {
+    setTimeOnView(formatTime(timeLimit));
+    startTimer();
+    setIsPopupOpen(false);
+    initGame();
+  };
+
   return (
     <Container>
       <button
-        onClick={onStart}
+        onClick={startTimer}
         disabled={!!startTime}
       >
         시작
@@ -59,11 +87,14 @@ const Timer = ({ timeLimit }: IProps) => {
 
       <Popup
         isOpen={isPopupOpen}
-        close={() => {
-          setIsPopupOpen(false);
-        }}
+        close={() => {}}
       >
-        <div>팝업</div>
+        <PopupContainer>
+          <h2>시간 종료!</h2>
+          <PopupButton onClick={onContinue}>계속하기</PopupButton>
+          <Spacer />
+          <PopupButton onClick={onRestart}>다시하기</PopupButton>
+        </PopupContainer>
       </Popup>
     </Container>
   );
