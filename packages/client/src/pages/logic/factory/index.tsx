@@ -36,7 +36,7 @@ const LogicFactory = () => {
   const [title, setTitle] = useState('');
   const [timeLimit, setTimeLimit] = useState(5 * 60);
 
-  const { cellStates, changeCellState } = useLogicBoard({
+  const [logicBoard, logicBoardStore] = useLogicBoard({
     rowLength: size,
     colLength: size,
   });
@@ -45,7 +45,7 @@ const LogicFactory = () => {
     new Fetcher('/logic')
       .post({
         title: title,
-        answer: cellStates,
+        answer: logicBoard.cellStates,
         timeLimit,
         size,
       })
@@ -87,9 +87,11 @@ const LogicFactory = () => {
       <Label>
         사이즈 :
         <Input
+          role={'sizeInput'}
           type="number"
           onFocus={(e) => e.target.select()}
           onChange={(e) => setSizeInputValue(+e.target.value)}
+          value={sizeInputValue}
         />
         <Button
           onClick={() => setSize(sizeInputValue)}
@@ -102,8 +104,9 @@ const LogicFactory = () => {
 
       <LogicForm
         size={size}
-        cellStates={cellStates}
-        changeCellState={changeCellState}
+        cellStates={logicBoard.cellStates}
+        onLeftClick={logicBoardStore.onLeftClick}
+        onRightClick={logicBoardStore.onRightClick}
       />
 
       <Button

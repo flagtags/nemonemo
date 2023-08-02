@@ -17,20 +17,18 @@ const Td = styled.td`
 interface ILogicBoardProps {
   hints: IHint;
   cellStates: CELL_STATE[][];
-  changeCellState: React.Dispatch<IChangeCellState>;
+  onLeftClick: (rowIndex: number, colIndex: number) => void;
+  onRightClick: (rowIndex: number, colIndex: number) => void;
 }
 
 export default function LogicBoard({
   hints,
   cellStates,
-  changeCellState,
+  onLeftClick,
+  onRightClick,
 }: ILogicBoardProps) {
   const onClick = (rowIndex: number, colIndex: number) => {
-    if (cellStates[rowIndex][colIndex] === CELL_STATE.FILL) {
-      changeCellState({ toBe: CELL_STATE.BLANK, rowIndex, colIndex });
-    } else {
-      changeCellState({ toBe: CELL_STATE.FILL, rowIndex, colIndex });
-    }
+    onLeftClick(rowIndex, colIndex);
   };
 
   const onContextMenu = (
@@ -39,12 +37,7 @@ export default function LogicBoard({
     colIndex: number,
   ) => {
     e.preventDefault();
-
-    if (cellStates[rowIndex][colIndex] === CELL_STATE.NOTHING) {
-      changeCellState({ toBe: CELL_STATE.BLANK, rowIndex, colIndex });
-    } else {
-      changeCellState({ toBe: CELL_STATE.NOTHING, rowIndex, colIndex });
-    }
+    onRightClick(rowIndex, colIndex);
   };
 
   return (

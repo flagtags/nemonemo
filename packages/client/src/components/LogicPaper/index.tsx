@@ -15,12 +15,12 @@ export default function LogicPaper({
   colLength: number;
   solution: number[][];
 }) {
-  const { cellStates, changeCellState } = useLogicBoard({
+  const [logicBoard, logicBoardStore] = useLogicBoard({
     rowLength,
     colLength,
   });
 
-  const hints = getHints(solution);
+  const hints = logicBoardStore.getHints(solution);
 
   useEffect(() => {
     const checkAnswer = (answer: CELL_STATE[][]) => {
@@ -36,16 +36,17 @@ export default function LogicPaper({
       });
     };
 
-    if (checkAnswer(cellStates)) {
+    if (checkAnswer(logicBoard.cellStates as CELL_STATE[][])) {
       window.alert('정답입니다!');
     }
-  }, [cellStates, solution]);
+  }, [logicBoard, solution]);
 
   return (
     <div role="logic-paper">
       <LogicBoard
-        cellStates={cellStates}
-        changeCellState={changeCellState}
+        cellStates={logicBoard.cellStates}
+        onLeftClick={logicBoardStore.onLeftClick}
+        onRightClick={logicBoardStore.onRightClick}
         hints={hints}
       />
     </div>

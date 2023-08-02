@@ -18,13 +18,14 @@ const Td = styled.td`
 `;
 
 export default function LogicForm({
-  size,
   cellStates,
-  changeCellState,
+  onLeftClick,
+  onRightClick,
 }: {
   size: number;
   cellStates: CELL_STATE[][];
-  changeCellState: React.Dispatch<IChangeCellState>;
+  onLeftClick: (rowIndex: number, colIndex: number) => void;
+  onRightClick: (rowIndex: number, colIndex: number) => void;
 }) {
   const hints = getHints(cellStates);
 
@@ -32,7 +33,8 @@ export default function LogicForm({
     <div role="logic-form">
       <LogicBoard
         cellStates={cellStates}
-        changeCellState={changeCellState}
+        onLeftClick={onLeftClick}
+        onRightClick={onRightClick}
         hints={hints}
       />
     </div>
