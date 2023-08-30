@@ -23,7 +23,6 @@ describe('타이머', () => {
   });
 
   afterEach(() => {
-    jest.runOnlyPendingTimers();
     jest.clearAllTimers();
     jest.useRealTimers();
   });
