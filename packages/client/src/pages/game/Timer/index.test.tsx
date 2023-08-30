@@ -1,4 +1,4 @@
-import { getByRole, render, waitFor, screen } from '@testing-library/react';
+import { render, screen, act, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import Timer from '.';
 // 최초에 timeLimit 값이 있고 시작 버튼을 누르면 매 초 시간이 줄어든다
@@ -11,8 +11,8 @@ describe('타이머', () => {
   let timeLimitMs: number;
   const initGame = jest.fn();
   beforeEach(() => {
-    jest.useFakeTimers();
     timeLimitMs = 10000;
+    jest.useFakeTimers();
 
     render(
       <Timer
@@ -41,7 +41,9 @@ describe('타이머', () => {
 
     await user.click(startButton);
 
-    jest.advanceTimersByTime(1000);
+    act(() => {
+      jest.advanceTimersByTime(1000);
+    });
 
     const remainTimeView = screen.getByRole('remainTimeView');
     expect(remainTimeView).toHaveTextContent('9 초');
@@ -53,7 +55,9 @@ describe('타이머', () => {
 
       await user.click(startButton);
 
-      jest.advanceTimersByTime(timeLimitMs);
+      act(() => {
+        jest.advanceTimersByTime(10000);
+      });
     });
 
     test('alert 창 노출', () => {
