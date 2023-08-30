@@ -11,10 +11,13 @@ import {
   InternalServerErrorException,
   NotFoundException,
   UnauthorizedException,
+  HttpException,
 } from '@nestjs/common';
 
 export default class ExceptionFactory {
   static createException(error: Error) {
+    if (error instanceof HttpException) return error;
+
     switch (error.constructor) {
       case DuplicatedUserError:
       case EmptyRequestError:

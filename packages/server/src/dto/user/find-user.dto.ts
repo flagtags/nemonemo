@@ -1,3 +1,4 @@
-export class FindUserDto{
-    readonly userName: string;
+export class FindUserDto {
+  readonly userName: string;
+  readonly password?: string;
 }

@@ -191,16 +191,17 @@ describe('UserService', () => {
         password: 'john',
       };
 
-      const spyfn = jest.spyOn(userModel, 'hasUser');
+      const hasUserSpyFn = jest.spyOn(userModel, 'hasUser');
+      const findeUserSpyFn = jest.spyOn(userModel, 'findUser');
       // 유저 있는지
-      spyfn.mockResolvedValueOnce({
+      hasUserSpyFn.mockResolvedValueOnce({
         response: true,
         matched: 1,
       });
       // 비밀번호 맞는지
-      spyfn.mockResolvedValueOnce({
-        response: false,
-        matched: 1,
+      findeUserSpyFn.mockResolvedValueOnce({
+        response: null,
+        matched: 0,
       });
 
       const userNotFoundError = new NotAuthenticatedError();
@@ -216,10 +217,29 @@ describe('UserService', () => {
         password: 'john6549',
       };
 
-      const userToken = await service.login(loginUserDto);
-      const { userName: decodedUserName } = jwt.decode(userToken) as JwtPayload;
+      const hasUserSpyFn = jest.spyOn(userModel, 'hasUser');
+      const findeUserSpyFn = jest.spyOn(userModel, 'findUser');
+      // 유저 있는지
+      hasUserSpyFn.mockResolvedValueOnce({
+        response: true,
+        matched: 1,
+      });
+      // 비밀번호 맞는지
+      findeUserSpyFn.mockResolvedValueOnce({
+        response: {
+          _id: 'asdf',
+          userName: 'dante022',
+          password: 'john6549',
+          name: '',
+          isBanned: false,
+        } as unknown as UserDocument,
+        matched: 0,
+      });
 
-      expect(loginUserDto.userName).toEqual(decodedUserName);
+      const userToken = await service.login(loginUserDto);
+      const { _id } = jwt.decode(userToken) as JwtPayload;
+
+      expect(_id).toEqual('asdf');
     });
   });
 });

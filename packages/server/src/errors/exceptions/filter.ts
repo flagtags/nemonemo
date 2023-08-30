@@ -16,14 +16,15 @@ export class AllExceptionFilter extends BaseExceptionFilter {
 
     const exception = ExceptionFactory.createException(error as Error);
 
-    const status =
-      exception instanceof HttpException
-        ? exception.getStatus()
-        : HttpStatus.INTERNAL_SERVER_ERROR;
+    const status = exception.getStatus();
+    const exceptionResponse = exception.getResponse();
 
     response.status(status).json({
       statusCode: status,
-      message: exception.message,
+      message:
+        typeof exceptionResponse === 'string'
+          ? exceptionResponse
+          : (exceptionResponse as any).message,
       timestamp: new Date().toISOString(),
       path: request.url,
     });

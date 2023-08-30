@@ -9,6 +9,7 @@ import ErrorBoundary from './components/ErrorBoundary';
 import List from './pages/list';
 import Game from './pages/game';
 import { Redirect } from './components/Redirect';
+import LogicFactory from './pages/logic/factory';
 
 const Container = styled.div`
   display: flex;
@@ -52,6 +53,17 @@ function App() {
               <ErrorBoundary fallback={<Redirect path="/account" />}>
                 <Suspense fallback="loading 중...">
                   <List />
+                </Suspense>
+              </ErrorBoundary>
+            }
+          />
+
+          <Route
+            path="/logic/factory"
+            element={
+              <ErrorBoundary fallback={<Redirect path="/list" />}>
+                <Suspense fallback="loading 중...">
+                  <LogicFactory />
                 </Suspense>
               </ErrorBoundary>
             }

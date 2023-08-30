@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { CELL_STATE } from '../type';
+import { CELL_STATE } from '@/types/logic';
 import React from 'react';
 
 const Button = styled.button`
@@ -36,9 +36,19 @@ export default function Cell({
   rowIndex: number;
   columnIndex: number;
 }) {
-  const FilledImage = <Image alt={'fill'} src={'/square.png'} />;
+  const FilledImage = (
+    <Image
+      alt={'fill'}
+      src={'/square.png'}
+    />
+  );
   const BlankImage = <Blank className={'blank'} />;
-  const NothingImage = <Image alt={'nothing'} src={'/close.png'} />;
+  const NothingImage = (
+    <Image
+      alt={'nothing'}
+      src={'/close.png'}
+    />
+  );
 
   const CellImage = {
     [CELL_STATE.FILL]: FilledImage,

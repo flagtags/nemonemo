@@ -63,20 +63,18 @@ export class UserService {
   async login(loginUserDto: LoginUserDto): Promise<string> {
     const hasUserDto = { userName: loginUserDto.userName };
     const hasUser = await this.hasUser(hasUserDto);
-    const authenticated = await this.hasUser(loginUserDto);
+    const authenticated = await this.findUser(loginUserDto);
 
     if (!hasUser) {
       throw new UserNotFoundError();
     }
+
     if (!authenticated) {
       throw new NotAuthenticatedError();
     }
 
     // 토큰 생성
-    const userToken = jwt.sign(
-      { userName: loginUserDto.userName },
-      config.jwtSecret,
-    );
+    const userToken = jwt.sign({ _id: authenticated._id }, config.jwtSecret);
 
     return userToken;
   }

@@ -8,6 +8,9 @@ import { Logic } from '@models/logic/logic.schema';
 import { Test, TestingModule } from '@nestjs/testing';
 import { LogicService } from '@use-cases/logic/logic.service';
 import { LogicController } from './logic.controller';
+import Jwt from 'jsonwebtoken';
+import config from '@config';
+import { Request } from 'express';
 
 jest.mock('@guards/authGuard');
 
@@ -62,12 +65,18 @@ describe('로직 서비스', () => {
       ],
       timeLimit: 6000,
       title: 'test',
-      authorId: '1',
+      authorId: 'authorId',
     };
+
+    const request = {
+      cookies: {
+        token: Jwt.sign({ _id: 'authorId' }, config.jwtSecret),
+      },
+    } as unknown as Request;
 
     const createLogicSpyfn = jest.spyOn(logicService, 'createLogic');
 
-    await controller.createLogic(createLogicDto);
+    await controller.createLogic(createLogicDto, request);
 
     expect(createLogicSpyfn).toHaveBeenCalledWith(createLogicDto);
   });

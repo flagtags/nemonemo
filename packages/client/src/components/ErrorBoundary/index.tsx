@@ -26,7 +26,7 @@ class ErrorBoundary extends Component<IProps, IState> {
 
   componentDidCatch(error: Error, info: ErrorInfo) {
     // console.error('componentDidCatch', error);
-    // this.setState({ isError: true });
+    this.setState({ isError: true });
   }
 
   render() {
