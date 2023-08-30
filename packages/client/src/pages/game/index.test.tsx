@@ -34,6 +34,8 @@ describe('Game page 테스트', () => {
       },
     );
 
+    jest.spyOn(Fetcher.prototype, 'get').mockRejectedValue(new Error('error'));
+
     render(
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
