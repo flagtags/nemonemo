@@ -53,7 +53,7 @@ describe('Cell 컴포넌트가 state 따라 보여지는가.', () => {
 });
 
 describe('Cell 컴포넌트 이벤트 핸들러 ', () => {
-  test('우클릭', () => {
+  test('우클릭', async () => {
     const onContextMenu = jest.fn();
 
     render(
@@ -67,12 +67,13 @@ describe('Cell 컴포넌트 이벤트 핸들러 ', () => {
     );
 
     const button = screen.getByRole('cell_button');
-    userEvent.click(button, { button: 2 });
+    const user = userEvent.setup();
+    await user.pointer({ keys: '[MouseRight]', target: button });
 
     expect(onContextMenu).toHaveBeenCalledTimes(1);
   });
 
-  test('좌클릭', () => {
+  test('좌클릭', async () => {
     const onClick = jest.fn();
 
     render(
@@ -86,7 +87,9 @@ describe('Cell 컴포넌트 이벤트 핸들러 ', () => {
     );
 
     const button = screen.getByRole('cell_button');
-    userEvent.click(button);
+    const user = userEvent.setup();
+
+    await user.click(button);
 
     expect(onClick).toHaveBeenCalledTimes(1);
   });

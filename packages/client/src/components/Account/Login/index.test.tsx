@@ -54,15 +54,15 @@ describe('로그인 컴포넌트', () => {
     let idInput: HTMLInputElement;
     let passwordInput: HTMLInputElement;
 
-    beforeEach(() => {
+    beforeEach(async () => {
       idInput = screen.getByPlaceholderText('아이디');
       passwordInput = screen.getByPlaceholderText('비밀번호');
       loginButton = screen.getByRole('button', {
         name: '로그인',
       });
 
-      userEvent.type(idInput, 'id');
-      userEvent.type(passwordInput, 'password');
+      await userEvent.type(idInput, 'id');
+      await userEvent.type(passwordInput, 'password');
     });
 
     test('로그인 성공 ', async () => {
@@ -77,7 +77,7 @@ describe('로그인 컴포넌트', () => {
         new AxiosError('로그인 실패!'),
       );
 
-      loginButton.click();
+      await userEvent.click(loginButton);
 
       await waitFor(async () =>
         expect(window.alert).toBeCalledWith('로그인 실패!'),

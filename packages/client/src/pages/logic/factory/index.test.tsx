@@ -13,6 +13,7 @@ import { QueryClient, QueryClientProvider } from 'react-query';
 import userEvent from '@testing-library/user-event';
 import Fetcher from '@/api/fetcher';
 import { CELL_STATE } from '@/types/logic';
+import { UserEvent } from '@testing-library/user-event/dist/types/setup/setup';
 
 jest.mock('@/api/fetcher');
 
@@ -63,19 +64,22 @@ describe('로직 팩토리', () => {
     expect(screen.getByRole('submit')).toBeInTheDocument();
   });
 
-  test('사이즈 입력에 따른 격자 크기 조정', () => {
-    const sizeInput = screen.getByLabelText('사이즈 :');
+  test('사이즈 입력에 따른 격자 크기 조정', async () => {
+    const user = userEvent.setup();
+    const sizeInput = screen.getByRole('sizeInput');
     const applyButton = screen.getByRole('apply-size');
 
-    userEvent.type(sizeInput, '3');
+    await user.type(sizeInput, '3');
     expect(screen.getAllByRole('row')).toHaveLength(DEFAULT_SIZE);
 
-    userEvent.click(applyButton);
+    await user.click(applyButton);
 
     expect(screen.getAllByRole('row')).toHaveLength(3);
   });
 
   test('로직 제출', async () => {
+    const user = userEvent.setup();
+
     MockedFetcher.prototype.post.mockResolvedValue(undefined);
 
     const submitButton = screen.getByRole('submit');
@@ -85,15 +89,15 @@ describe('로직 팩토리', () => {
     const applyButton = screen.getByRole('apply-size');
     const [firstCell, ...restCells] = screen.getAllByRole('cell_button');
 
-    userEvent.type(titleInput, 'title');
+    await user.type(titleInput, 'title');
     timeLimit.focus();
-    userEvent.type(timeLimit, '30000');
-    userEvent.type(size, '6');
-    userEvent.click(applyButton);
+    await user.type(timeLimit, '30000');
+    await user.type(size, '6');
+    user.click(applyButton);
 
-    userEvent.click(firstCell);
+    await user.click(firstCell);
 
-    userEvent.click(submitButton);
+    await user.click(submitButton);
 
     expect(MockedFetcher).toBeCalledWith('/logic');
     expect(MockedFetcher.prototype.post).toBeCalledWith({

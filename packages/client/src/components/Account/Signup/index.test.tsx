@@ -70,16 +70,16 @@ describe('회원가입', () => {
     });
 
     describe('input 채워져있는 경우', () => {
-      beforeEach(() => {
-        userEvent.type(idInput, 'id');
-        userEvent.type(passwordInput, 'password');
-        userEvent.type(nameInput, 'name');
+      beforeEach(async () => {
+        await userEvent.type(idInput, 'id');
+        await userEvent.type(passwordInput, 'password');
+        await userEvent.type(nameInput, 'name');
       });
 
       test('회원가입 성공 ', async () => {
         MockedFetcher.prototype.post.mockResolvedValue({});
 
-        registerButton.click();
+        await userEvent.click(registerButton);
 
         await waitFor(() => expect(router.state.location.pathname).toBe('/'));
       });
@@ -89,7 +89,7 @@ describe('회원가입', () => {
           new AxiosError('회원가입 실패!'),
         );
 
-        registerButton.click();
+        await userEvent.click(registerButton);
 
         await waitFor(
           async () => expect(window.alert).toBeCalledWith('회원가입 실패!'),
@@ -108,8 +108,8 @@ describe('회원가입', () => {
 
     describe('validation', () => {
       test('아이디 입력창 미입력시 alert ', async () => {
-        userEvent.type(passwordInput, 'password');
-        userEvent.type(nameInput, 'name');
+        await userEvent.type(passwordInput, 'password');
+        await userEvent.type(nameInput, 'name');
 
         registerButton.click();
 
@@ -119,8 +119,8 @@ describe('회원가입', () => {
       });
 
       test('비밀번호 입력창 미입력시 alert ', async () => {
-        userEvent.type(idInput, 'id');
-        userEvent.type(nameInput, 'name');
+        await userEvent.type(idInput, 'id');
+        await userEvent.type(nameInput, 'name');
 
         registerButton.click();
 
@@ -130,8 +130,8 @@ describe('회원가입', () => {
       });
 
       test('이름 입력창 미입력시 alert ', async () => {
-        userEvent.type(idInput, 'id');
-        userEvent.type(passwordInput, 'password');
+        await userEvent.type(idInput, 'id');
+        await userEvent.type(passwordInput, 'password');
 
         registerButton.click();
 

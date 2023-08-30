@@ -91,18 +91,22 @@ describe('로직 페이퍼 클릭 처리', () => {
   });
 
   describe('fill 일 때', () => {
-    beforeEach(() => {
-      userEvent.click(firstCell);
+    beforeEach(async () => {
+      const user = userEvent.setup();
+      await user.click(firstCell);
       testFillState(firstCell);
     });
 
-    test('좌클릭 처리', () => {
-      userEvent.click(firstCell);
+    test('좌클릭 처리', async () => {
+      const user = userEvent.setup();
+      await user.click(firstCell);
       testBlankstate(firstCell);
     });
 
-    test('우클릭 처리', () => {
-      userEvent.click(firstCell, { button: 2 });
+    test('우클릭 처리', async () => {
+      const user = userEvent.setup();
+
+      await user.pointer({ keys: '[MouseRight]', target: firstCell });
       testNothingState(firstCell);
     });
   });
@@ -112,30 +116,35 @@ describe('로직 페이퍼 클릭 처리', () => {
       testBlankstate(firstCell);
     });
 
-    test('좌클릭 처리', () => {
-      userEvent.click(firstCell);
+    test('좌클릭 처리', async () => {
+      const user = userEvent.setup();
+      await user.click(firstCell);
       testFillState(firstCell);
     });
 
-    test('우클릭 처리', () => {
-      userEvent.click(firstCell, { button: 2 });
+    test('우클릭 처리', async () => {
+      const user = userEvent.setup();
+      await user.pointer({ keys: '[MouseRight]', target: firstCell });
       testNothingState(firstCell);
     });
   });
 
   describe('nothing 일 때', () => {
-    beforeEach(() => {
-      userEvent.click(firstCell, { button: 2 });
+    beforeEach(async () => {
+      const user = userEvent.setup();
+      await user.pointer({ keys: '[MouseRight]', target: firstCell });
       testNothingState(firstCell);
     });
 
-    test('좌클릭 처리', () => {
-      userEvent.click(firstCell);
+    test('좌클릭 처리', async () => {
+      const user = userEvent.setup();
+      await user.click(firstCell);
       testFillState(firstCell);
     });
 
-    test('우클릭 처리', () => {
-      userEvent.click(firstCell, { button: 2 });
+    test('우클릭 처리', async () => {
+      const user = userEvent.setup();
+      await user.pointer({ keys: '[MouseRight]', target: firstCell });
       testBlankstate(firstCell);
     });
   });
@@ -187,8 +196,10 @@ describe('힌트 숫자를 클릭하면 삭선처리', () => {
     });
   });
 
-  test('클릭 처리', () => {
-    userEvent.click(firstHintNumber);
+  test('클릭 처리', async () => {
+    const user = userEvent.setup();
+
+    await user.click(firstHintNumber);
     expect(firstHintNumber).toHaveStyle({
       'text-decoration': 'line-through',
       color: 'blue',
@@ -201,9 +212,11 @@ describe('힌트 숫자를 클릭하면 삭선처리', () => {
     });
   });
 
-  test('클릭 두 번 처리', () => {
-    userEvent.click(firstHintNumber);
-    userEvent.click(firstHintNumber);
+  test('클릭 두 번 처리', async () => {
+    const user = userEvent.setup();
+
+    await user.click(firstHintNumber);
+    await user.click(firstHintNumber);
     expect(firstHintNumber).not.toHaveStyle({
       'text-decoration': 'line-through',
       color: 'blue',
@@ -220,13 +233,13 @@ describe('힌트 숫자를 클릭하면 삭선처리', () => {
 const testCases = {
   '천재(정답만 클릭)': {
     clicks: [
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 2], buttonType: 'left' },
-      { coordinate: [1, 1], buttonType: 'left' },
-      { coordinate: [2, 0], buttonType: 'left' },
-      { coordinate: [2, 2], buttonType: 'left' },
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 0], buttonType: 'left' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 2], buttonType: '[MouseLeft]' },
+      { coordinate: [1, 1], buttonType: '[MouseLeft]' },
+      { coordinate: [2, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [2, 2], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
     ],
 
     solution: [
@@ -250,15 +263,15 @@ const testCases = {
 
   '수재(한 번 정답 아닌걸 좌클릭 후 마지막에 우클릭)': {
     clicks: [
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 2], buttonType: 'left' },
-      { coordinate: [0, 1], buttonType: 'left' },
-      { coordinate: [1, 1], buttonType: 'left' },
-      { coordinate: [2, 0], buttonType: 'left' },
-      { coordinate: [2, 2], buttonType: 'left' },
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 1], buttonType: 'right' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 2], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 1], buttonType: '[MouseLeft]' },
+      { coordinate: [1, 1], buttonType: '[MouseLeft]' },
+      { coordinate: [2, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [2, 2], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 1], buttonType: '[MouseRight]' },
     ],
 
     solution: [
@@ -282,15 +295,15 @@ const testCases = {
 
   '수재(한 번 정답 아닌걸 좌클릭 후 마지막에 좌클릭)': {
     clicks: [
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 2], buttonType: 'left' },
-      { coordinate: [0, 1], buttonType: 'left' },
-      { coordinate: [1, 1], buttonType: 'left' },
-      { coordinate: [2, 0], buttonType: 'left' },
-      { coordinate: [2, 2], buttonType: 'left' },
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 0], buttonType: 'left' },
-      { coordinate: [0, 1], buttonType: 'left' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 2], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 1], buttonType: '[MouseLeft]' },
+      { coordinate: [1, 1], buttonType: '[MouseLeft]' },
+      { coordinate: [2, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [2, 2], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 0], buttonType: '[MouseLeft]' },
+      { coordinate: [0, 1], buttonType: '[MouseLeft]' },
     ],
 
     solution: [
@@ -324,6 +337,7 @@ describe('클릭 시 정답 반응 처리', () => {
       clicks: { coordinate: number[]; buttonType: string }[];
     }) => {
       window.alert = jest.fn();
+      const user = userEvent.setup();
 
       render(
         <LogicPaper
@@ -333,14 +347,14 @@ describe('클릭 시 정답 반응 처리', () => {
         />,
       );
 
-      clicks.map(({ coordinate: [row, column], buttonType }) => {
-        // row, column을 받아서 클릭 할 버튼들의 좌표를 받아옴
-        const clickedButton = screen.queryAllByCoordinateId(row, column)[0];
-        // 각 좌표를 클릭함
-        userEvent.click(clickedButton, {
-          button: buttonType === 'left' ? 0 : 2,
-        });
-      });
+      await Promise.all(
+        clicks.map(async ({ coordinate: [row, column], buttonType }) => {
+          // row, column을 받아서 클릭 할 버튼들의 좌표를 받아옴
+          const clickedButton = screen.queryAllByCoordinateId(row, column)[0];
+          // 각 좌표를 클릭함
+          await user.pointer({ keys: buttonType, target: clickedButton });
+        }),
+      );
 
       expect(window.alert).toBeCalledWith('정답입니다!');
     },
