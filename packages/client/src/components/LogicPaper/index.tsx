@@ -24,6 +24,7 @@ export default function LogicPaper({
 
   useEffect(() => {
     const checkAnswer = (answer: CELL_STATE[][]) => {
+      if (answer.length !== solution.length) return false;
       return answer.every((row: CELL_STATE[], rowIndex: number) => {
         return row.every((answerCell: CELL_STATE, columnIndex: number) => {
           if (solution[rowIndex][columnIndex] === CELL_STATE.FILL) {
