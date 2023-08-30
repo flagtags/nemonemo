@@ -5,6 +5,7 @@ import Timer from '.';
 // 0초가 되면 alert가 뜨고
 // 다시하기 -> timer 초기화, game 초기화
 // 계속하기 -> timer 0초로 남고, game판 유지
+const user = userEvent.setup({ delay: null });
 
 describe('타이머', () => {
   let timeLimitMs: number;
@@ -35,10 +36,10 @@ describe('타이머', () => {
     expect(remainTimeView).toHaveTextContent('10 초');
   });
 
-  test('타이머 테스트', () => {
+  test('타이머 테스트', async () => {
     const startButton = screen.getByRole('button', { name: '시작' });
 
-    userEvent.click(startButton);
+    await user.click(startButton);
 
     jest.advanceTimersByTime(1000);
 
@@ -47,10 +48,10 @@ describe('타이머', () => {
   });
 
   describe('시간초과', () => {
-    beforeEach(() => {
+    beforeEach(async () => {
       const startButton = screen.getByRole('button', { name: '시작' });
 
-      userEvent.click(startButton);
+      await user.click(startButton);
 
       jest.advanceTimersByTime(timeLimitMs);
     });
@@ -60,23 +61,22 @@ describe('타이머', () => {
       const endPopup = screen.getByText('시간 종료!');
       expect(endPopup).toBeInTheDocument();
     });
-    test('계속하기', () => {
+    test('계속하기', async () => {
       //기존의 게임판 유지
       const restartButton = screen.getByRole('button', { name: '계속하기' });
 
-      userEvent.click(restartButton);
+      await user.click(restartButton);
 
       const remainTimeView = screen.getByRole('remainTimeView');
       expect(remainTimeView).toHaveTextContent('0 초');
     });
-    test('다시하기', () => {
+    test('다시하기', async () => {
       const continueButton = screen.getByRole('button', { name: '다시하기' });
-      userEvent.click(continueButton);
+      await user.click(continueButton);
 
       const remainTimeView = screen.getByRole('remainTimeView');
       expect(remainTimeView).toHaveTextContent('10 초');
       // 게임판 초기화
-
       expect(initGame).toBeCalled();
     });
   });
