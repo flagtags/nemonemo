@@ -9,6 +9,7 @@ export default function useTimer(timeLimit: number, onTimerEnd: () => void) {
   const [remainSeconds, setRemainSeconds] = useState(roundSeconds(timeLimit));
 
   const startTimer = () => {
+    if (remainSeconds <= 0) return;
     setStartTime(Date.now());
   };
 
