@@ -9,7 +9,6 @@ import { getStateFromAlt } from './util';
 import { CELL_SOLUTION_STATE, CELL_STATE } from '@/types/logic';
 import LogicPaper from '.';
 import { testBlankstate, testFillState, testNothingState } from './testUtil';
-import getHints from '@/service/logic/getHints';
 import cases from 'jest-in-case';
 
 describe('로직 페이퍼 렌더링', () => {
@@ -338,12 +337,14 @@ describe('클릭 시 정답 반응 처리', () => {
     }) => {
       window.alert = jest.fn();
       const user = userEvent.setup();
+      const onEnd = jest.fn();
 
       render(
         <LogicPaper
           rowLength={3}
           colLength={3}
           solution={solution}
+          onEnd={onEnd}
         />,
       );
 
@@ -357,6 +358,7 @@ describe('클릭 시 정답 반응 처리', () => {
       );
 
       expect(window.alert).toBeCalledWith('정답입니다!');
+      expect(onEnd).toBeCalled();
     },
     testCases,
   );
